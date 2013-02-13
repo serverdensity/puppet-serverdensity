@@ -1,4 +1,4 @@
-class apt {
+class sd-apt {
 
     file {
         'sd-agent.list':
@@ -28,7 +28,7 @@ class apt {
     }    
 }
 
-class yum {
+class sd-yum {
 
     file {
         'sd-agent.repo':
@@ -65,9 +65,30 @@ enabled=1',
     } 
 }
 
+class sd-config-file ( $location ) {
+    file { 'sd-agent-config-file':
+        path => $location,
+        content => template('puppet-serverdensity/config.template')
+    }
+}
+
 class puppet-serverdensity( $content ) {
     case $::operatingsystem {
-        'Ubuntu': { include apt }
-        'CentOS': { include yum }
+        'Ubuntu': { 
+            include sd-apt 
+            class {
+                'sd-config-file':
+                    location => '/tmp/apt_config_file',
+                    require => Package['sd-agent']
+            }
+        }
+        'CentOS': { 
+            include sd-yum 
+            class {
+                'sd-config-file':
+                    location => '/tmp/yum_config_file',
+                    require => Package['sd-agent']
+            }
+        }
     }
 }
