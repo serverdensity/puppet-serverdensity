@@ -65,10 +65,15 @@ enabled=1',
     } 
 }
 
-class sd-config-file ( $location ) {
+class sd-config-file ( 
+        $location,
+        $sd_url = '',
+        $agent_key = '' 
+    ) {
     file { 'sd-agent-config-file':
         path => $location,
-        content => template('puppet-serverdensity/config.template')
+        content => template('puppet-serverdensity/config.template'),
+        
     }
 }
 

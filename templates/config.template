@@ -4,8 +4,8 @@
 #
 
 [Main]
-sd_url: https://example.serverdensity.com
-agent_key:
+sd_url: https://<%= sd_url %>.serverdensity.com
+agent_key: <%= agent_key %>
 
 #
 # Plugins
