@@ -67,8 +67,8 @@ enabled=1',
 
 class sd-config-file ( 
         $location,
-        $sd_url = '',
-        $agent_key = '' 
+        $sd_url,
+        $agent_key
     ) {
     file { 'sd-agent-config-file':
         path => $location,
@@ -77,14 +77,16 @@ class sd-config-file (
     }
 }
 
-class puppet-serverdensity( $content ) {
+class puppet-serverdensity( $sd_url = '', $agent_key = '' ) {
     case $::operatingsystem {
         'Ubuntu': { 
             include sd-apt 
             class {
                 'sd-config-file':
                     location => '/tmp/apt_config_file',
-                    require => Package['sd-agent']
+                    require => Package['sd-agent'],
+                    sd_url => $sd_url,
+                    agent_key => $agent_key,
             }
         }
         'CentOS': { 
@@ -92,7 +94,9 @@ class puppet-serverdensity( $content ) {
             class {
                 'sd-config-file':
                     location => '/tmp/yum_config_file',
-                    require => Package['sd-agent']
+                    require => Package['sd-agent'],
+                    sd_url => $sd_url,
+                    agent_key => $agent_key,
             }
         }
     }
