@@ -23,12 +23,16 @@ class apt {
         'sd-agent':
             ensure => 'present',
             require => Exec['sd-apt-update']
-    }
+    }    
+}
+
+class yum {
     
 }
 
 class puppet-serverdensity( $content ) {
     case $::operatingsystem {
         'Ubuntu': { include apt }
+        'CentOS'
     }
 }
