@@ -68,7 +68,24 @@ enabled=1',
 class sd-config-file ( 
         $location,
         $sd_url,
-        $agent_key
+        $agent_key,
+        $plugin_directory,
+        $apache_status_url,
+        $apache_status_user,
+        $apache_status_pass,
+        $mongodb_server,
+        $mongodb_dbstats,
+        $mongodb_replset,
+        $mysql_server,
+        $mysql_user,
+        $mysql_pass,
+        $nginx_status_url,
+        $rabbitmq_status_url,
+        $rabbitmq_user,
+        $rabbitmq_pass,
+        $tmp_directory,
+        $pidfile_directory,
+        $logging_level
     ) {
     file { 'sd-agent-config-file':
         path => $location,
@@ -77,27 +94,62 @@ class sd-config-file (
     }
 }
 
-class puppet-serverdensity( $sd_url = '', $agent_key = '' ) {
+class puppet-serverdensity( 
+    $sd_url,
+    $agent_key = '',
+    $plugin_directory = '',
+    $apache_status_url = '',
+    $apache_status_user = '',
+    $apache_status_pass = '',
+    $mongodb_server = '',
+    $mongodb_dbstats = 'no',
+    $mongodb_replset = 'no',
+    $mysql_server = '',
+    $mysql_user = '',
+    $mysql_pass = '',
+    $nginx_status_url = '',
+    $rabbitmq_status_url = '',
+    $rabbitmq_user = '',
+    $rabbitmq_pass = '',
+    $tmp_directory = '',
+    $pidfile_directory = '',
+    $logging_level = ''
+) {
+
     case $::operatingsystem {
         'Ubuntu': { 
-            include sd-apt 
-            class {
-                'sd-config-file':
-                    location => '/tmp/apt_config_file',
-                    require => Package['sd-agent'],
-                    sd_url => $sd_url,
-                    agent_key => $agent_key,
-            }
+            include sd-apt
+            $location = '/tmp/apt_config_file'
         }
         'CentOS': { 
             include sd-yum 
-            class {
-                'sd-config-file':
-                    location => '/tmp/yum_config_file',
-                    require => Package['sd-agent'],
-                    sd_url => $sd_url,
-                    agent_key => $agent_key,
-            }
+            $location = '/tmp/yum_config_file'
         }
+
+
     }
+    class {
+           'sd-config-file':
+                location => $location,
+                require => Package['sd-agent'],
+                sd_url => $sd_url,
+                agent_key => $agent_key,
+                plugin_directory => $plugin_directory,
+                apache_status_url => $apache_status_url,
+                apache_status_user => $apache_status_user,
+                apache_status_pass => $apache_status_pass,
+                mongodb_server => $mongodb_server,
+                mongodb_dbstats => $mongodb_dbstats,
+                mongodb_replset => $mongodb_replset,
+                mysql_server => $mysql_server,
+                mysql_user => $mysql_user,
+                mysql_pass => $mysql_pass,
+                nginx_status_url => $nginx_status_url,
+                rabbitmq_status_url => $rabbitmq_status_url,
+                rabbitmq_user => $rabbitmq_user,
+                rabbitmq_pass => $rabbitmq_pass,
+                tmp_directory => $tmp_directory,
+                pidfile_directory => $pidfile_directory,
+                logging_level => $logging_level
+            }
 }
