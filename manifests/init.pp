@@ -96,6 +96,9 @@ class sd-config-file (
 
 class puppet-serverdensity( 
     $sd_url,
+    $api_token = '',
+    $api_username = '',
+    $api_password = '',
     $agent_key = '',
     $plugin_directory = '',
     $apache_status_url = '',
@@ -118,8 +121,16 @@ class puppet-serverdensity(
 
     case $::operatingsystem {
         'Ubuntu': { 
-            include sd-apt
-            $location = '/etc/sd-agent/config.cfg'
+            class {
+                'api':
+                    api_version => "1",
+                    sd_url => '',
+                    token => 'foo',
+                    sd_username => '',
+                    sd_password => ''
+            }
+            #include sd-apt
+            #$location = '/etc/sd-agent/config.cfg'
         }
         'CentOS': { 
             include sd-yum 
