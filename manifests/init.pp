@@ -119,11 +119,11 @@ class puppet-serverdensity(
     case $::operatingsystem {
         'Ubuntu': { 
             include sd-apt
-            $location = '/tmp/apt_config_file'
+            $location = '/etc/sd-agent/config.cfg'
         }
         'CentOS': { 
             include sd-yum 
-            $location = '/tmp/yum_config_file'
+            $location = '/etc/sd-agent/config.cfg'
         }
 
 
@@ -150,6 +150,14 @@ class puppet-serverdensity(
                 rabbitmq_pass => $rabbitmq_pass,
                 tmp_directory => $tmp_directory,
                 pidfile_directory => $pidfile_directory,
-                logging_level => $logging_level
-            }
+                logging_level => $logging_level,
+
+                notify => Service['sd-agent']
+    }
+
+    service {
+        'sd-agent':
+            ensure  => "running",
+            enable  => "true",
+    }
 }
