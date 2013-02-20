@@ -28,7 +28,9 @@ hostclass :api, :arguments => {"api_version" => nil, "sd_username" => nil, "sd_p
 
         base_url = 'http://api.serverdensity.com/1.4/'
         hostname = Facter["hostname"].value
+        notice [hostname]
         uri = URI("#{ base_url }devices/getByHostName?hostName=#{ hostname }&account=#{ sd_url }")
+        notice [uri.request_uri]
 
         req = Net::HTTP::Get.new(uri.request_uri)
         req.basic_auth sd_username, sd_password
@@ -38,6 +40,7 @@ hostclass :api, :arguments => {"api_version" => nil, "sd_username" => nil, "sd_p
         }
 
         device = JSON.parse(res.body)
+        notice [device]
 
         if device['status'] == 2
             notice ["Device not found, creating a new one"]
@@ -47,9 +50,8 @@ hostclass :api, :arguments => {"api_version" => nil, "sd_username" => nil, "sd_p
             req.basic_auth sd_username, sd_password
 
             params = {
-                'name' => Facter["hostname"].value,
-                'hostName' => Facter["hostname"].value,
-                'notes' => 'Created automatically by chef-serverdensity',
+                'name' => hostname,
+                'notes' => 'Created automatically by puppet-serverdensity',
             }
 
             # Create new device
@@ -58,9 +60,16 @@ hostclass :api, :arguments => {"api_version" => nil, "sd_username" => nil, "sd_p
             res = Net::HTTP.start(uri.host, uri.port) {|http|
                 http.request(req)
             }
-
-            notice [res.value]
+            notice [res.body]
+            device = JSON.parse(res.body)
+            agent_key = device['data']['agentKey']
+        else
+            agent_key = device['device']['agentKey']
         end
+
+        # need to figure out how to do this
+        #$::puppet-serverdensity::agent_key = agent_key
+        notice [agent_key]
 
 
     elsif api_version == "2"
@@ -72,15 +81,4 @@ hostclass :api, :arguments => {"api_version" => nil, "sd_username" => nil, "sd_p
         end
     end
 
-    
-
-    #notice [)]
-
-    #uri = URI('scope.lookupvar("token")
-    #token = Net::HTTP.get(uri)
-
-    
-
-    notice [api_token]
-    notice [sd_url]
 end
