@@ -1,4 +1,4 @@
 puppet-serverdensity
 ====================
 
-Puppet Manifests for deploying the Server Density Agent
+Puppet Module for deploying the Server Density Agent
