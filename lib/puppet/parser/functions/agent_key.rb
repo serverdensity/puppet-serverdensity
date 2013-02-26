@@ -67,7 +67,7 @@ module Puppet::Parser::Functions
                 device = JSON.parse(res.body)
                 agent_key = device['data']['agentKey']
             else
-                agent_key = device['device']['agentKey']
+                agent_key = device['data']['device']['agentKey']
             end
 
             # need to figure out how to do this

@@ -4,7 +4,7 @@
 #
 
 [Main]
-sd_url: https://<%= sd_url %>.serverdensity.com
+sd_url: <%= sd_url %>
 agent_key: <%= agent_key %>
 
 #
