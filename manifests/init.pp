@@ -121,16 +121,8 @@ class puppet-serverdensity(
 
     case $::operatingsystem {
         'Ubuntu': { 
-            class {
-                'api':
-                    api_version => "1",
-                    sd_url => '',
-                    token => 'foo',
-                    sd_username => '',
-                    sd_password => ''
-            }
-            #include sd-apt
-            #$location = '/etc/sd-agent/config.cfg'
+            include sd-apt
+            $location = '/etc/sd-agent/config.cfg'
         }
         'CentOS': { 
             include sd-yum 
@@ -144,7 +136,7 @@ class puppet-serverdensity(
                 location => $location,
                 require => Package['sd-agent'],
                 sd_url => $sd_url,
-                agent_key => $agent_key,
+                agent_key => agent_key('1', 'puppettest', 'testpuppet', 'tomwardill.serverdensity.com', ''),
                 plugin_directory => $plugin_directory,
                 apache_status_url => $apache_status_url,
                 apache_status_user => $apache_status_user,
