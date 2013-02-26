@@ -40,10 +40,15 @@ baseurl=http://www.serverdensity.com/downloads/linux/redhat/
 enabled=1',
     }
 
+    package {
+        'wget':
+            ensure => 'present',
+    }
+
     exec {
         'download-sd-yum-key':
             command => '/usr/bin/wget https://www.serverdensity.com/downloads/boxedice-public.key',
-            require => File['sd-agent.repo'],
+            require => [File['sd-agent.repo'], Package['wget']],
     }
 
     exec {

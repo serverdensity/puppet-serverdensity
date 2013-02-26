@@ -1,6 +1,5 @@
 require 'net/http'
 require 'uri'
-require 'json'
 
 module Puppet::Parser::Functions
 
@@ -42,7 +41,7 @@ module Puppet::Parser::Functions
                 http.request(req)
             }
 
-            device = JSON.parse(res.body)
+            device = PSON.parse(res.body)
             notice [device]
 
             if device['status'] == 2
@@ -64,7 +63,7 @@ module Puppet::Parser::Functions
                     http.request(req)
                 }
                 notice [res.body]
-                device = JSON.parse(res.body)
+                device = PSON.parse(res.body)
                 agent_key = device['data']['agentKey']
             else
                 agent_key = device['data']['device']['agentKey']
