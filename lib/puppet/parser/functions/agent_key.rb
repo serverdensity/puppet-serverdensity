@@ -5,21 +5,33 @@ module Puppet::Parser::Functions
 
     newfunction(:agent_key, :type => :rvalue) do |args|
 
-        api_version = args[0]
-        sd_username = args[1]
-        sd_password = args[2]
-        sd_url = args[3]
-        token = args[4]
+        sd_username = args[0]
+        sd_password = args[1]
+        sd_url = args[2]
+        token = args[3]
+        agent_key = args[4]
 
-        if api_version.nil? or api_version.empty?
-            raise Puppet::ParseError, "API version not set"
+        sd_url = sd_url.sub(/^https?\:\/\//, '')
+
+        unless agent_key.nil? or agent_key.empty?
+            notice ["Agent Key provided"]
+            notice [agent_key]
+            return agent_key
         end
+
         if sd_url.nil? or sd_url.empty?
             raise Puppet::ParseError, "SD URL not set"
         end
 
-        if api_version == "1"
-            notice ["Using SD Version 1"]
+        if token.nil? or token.empty?
+            api_version = "1.4"
+        else
+            api_version = "2"
+        end
+
+
+        if api_version == "1.4"
+            notice ["Using SD Version 1.4"]
 
             if sd_password.nil? or sd_password.empty?
                 raise Puppet::ParseError, "SD Password not set"

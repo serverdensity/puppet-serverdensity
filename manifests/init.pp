@@ -24,7 +24,7 @@ class sd-apt {
     package {
         'sd-agent':
             ensure => 'present',
-            require => Exec['sd-apt-update']
+            require => Exec['sd-apt-update'],
     }    
 }
 
@@ -133,15 +133,14 @@ class puppet-serverdensity(
             include sd-yum 
             $location = '/etc/sd-agent/config.cfg'
         }
-
-
     }
+
     class {
            'sd-config-file':
                 location => $location,
                 require => Package['sd-agent'],
                 sd_url => $sd_url,
-                agent_key => agent_key('1', 'puppettest', 'testpuppet', 'tomwardill.serverdensity.com', ''),
+                agent_key => agent_key($api_username, $api_password, $sd_url, $token, $agent_key),
                 plugin_directory => $plugin_directory,
                 apache_status_url => $apache_status_url,
                 apache_status_user => $apache_status_user,
