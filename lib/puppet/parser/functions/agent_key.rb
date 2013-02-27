@@ -14,8 +14,7 @@ module Puppet::Parser::Functions
         sd_url = sd_url.sub(/^https?\:\/\//, '')
 
         unless agent_key.nil? or agent_key.empty?
-            notice ["Agent Key provided"]
-            notice [agent_key]
+            notice ["Agent Key Provided: #{ agent_key }"]
             return agent_key
         end
 
@@ -31,7 +30,6 @@ module Puppet::Parser::Functions
 
 
         if api_version == "1.4"
-            notice ["Using SD Version 1.4"]
 
             if sd_password.nil? or sd_password.empty?
                 raise Puppet::ParseError, "SD Password not set"
@@ -42,9 +40,7 @@ module Puppet::Parser::Functions
 
             base_url = 'http://api.serverdensity.com/1.4/'
             hostname = Facter["hostname"].value
-            notice [hostname]
             uri = URI("#{ base_url }devices/getByHostName?hostName=#{ hostname }&account=#{ sd_url }")
-            notice [uri.request_uri]
 
             req = Net::HTTP::Get.new(uri.request_uri)
             req.basic_auth sd_username, sd_password
@@ -54,7 +50,6 @@ module Puppet::Parser::Functions
             }
 
             device = PSON.parse(res.body)
-            notice [device]
 
             if device['status'] == 2
                 notice ["Device not found, creating a new one"]
@@ -65,6 +60,7 @@ module Puppet::Parser::Functions
 
                 params = {
                     'name' => hostname,
+                    'hostName' => hostname,
                     'notes' => 'Created automatically by puppet-serverdensity',
                 }
 
@@ -74,16 +70,14 @@ module Puppet::Parser::Functions
                 res = Net::HTTP.start(uri.host, uri.port) {|http|
                     http.request(req)
                 }
-                notice [res.body]
                 device = PSON.parse(res.body)
                 agent_key = device['data']['agentKey']
             else
+                notice ["Reusing existing device"]
                 agent_key = device['data']['device']['agentKey']
             end
 
-            # need to figure out how to do this
-            #$::puppet-serverdensity::agent_key = agent_key
-            notice [agent_key]
+            notice ["Agent Key: #{ agent_key }"]
 
 
         elsif api_version == "2"
