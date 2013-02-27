@@ -82,11 +82,7 @@ module Puppet::Parser::Functions
 
         elsif api_version == "2"
             notice ["Using SD Version 2"]
-
-            api_token = scope.lookupvar("token")
-            if api_token.nil? or api_token.empty?
-                raise Puppet::ParseError, "SD API token not set"
-            end
+            
         end
 
         return agent_key

@@ -140,7 +140,7 @@ class puppet-serverdensity(
                 location => $location,
                 require => Package['sd-agent'],
                 sd_url => $sd_url,
-                agent_key => agent_key($api_username, $api_password, $sd_url, $token, $agent_key),
+                agent_key => agent_key($api_username, $api_password, $sd_url, $api_token, $agent_key),
                 plugin_directory => $plugin_directory,
                 apache_status_url => $apache_status_url,
                 apache_status_user => $apache_status_user,
