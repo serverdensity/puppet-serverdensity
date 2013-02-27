@@ -10,6 +10,11 @@ module Puppet::Parser::Functions
         sd_url = args[2]
         token = args[3]
         agent_key = args[4]
+        server_name = args[5]
+
+        if server_name.nil? or server_name.empty?
+            server_name = Facter["hostname"].value
+        end
 
         sd_url = sd_url.sub(/^https?\:\/\//, '')
 
@@ -39,7 +44,6 @@ module Puppet::Parser::Functions
             end
 
             base_url = 'http://api.serverdensity.com/1.4/'
-            hostname = Facter["hostname"].value
             uri = URI("#{ base_url }devices/getByHostName?hostName=#{ hostname }&account=#{ sd_url }")
 
             req = Net::HTTP::Get.new(uri.request_uri)
@@ -59,8 +63,8 @@ module Puppet::Parser::Functions
                 req.basic_auth sd_username, sd_password
 
                 params = {
-                    'name' => hostname,
-                    'hostName' => hostname,
+                    'name' => server_name,
+                    'hostName' => Facter["hostname"].value,
                     'notes' => 'Created automatically by puppet-serverdensity',
                 }
 
@@ -82,7 +86,7 @@ module Puppet::Parser::Functions
 
         elsif api_version == "2"
             notice ["Using SD Version 2"]
-            
+
         end
 
         return agent_key
