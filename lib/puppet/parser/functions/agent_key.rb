@@ -81,14 +81,53 @@ module Puppet::Parser::Functions
                 agent_key = device['data']['device']['agentKey']
             end
 
-            notice ["Agent Key: #{ agent_key }"]
-
-
         elsif api_version == "2"
             notice ["Using SD Version 2"]
 
+            base_url = "http://api.honshuu.vgrnt:8091"
+
+            filter = {
+                'type' => 'device',
+                'hostname' => Facter["hostname"].value,
+            }
+
+            filter_json = URI.escape(PSON.dump(filter))
+
+            uri = URI("#{ base_url }/inventory/devices?filter=#{ filter_json }&token=#{ token }")
+            req = Net::HTTP::Get.new(uri.request_uri)
+            res = Net::HTTP.start(uri.host, uri.port) { |http|
+                http.request(req)
+            }
+
+            list = PSON.parse(res.body)
+
+            if Integer(res.code) >= 300 or list.length == 0
+                notice ["Device not found, creating a new one"]
+
+                data = {
+                    :name => server_name,
+                    :hostname => Facter["hostname"].value,
+                }
+
+                uri = URI("#{ base_url }/inventory/devices?token=#{ token }")
+                req = Net::HTTP::Post.new(uri.request_uri)
+
+                # Create new device
+                req.set_form_data(data)
+
+                res = Net::HTTP.start(uri.host, uri.port) {|http|
+                    http.request(req)
+                }
+                device = PSON.parse(res.body)
+
+            else
+                device = list[0]
+            end
+
+            agent_key = device["agentKey"]
         end
 
+        notice ["Agent Key: #{ agent_key }"]
         return agent_key
     end
 end
