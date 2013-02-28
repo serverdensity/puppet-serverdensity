@@ -41,7 +41,7 @@ class serverdensity::apt {
       'sd-agent.list':
           ensure  =>  file,
           path    => '/etc/apt/sources.list.d/sd-agent.list',
-          source  => 'puppet:///modules/puppet-serverdensity/sd-agent.list',
+          source  => 'puppet:///modules/serverdensity/sd-agent.list',
           notify  => Exec['sd-apt-update']
   }
 
