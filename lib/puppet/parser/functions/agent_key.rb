@@ -13,7 +13,7 @@ module Puppet::Parser::Functions
         server_name = args[5]
 
         if server_name.nil? or server_name.empty?
-            server_name = Facter["hostname"].value
+            server_name = Facter["fqdn"].value
         end
 
         sd_url = sd_url.sub(/^https?\:\/\//, '')
