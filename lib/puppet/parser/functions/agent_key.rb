@@ -12,6 +12,8 @@ module Puppet::Parser::Functions
         agent_key = args[4]
         server_name = args[5]
 
+        hostname = Facter["hostname"].value
+
         if server_name.nil? or server_name.empty?
             server_name = Facter["hostname"].value
         end
