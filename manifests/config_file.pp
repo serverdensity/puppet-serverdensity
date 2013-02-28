@@ -59,6 +59,6 @@ class serverdensity::config_file (
     ) {
     file { 'sd-agent-config-file':
         path    => $location,
-        content => template('puppet-serverdensity/config.template'),
+        content => template('serverdensity/config.template'),
     }
 }
