@@ -4,7 +4,7 @@ class sd-apt {
         'sd-agent.list':
             path    => '/etc/apt/sources.list.d/sd-agent.list',
             ensure  =>  file,
-            content => 'deb http://www.serverdensity.com/downloads/linux/deb all main',
+            source  => 'puppet:///modules/puppet-serverdensity/sd-agent.list'
             notify  => Exec['sd-apt-update']
     }
 
