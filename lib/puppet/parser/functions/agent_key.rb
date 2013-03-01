@@ -45,6 +45,7 @@ module Puppet::Parser::Functions
                 raise Puppet::ParseError, "SD Username not set"
             end
 
+            notice ["Starting retrieval"]
             base_url = 'http://api.serverdensity.com/1.4/'
             uri = URI("#{ base_url }devices/getByHostName?hostName=#{ hostname }&account=#{ sd_url }")
 
@@ -54,7 +55,7 @@ module Puppet::Parser::Functions
             res = Net::HTTP.start(uri.host, uri.port) {|http|
                 http.request(req)
             }
-
+            notice ["Initial Body: #{ res.body }"]
             device = PSON.parse(res.body)
 
             if device['status'] == 2
@@ -76,6 +77,7 @@ module Puppet::Parser::Functions
                 res = Net::HTTP.start(uri.host, uri.port) {|http|
                     http.request(req)
                 }
+                notice ["New Body: #{ res.body}"]
                 device = PSON.parse(res.body)
                 agent_key = device['data']['agentKey']
             else
