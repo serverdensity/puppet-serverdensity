@@ -12,11 +12,14 @@ module Puppet::Parser::Functions
         agent_key = args[4]
         server_name = args[5]
 
-        hostname = Facter["hostname"].value
+        hostname = lookupvar("hostname")
+        fqdn = lookupvar("fqdn")
 
         if server_name.nil? or server_name.empty?
-            server_name = Facter["fqdn"].value
+            server_name = fqdn
         end
+
+        notice ["Server Name: #{ server_name }"]
 
         sd_url = sd_url.sub(/^https?\:\/\//, '')
 
@@ -67,7 +70,7 @@ module Puppet::Parser::Functions
 
                 params = {
                     'name' => server_name,
-                    'hostName' => Facter["hostname"].value,
+                    'hostName' => hostname,
                     'notes' => 'Created automatically by puppet-serverdensity',
                 }
 
@@ -79,6 +82,12 @@ module Puppet::Parser::Functions
                 }
                 notice ["New Body: #{ res.body}"]
                 device = PSON.parse(res.body)
+
+                if device['status'] == 2:
+                    message = device['error']['message']
+                    raise Puppet::ParseError, "Failure creating new device: #{ message }"
+                end
+
                 agent_key = device['data']['agentKey']
             else
                 notice ["Reusing existing device"]
@@ -92,7 +101,7 @@ module Puppet::Parser::Functions
 
             filter = {
                 'type' => 'device',
-                'hostname' => Facter["hostname"].value,
+                'hostname' => hostname,
             }
 
             filter_json = URI.escape(PSON.dump(filter))
@@ -110,7 +119,7 @@ module Puppet::Parser::Functions
 
                 data = {
                     :name => server_name,
-                    :hostname => Facter["hostname"].value,
+                    :hostname => hostname,
                 }
 
                 uri = URI("#{ base_url }/inventory/devices?token=#{ token }")
