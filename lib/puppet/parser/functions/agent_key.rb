@@ -11,6 +11,7 @@ module Puppet::Parser::Functions
         token = args[3]
         agent_key = args[4]
         server_name = args[5]
+        group = args[6]
 
         hostname = lookupvar("hostname")
         fqdn = lookupvar("fqdn")
@@ -74,6 +75,10 @@ module Puppet::Parser::Functions
                     'notes' => 'Created automatically by puppet-serverdensity',
                 }
 
+                unless group.nil? or group.empty?
+                    params['group'] = group
+                end
+
                 # Create new device
                 req.set_form_data(params)
 
@@ -121,6 +126,9 @@ module Puppet::Parser::Functions
                     :name => server_name,
                     :hostname => hostname,
                 }
+                unless group.nil? or group.empty?
+                    data['group'] = group
+                end
 
                 uri = URI("#{ base_url }/inventory/devices?token=#{ token }")
                 req = Net::HTTP::Post.new(uri.request_uri)

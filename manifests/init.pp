@@ -42,6 +42,7 @@ class serverdensity(
   $api_password = '',
   $agent_key = '',
   $server_name = '',
+  $server_group = '',
   $plugin_directory = '',
   $apache_status_url = 'http://www.example.com/server-status/?auto',
   $apache_status_user = '',
@@ -85,7 +86,8 @@ class serverdensity(
         $sd_url,
         $api_token,
         $agent_key,
-        $server_name
+        $server_name,
+        $server_group
         ),
       plugin_directory    => $plugin_directory,
       apache_status_url   => $apache_status_url,
