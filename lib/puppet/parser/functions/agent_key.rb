@@ -85,6 +85,7 @@ module Puppet::Parser::Functions
                 if device['status'] == 2:
                     message = device['error']['message']
                     raise Puppet::ParseError, "Failure creating new device: #{ message }"
+                end
 
                 agent_key = device['data']['agentKey']
             else
