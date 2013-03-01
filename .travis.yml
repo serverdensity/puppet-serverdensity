@@ -5,6 +5,3 @@ script: 'puppet parser validate `find . {manifests} -name "*.pp"`'
 script: 'puppet-lint --with-filename manifests'
 env:
   - PUPPET_VERSION="2.7"
-branches:
-  only:
-    - possible_enhancements
