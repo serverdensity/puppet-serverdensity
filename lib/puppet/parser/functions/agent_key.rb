@@ -15,15 +15,11 @@ module Puppet::Parser::Functions
         hostname = lookupvar("hostname")
         fqdn = lookupvar("fqdn")
 
-        notice ["Hostname: #{hostname}"]
-        notice ["FQDN: #{fqdn}"]
-        notice ["First Server Name: #{server_name}"]
-
         if server_name.nil? or server_name.empty?
-            server_name = Facter["fqdn"].value
+            server_name = fqdn
         end
 
-        notice ["Second Server Name: #{ server_name }"]
+        notice ["Server Name: #{ server_name }"]
 
         sd_url = sd_url.sub(/^https?\:\/\//, '')
 
@@ -74,7 +70,7 @@ module Puppet::Parser::Functions
 
                 params = {
                     'name' => server_name,
-                    'hostName' => Facter["hostname"].value,
+                    'hostName' => hostname,
                     'notes' => 'Created automatically by puppet-serverdensity',
                 }
 
@@ -105,7 +101,7 @@ module Puppet::Parser::Functions
 
             filter = {
                 'type' => 'device',
-                'hostname' => Facter["hostname"].value,
+                'hostname' => hostname,
             }
 
             filter_json = URI.escape(PSON.dump(filter))
@@ -123,7 +119,7 @@ module Puppet::Parser::Functions
 
                 data = {
                     :name => server_name,
-                    :hostname => Facter["hostname"].value,
+                    :hostname => hostname,
                 }
 
                 uri = URI("#{ base_url }/inventory/devices?token=#{ token }")
