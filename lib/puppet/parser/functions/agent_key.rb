@@ -59,7 +59,6 @@ module Puppet::Parser::Functions
             res = Net::HTTP.start(uri.host, uri.port) {|http|
                 http.request(req)
             }
-            notice ["Initial Body: #{ res.body }"]
             device = PSON.parse(res.body)
 
             if device['status'] == 2
@@ -85,7 +84,6 @@ module Puppet::Parser::Functions
                 res = Net::HTTP.start(uri.host, uri.port) {|http|
                     http.request(req)
                 }
-                notice ["New Body: #{ res.body}"]
                 device = PSON.parse(res.body)
 
                 if device['status'] == 2:
