@@ -12,8 +12,8 @@ module Puppet::Parser::Functions
         agent_key = args[4]
         server_name = args[5]
 
-        hostname = Facter["hostname"].value
-        fqdn = Facter["fqdn"].value
+        hostname = lookupvar("hostname")
+        fqdn = lookupvar("fqdn")
 
         notice ["Hostname: #{hostname}"]
         notice ["FQDN: #{fqdn}"]
