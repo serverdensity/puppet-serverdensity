@@ -79,6 +79,11 @@ module Puppet::Parser::Functions
                 }
                 notice ["New Body: #{ res.body}"]
                 device = PSON.parse(res.body)
+
+                if device['status'] == 2:
+                    message = device['error']['message']
+                    raise Puppet::ParseError, "Failure creating new device: #{ message }"
+
                 agent_key = device['data']['agentKey']
             else
                 notice ["Reusing existing device"]
