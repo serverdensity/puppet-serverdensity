@@ -60,12 +60,12 @@ class serverdensity(
   $pidfile_directory = '',
   $logging_level = '',
   ) {
-  case $::operatingsystem {
-    'Ubuntu': {
+  case $::osfamily {
+    'Debian': {
       include apt
         $location = '/etc/sd-agent/config.cfg'
     }
-    'CentOS': {
+    'RedHat': {
       include yum
         $location = '/etc/sd-agent/config.cfg'
     }
