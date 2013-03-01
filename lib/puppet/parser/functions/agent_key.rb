@@ -18,6 +18,8 @@ module Puppet::Parser::Functions
             server_name = Facter["fqdn"].value
         end
 
+        notice ["Server Name: #{ server_name }"]
+
         sd_url = sd_url.sub(/^https?\:\/\//, '')
 
         unless agent_key.nil? or agent_key.empty?
