@@ -111,7 +111,11 @@ class serverdensity(
 
   service {
     'sd-agent':
-      ensure  => 'running',
-      enable  => true,
+      name      => 'sd-agent',
+      ensure    => running,
+      pattern   => 'python /usr/bin/sd-agent/agent.py start init --clean',
+      hasstatus => false, # Match specific pattern due to Ubuntu bug https://bugs.launchpad.net/ubuntu/+source/upstart/+bug/552786
+      enable    => true,
+      subscribe => File['config.cfg'],
   }
 }
