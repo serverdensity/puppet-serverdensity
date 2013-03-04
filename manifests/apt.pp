@@ -56,7 +56,7 @@ class serverdensity::apt {
   exec {
       'sd-apt-update':
           command     => '/usr/bin/apt-get update',
-          require     => Exec['sd-agent.list'],
+          require     => File['sd-agent.list'],
           refreshonly => true,
   }
 

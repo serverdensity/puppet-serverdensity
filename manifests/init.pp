@@ -117,6 +117,5 @@ class serverdensity(
       # due to https://bugs.launchpad.net/ubuntu/+source/upstart/+bug/552786
       hasstatus => false,
       enable    => true,
-      subscribe => File['config.cfg'],
   }
 }
