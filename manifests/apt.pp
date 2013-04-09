@@ -42,19 +42,22 @@ class serverdensity::apt {
           ensure  =>  file,
           path    => '/etc/apt/sources.list.d/sd-agent.list',
           source  => 'puppet:///modules/serverdensity/sd-agent.list',
-          notify  => Exec['sd-apt-update']
+          notify  => Exec['add-sd-apt-key']
   }
 
   exec {
       'add-sd-apt-key':
-          command => '/usr/bin/wget -O - https://www.serverdensity.com/downloads/boxedice-public.key | /usr/bin/apt-key add -',
-          require => File['sd-agent.list'],
+          command     => '/usr/bin/wget -O - https://www.serverdensity.com/downloads/boxedice-public.key | /usr/bin/apt-key add -',
+          refreshonly => true,
+          notify      => Exec['sd-apt-update'],
+          require     => File['sd-agent.list'],
   }
 
   exec {
       'sd-apt-update':
-          command => '/usr/bin/apt-get update',
-          require => Exec['add-sd-apt-key'],
+          command     => '/usr/bin/apt-get update',
+          require     => File['sd-agent.list'],
+          refreshonly => true,
   }
 
   package {
