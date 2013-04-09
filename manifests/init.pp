@@ -40,7 +40,7 @@ class serverdensity(
   $api_token = '',
   $api_username = '',
   $api_password = '',
-  $agent_key = '',
+  $agent_key = $::agent_key,
   $server_name = '',
   $server_group = '',
   $plugin_directory = '',

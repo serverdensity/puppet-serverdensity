@@ -25,6 +25,23 @@ module Puppet::Parser::Functions
 
         sd_url = sd_url.sub(/^https?\:\/\//, '')
 
+        # can we get the agent key from the environment
+        # we set it on cloud devices created on Amazon or Rackspace
+        # created via the serverdensity UI
+        # uses custom agent_key fact
+        agent_key = lookupvar("agent_key")
+
+        # lookupvar returns undef if no value
+        # test against nil just in case
+        unless agent_key.nil? or agent_key == :undef
+            notice ["Agent Key Provided via Facter: #{ agent_key }"]
+            return agent_key
+        end
+
+        if agent_key == :undef
+            agent_key = ""
+        end
+
         unless agent_key.nil? or agent_key.empty?
             notice ["Agent Key Provided: #{ agent_key }"]
             return agent_key
@@ -116,9 +133,9 @@ module Puppet::Parser::Functions
             req = Net::HTTP::Get.new(uri.request_uri)
             https = Net::HTTP.new(uri.host, uri.port)
             https.use_ssl = true
+            https.verify_mode = OpenSSL::SSL::VERIFY_NONE
             res = https.start { |cx| cx.request(req) }
 
-            notice [res.body]
             list = PSON.parse(res.body)
 
             if Integer(res.code) >= 300 or list.length == 0
@@ -140,6 +157,7 @@ module Puppet::Parser::Functions
 
                 https = Net::HTTP.new(uri.host, uri.port)
                 https.use_ssl = true
+                https.verify_mode = OpenSSL::SSL::VERIFY_NONE
                 res = https.start { |cx| cx.request(req) }
 
                 device = PSON.parse(res.body)
