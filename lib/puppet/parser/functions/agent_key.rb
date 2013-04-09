@@ -1,4 +1,5 @@
 require 'net/http'
+require 'net/https'
 require 'uri'
 
 module Puppet::Parser::Functions
@@ -100,7 +101,7 @@ module Puppet::Parser::Functions
         elsif api_version == "2"
             notice ["Using SD Version 2"]
 
-            base_url = "http://api.honshuu.vgrnt:8091"
+            base_url = "https://api.serverdensity.io"
 
             filter = {
                 'type' => 'device',
@@ -109,12 +110,15 @@ module Puppet::Parser::Functions
 
             filter_json = URI.escape(PSON.dump(filter))
 
+            notice ["Making API request"]
+
             uri = URI("#{ base_url }/inventory/devices?filter=#{ filter_json }&token=#{ token }")
             req = Net::HTTP::Get.new(uri.request_uri)
-            res = Net::HTTP.start(uri.host, uri.port) { |http|
-                http.request(req)
-            }
+            https = Net::HTTP.new(uri.host, uri.port)
+            https.use_ssl = true
+            res = https.start { |cx| cx.request(req) }
 
+            notice [res.body]
             list = PSON.parse(res.body)
 
             if Integer(res.code) >= 300 or list.length == 0
@@ -134,9 +138,10 @@ module Puppet::Parser::Functions
                 # Create new device
                 req.set_form_data(data)
 
-                res = Net::HTTP.start(uri.host, uri.port) {|http|
-                    http.request(req)
-                }
+                https = Net::HTTP.new(uri.host, uri.port)
+                https.use_ssl = true
+                res = https.start { |cx| cx.request(req) }
+
                 device = PSON.parse(res.body)
 
             else
