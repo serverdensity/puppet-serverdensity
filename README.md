@@ -24,7 +24,7 @@ class {
 
 This will install the agent, with the basic configuration, using the key that is provided.
 
-### API Config
+### Serverdensity V1 API Config
 
 You can use the Server Density API to create a new device, based on the hostname of the node.
 
@@ -38,6 +38,20 @@ class {
 
 ```
 
+### Serverdensity V2 API Config
+
+You can also use the V2 API to create a new device, based on the hostname of your node
+
+```puppet
+class {
+
+        'puppet-serverdensity':
+            sd_url => 'https://example.serverdensity.io',
+            api_token => 'APITOKENHERE',
+}
+```
+
+
 This will create a new device, and then use the agent key provided to configure the agent on the node.
 
 ### Optional Parameters
@@ -45,6 +59,7 @@ This will create a new device, and then use the agent key provided to configure 
 There are some optional parameters that can be used to configure other parts of the agent
 
 * `$server_name`
+* `$server_group` - Sets the group for the server that is added
 * `$plugin_directory` -  Sets the directory the agent looks for plugins, if left blank it is ignored
 * `$apache_status_url` - URL to get the Apache2 status page from (e.g. `mod_status`), disabled if not set
 * `$apache_status_user` - Username to authenticate to the Apache2 status page, required if `apache_status_url` is set
