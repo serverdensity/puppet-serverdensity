@@ -24,7 +24,9 @@ class {
 
 This will install the agent, with the basic configuration, using the key that is provided.
 
-### Serverdensity V1 API Config
+### v1 API Config
+
+*If your account URL ends in .com you are using v1*
 
 You can use the Server Density API to create a new device, based on the hostname of the node.
 
@@ -38,9 +40,11 @@ class {
 
 ```
 
-### Serverdensity V2 API Config
+### v2 API Config
 
-You can also use the V2 API to create a new device, based on the hostname of your node
+*If your account URL ends in .io you are using v2*
+
+Create an API token by clicking your name top left, clicking Preferences then going to the Security tab.
 
 ```puppet
 class {
@@ -50,7 +54,6 @@ class {
             api_token => 'APITOKENHERE',
 }
 ```
-
 
 This will create a new device, and then use the agent key provided to configure the agent on the node.
 
