@@ -61,7 +61,7 @@ class serverdensity(
   $pidfile_directory = '',
   $logging_level = '',
   ) {
-  case $::osfamily {
+  case $::operatingsystem {
     'Debian': {
       include apt
         $location = '/etc/sd-agent/config.cfg'
