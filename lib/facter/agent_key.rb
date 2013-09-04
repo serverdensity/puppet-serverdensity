@@ -21,8 +21,8 @@ Facter.add(:agent_key) do
         res = Net::HTTP.start(uri.host, uri.port) {|http|
                 http.request(req)
             }
-
-        result = res.body.split(':').last
+        
+        result = res.body.split(':').last if res.code == 200
     end
 
     # if we get to here and neither of the above
