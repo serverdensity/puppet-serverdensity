@@ -66,6 +66,10 @@ class serverdensity(
       include apt
         $location = '/etc/sd-agent/config.cfg'
     }
+    'Ubuntu': {
+      include apt
+        $location = '/etc/sd-agent/config.cfg'
+    }
     'RedHat': {
       include yum
         $location = '/etc/sd-agent/config.cfg'
