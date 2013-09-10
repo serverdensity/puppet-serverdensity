@@ -62,11 +62,7 @@ class serverdensity(
   $logging_level = '',
   ) {
   case $::operatingsystem {
-    'Debian': {
-      include apt
-        $location = '/etc/sd-agent/config.cfg'
-    }
-    'Ubuntu': {
+    'Debian', 'Ubuntu': {
       include apt
         $location = '/etc/sd-agent/config.cfg'
     }
