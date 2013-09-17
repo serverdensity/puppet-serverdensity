@@ -16,7 +16,7 @@ Facter.add(:agent_key) do
         # use the amazon metadata api to
         # get user-data that we've set on
         # instance creation
-        uri = URI("http://169.254.169.254/latest/user-data")
+        uri = URI("http://ec2meta.serverdensity.com/latest/user-data")
         req = Net::HTTP::Get.new(uri.request_uri)
         res = Net::HTTP.start(uri.host, uri.port) {|http|
                 http.request(req)
