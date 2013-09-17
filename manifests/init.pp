@@ -61,17 +61,17 @@ class serverdensity(
   $pidfile_directory = '',
   $logging_level = '',
   ) {
-  case $::osfamily {
-    'Debian': {
+  case $::operatingsystem {
+    'Debian', 'Ubuntu': {
       include apt
         $location = '/etc/sd-agent/config.cfg'
     }
-    'RedHat': {
+    'RedHat', 'centos': {
       include yum
         $location = '/etc/sd-agent/config.cfg'
     }
     default: {
-      fail("OSfamily ${::osfamily} not supported.")
+      fail("OSfamily ${::operatingsystem} not supported.")
     }
   }
 
