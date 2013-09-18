@@ -40,6 +40,7 @@ class serverdensity(
   $api_token = '',
   $api_username = '',
   $api_password = '',
+  $use_fqdn = false,
   $agent_key = $::agent_key,
   $server_name = '',
   $server_group = '',
@@ -87,7 +88,8 @@ class serverdensity(
         $api_token,
         $agent_key,
         $server_name,
-        $server_group
+        $server_group,
+        $use_fqdn
         ),
       plugin_directory    => $plugin_directory,
       apache_status_url   => $apache_status_url,
