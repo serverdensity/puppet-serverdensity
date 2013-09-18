@@ -58,6 +58,7 @@ class {
 
 There are some optional parameters that can be used to configure other parts of the agent
 
+* `$use_fqdn` - This will cause the class to use the facter Fully Qualified Domain Name rather than the detected hostname. Useful in times where the sd-agent and puppet disagree on what the hostname should be.
 * `$server_name`
 * `$server_group` - Sets the group for the server that is added
 * `$plugin_directory` -  Sets the directory the agent looks for plugins, if left blank it is ignored

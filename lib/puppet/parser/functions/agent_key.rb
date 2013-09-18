@@ -13,12 +13,18 @@ module Puppet::Parser::Functions
         agent_key = args[4]
         server_name = args[5]
         group = args[6]
+        use_fqdn = args[7]
 
         hostname = lookupvar("hostname")
         fqdn = lookupvar("fqdn")
 
         if server_name.nil? or server_name.empty?
             server_name = fqdn
+        end
+
+        if use_fqdn
+            notice "Using fqdn for hostname"
+            hostname = fqdn
         end
 
         notice ["Server Name: #{ server_name }"]
