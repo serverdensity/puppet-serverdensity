@@ -2,7 +2,7 @@ require 'facter'
 require 'net/http'
 require 'uri'
 
-Facter.add(:agent_key) do
+Facter.add(:agent_key, :timeout => 10) do
 
     # just in case we don't get any of them
     result = nil
@@ -12,7 +12,7 @@ Facter.add(:agent_key) do
     # do this first as it's fast
     if File::exist?('/etc/sd-agent-key')
         result = Facter::Util::Resolution.exec("cat /etc/sd-agent-key")
-    else
+    elsif Facter.value('ec2_instance_id')
         # use the amazon metadata api to
         # get user-data that we've set on
         # instance creation
