@@ -75,15 +75,23 @@ module Puppet::Parser::Functions
 
             notice ["Starting retrieval"]
             base_url = 'http://api.serverdensity.com/1.4/'
-            uri = URI("#{ base_url }devices/getByHostName?hostName=#{ hostname }&account=#{ sd_url }")
+            # attempt to find the device by hostname (which may be local or FQDN)
+            device = nil
+            [hostname, fqdn].each do |hn|
+                uri = URI("#{ base_url }devices/getByHostName?hostName=#{ hn }&account=#{ sd_url }")
 
-            req = Net::HTTP::Get.new(uri.request_uri)
-            req.basic_auth sd_username, sd_password
+                req = Net::HTTP::Get.new(uri.request_uri)
+                req.basic_auth sd_username, sd_password
 
-            res = Net::HTTP.start(uri.host, uri.port) {|http|
-                http.request(req)
-            }
-            device = PSON.parse(res.body)
+                res = Net::HTTP.start(uri.host, uri.port) {|http|
+                    http.request(req)
+                }
+                device = PSON.parse(res.body)
+                if device['status'] == 1
+                    # keep this response -- device was found
+                    break
+                end
+            end
 
             if device['status'] == 2
                 notice ["Device not found, creating a new one"]
@@ -110,7 +118,7 @@ module Puppet::Parser::Functions
                 }
                 device = PSON.parse(res.body)
 
-                if device['status'] == 2:
+                if device['status'] == 2
                     message = device['error']['message']
                     raise Puppet::ParseError, "Failure creating new device: #{ message }"
                 end
@@ -118,6 +126,13 @@ module Puppet::Parser::Functions
                 agent_key = device['data']['agentKey']
             else
                 notice ["Reusing existing device"]
+                # Validate that the found device is correct (this is to correct
+                # for erroneous results that can be returned from the API
+                # getByHostName query)
+                found_hostname = device['data']['device']['hostName']
+                if not [hostname, fqdn].include? found_hostname
+                    raise Puppet::ParseError, "Serverdensity getByHostname API call returned a device with mismatching hostname '#{found_hostname}'.  You may need to recreate device(s)."
+                end
                 agent_key = device['data']['device']['agentKey']
             end
 
@@ -126,23 +141,31 @@ module Puppet::Parser::Functions
 
             base_url = "https://api.serverdensity.io"
 
-            filter = {
-                'type' => 'device',
-                'hostname' => hostname,
-            }
+            # attempt to find the device by hostname (which may be local or FQDN)
+            list = nil
+            [hostname, fqdn].each do |hn|
+                filter = {
+                    'type' => 'device',
+                    'hostname' => hn,
+                }
 
-            filter_json = URI.escape(PSON.dump(filter))
+                filter_json = URI.escape(PSON.dump(filter))
 
-            notice ["Making API request"]
+                notice ["Making API request"]
 
-            uri = URI("#{ base_url }/inventory/devices?filter=#{ filter_json }&token=#{ token }")
-            req = Net::HTTP::Get.new(uri.request_uri)
-            https = Net::HTTP.new(uri.host, uri.port)
-            https.use_ssl = true
-            https.verify_mode = OpenSSL::SSL::VERIFY_NONE
-            res = https.start { |cx| cx.request(req) }
+                uri = URI("#{ base_url }/inventory/devices?filter=#{ filter_json }&token=#{ token }")
+                req = Net::HTTP::Get.new(uri.request_uri)
+                https = Net::HTTP.new(uri.host, uri.port)
+                https.use_ssl = true
+                https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+                res = https.start { |cx| cx.request(req) }
 
-            list = PSON.parse(res.body)
+                list = PSON.parse(res.body)
+                if list.length > 0
+                    # keep this response -- device was found
+                    break
+                end
+            end
 
             if Integer(res.code) >= 300 or list.length == 0
                 notice ["Device not found, creating a new one"]
