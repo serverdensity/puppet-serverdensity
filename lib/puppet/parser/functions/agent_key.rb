@@ -110,7 +110,7 @@ module Puppet::Parser::Functions
                 }
                 device = PSON.parse(res.body)
 
-                if device['status'] == 2:
+                if device['status'] == 2
                     message = device['error']['message']
                     raise Puppet::ParseError, "Failure creating new device: #{ message }"
                 end
