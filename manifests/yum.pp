@@ -36,43 +36,19 @@
 # Copyright 2011 Your name here, unless otherwise noted.
 #
 class serverdensity::yum {
+  $repo_baseurl = 'http://www.serverdensity.com/downloads/linux/redhat/'
+  $repo_keyurl = 'https://www.serverdensity.com/downloads/boxedice-public.key'
 
-  file {
-      'sd-agent.repo':
-          ensure  =>  file,
-          path    => '/etc/yum.repos.d/serverdensity.repo',
-          content => '[serverdensity]
-name=Server Density
-baseurl=http://www.serverdensity.com/downloads/linux/redhat/
-enabled=1',
+  yumrepo { 'serverdensity':
+    baseurl  => $repo_baseurl,
+    gpgkey   => $repo_keyurl,
+    descr    => "Server Density",
+    enabled  => 1,
+    gpgcheck => 1,
   }
-
-  package {
-      'wget':
-          ensure => 'present',
-  }
-
-  exec {
-      'download-sd-yum-key':
-          command => '/usr/bin/wget https://www.serverdensity.com/downloads/boxedice-public.key',
-          require => [File['sd-agent.repo'], Package['wget']],
-  }
-
-  exec {
-      'import-sd-yum-key':
-          command => '/usr/bin/sudo rpm --import boxedice-public.key',
-          require => Exec['download-sd-yum-key'],
-  }
-
-  exec {
-      'delete-sd-yum-key':
-          command => '/bin/rm boxedice-public.key',
-          require => Exec['import-sd-yum-key'],
-  }
-
-  package {
-      'sd-agent':
-          ensure  => 'present',
-          require => Exec['delete-sd-yum-key']
+  # install SD agent package
+  package { 'sd-agent':
+    ensure   => present,
+    require  => Yumrepo['serverdensity']
   }
 }
