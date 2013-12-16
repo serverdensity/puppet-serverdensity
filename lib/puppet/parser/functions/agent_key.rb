@@ -25,7 +25,13 @@ module Puppet::Parser::Functions
         if use_fqdn
             notice "Using fqdn for hostname"
             hostname = fqdn
+            checks = [hostname]
+        else
+            # if we don't explicitly want to use the fqdn
+            # then we should check hostname and fqdn
+            checks = [hostname, fqdn]
         end
+
 
         notice ["Server Name: #{ server_name }"]
 
@@ -77,7 +83,7 @@ module Puppet::Parser::Functions
             base_url = 'http://api.serverdensity.com/1.4/'
             # attempt to find the device by hostname (which may be local or FQDN)
             device = nil
-            [hostname, fqdn].each do |hn|
+            checks.each do |hn|
                 uri = URI("#{ base_url }devices/getByHostName?hostName=#{ hn }&account=#{ sd_url }")
 
                 req = Net::HTTP::Get.new(uri.request_uri)
@@ -130,7 +136,7 @@ module Puppet::Parser::Functions
                 # for erroneous results that can be returned from the API
                 # getByHostName query)
                 found_hostname = device['data']['device']['hostName']
-                if not [hostname, fqdn].include? found_hostname
+                if not checks.include? found_hostname
                     raise Puppet::ParseError, "Serverdensity getByHostname API call returned a device with mismatching hostname '#{found_hostname}'.  You may need to recreate device(s)."
                 end
                 agent_key = device['data']['device']['agentKey']
@@ -143,7 +149,7 @@ module Puppet::Parser::Functions
 
             # attempt to find the device by hostname (which may be local or FQDN)
             list = nil
-            [hostname, fqdn].each do |hn|
+            checks.each do |hn|
                 filter = {
                     'type' => 'device',
                     'hostname' => hn,
