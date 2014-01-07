@@ -47,32 +47,28 @@ baseurl=http://www.serverdensity.com/downloads/linux/redhat/
 enabled=1',
   }
 
-  package {
-      'wget':
-          ensure => 'present',
+  file {
+    'serverdensity-yum-key':
+      path   => '/etc/pki/rpm-gpg/RPM-GPG-KEY-ServerDensity',
+      ensure => file,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0644',
+      source => 'puppet:///modules/yum/RPM-GPG-KEY-ServerDensity',
   }
 
   exec {
-      'download-sd-yum-key':
-          command => '/usr/bin/wget https://www.serverdensity.com/downloads/boxedice-public.key',
-          require => [File['sd-agent.repo'], Package['wget']],
-  }
-
-  exec {
-      'import-sd-yum-key':
-          command => '/usr/bin/sudo rpm --import boxedice-public.key',
-          require => Exec['download-sd-yum-key'],
-  }
-
-  exec {
-      'delete-sd-yum-key':
-          command => '/bin/rm boxedice-public.key',
-          require => Exec['import-sd-yum-key'],
+    'import-serverdensity-yum-key':
+      command => '/bin/rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-ServerDensity',
+      unless  => "/bin/rpm -q gpg-pubkey-$(echo $(gpg --throw-keyids < /etc/pki/rpm-gpg/RPM-GPG-KEY-ServerDensity) | cut --characters=11-18 | tr '[A-Z]' '[a-z]')",
+      refreshonly => true,
+      logoutput => 'on_failure',
   }
 
   package {
       'sd-agent':
           ensure  => 'present',
-          require => Exec['delete-sd-yum-key']
   }
+
+  File['serverdensity-yum-key'] ~> Exec['import-serverdensity-yum-key'] -> File['sd-agent.repo'] -> Package['sd-agent']
 }
