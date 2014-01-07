@@ -54,7 +54,7 @@ enabled=1',
       owner  => 'root',
       group  => 'root',
       mode   => '0644',
-      source => 'puppet:///modules/yum/RPM-GPG-KEY-ServerDensity',
+      source => 'puppet:///modules/serverdensity/RPM-GPG-KEY-ServerDensity',
   }
 
   exec {
