@@ -36,33 +36,20 @@
 # Copyright 2011 Your name here, unless otherwise noted.
 #
 class serverdensity::apt {
+  $repo_baseurl = 'http://www.serverdensity.com/downloads/linux/deb'
+  $repo_keyurl = 'https://www.serverdensity.com/downloads/boxedice-public.key'
 
-  file {
-      'sd-agent.list':
-          ensure  =>  file,
-          path    => '/etc/apt/sources.list.d/sd-agent.list',
-          source  => 'puppet:///modules/serverdensity/sd-agent.list',
-          notify  => Exec['add-sd-apt-key']
+  apt::source { 'serverdensity':
+    location    => $repo_baseurl,
+    release     => 'all',
+    repos       => 'main',
+    key         => '13C2E6F8',
+    key_source  => $repo_keyurl,
+    include_src => false
   }
-
-  exec {
-      'add-sd-apt-key':
-          command     => '/usr/bin/wget -O - https://www.serverdensity.com/downloads/boxedice-public.key | /usr/bin/apt-key add -',
-          refreshonly => true,
-          notify      => Exec['sd-apt-update'],
-          require     => File['sd-agent.list'],
-  }
-
-  exec {
-      'sd-apt-update':
-          command     => '/usr/bin/apt-get update',
-          require     => File['sd-agent.list'],
-          refreshonly => true,
-  }
-
   package {
       'sd-agent':
           ensure  => 'present',
-          require => Exec['sd-apt-update'],
+          require => Apt::Source['serverdensity'],
   }
 }
