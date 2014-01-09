@@ -65,6 +65,7 @@ There are some optional parameters that can be used to configure other parts of 
 * `$apache_status_url` - URL to get the Apache2 status page from (e.g. `mod_status`), disabled if not set
 * `$apache_status_user` - Username to authenticate to the Apache2 status page, required if `apache_status_url` is set
 * `$apache_status_pass` - Password to authenticate to the Apache2 status page, required if `apache_status_url` is set
+* `$fpm_status_url` - URL to get the PHP-FPM status page from, disabled if not set
 * `$mongodb_server` - Server to get MongoDB status monitoring from, this takes a full [MongoDB connection URI](http://docs.mongodb.org/manual/reference/connection-string/) so you can set username/password etc. details here if needed, disabled if not set
 * `$mongodb_dbstats` - Enables MongoDB stats if `true` and `mongodb_server` is set, *default*: `false`
 * `$mongodb_replset` - Enables MongoDB replset stats if `true` and `mongodb_server` is set, *default*: `false`

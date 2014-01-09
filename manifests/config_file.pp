@@ -43,6 +43,7 @@ class serverdensity::config_file (
         $apache_status_url = 'http://www.example.com/server-status/?auto',
         $apache_status_user = '',
         $apache_status_pass = '',
+        $fpm_status_url = '',
         $mongodb_server = '',
         $mongodb_dbstats = 'no',
         $mongodb_replset = 'no',

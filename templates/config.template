@@ -29,6 +29,10 @@ apache_status_url:  <%= apache_status_url %>
 apache_status_user: <%= apache_status_user %>
 apache_status_pass: <%= apache_status_pass %>
 
+# PHP-FPM
+
+fpm_status_url: <%= fpm_status_url %>
+
 # MongoDB
 # See http://support.serverdensity.com/knowledgebase/articles/71151-mongodb-monitoring-linux-mac-and-freebsd
 
