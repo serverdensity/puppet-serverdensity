@@ -63,14 +63,36 @@ class serverdensity(
   $pidfile_directory = '',
   $logging_level = '',
   ) {
-  case $::operatingsystem {
-    'Debian', 'Ubuntu': {
-      include apt
-        $location = '/etc/sd-agent/config.cfg'
+
+  if $plugin_directory {
+    $sd_agent_plugin_dir = $plugin_directory
+  } else {
+    $sd_agent_plugin_dir = "/usr/bin/sd-agent/plugins"
+  }
+
+   case $::osfamily {
+    'Debian': {
+      include serverdensity::apt
+        $location = '/etc/sd-agent/conf.d'
+
+      file { 'sd-agent-plugin-dir':
+        path    => $sd_agent_plugin_dir,
+        ensure  => directory,
+        mode    => "0755",
+        notify  => Service['sd-agent'],
+        require => Class['serverdensity::apt'],
+      }
     }
-    'RedHat', 'centos': {
-      include yum
-        $location = '/etc/sd-agent/config.cfg'
+    'RedHat': {
+      include serverdensity::yum
+        $location = '/etc/sd-agent/conf.d'
+      file { 'sd-agent-plugin-dir':
+        path    => $sd_agent_plugin_dir,
+        ensure  => directory,
+        mode    => "0755",
+        notify  => Service['sd-agent'],
+        require => Class['serverdensity::yum'],
+      }
     }
     default: {
       fail("OSfamily ${::operatingsystem} not supported.")

@@ -58,8 +58,18 @@ class serverdensity::config_file (
         $pidfile_directory = '/var/log/custom_location',
         $logging_level = 'fatal',
     ) {
+
+    file { "sd-agent-config-dir":
+      path    => $location,
+      ensure  => "directory",
+      mode    => "0755",
+      notify  => Service['sd-agent'],
+    }
+
     file { 'sd-agent-config-file':
-        path    => $location,
+        path    => "${location}/000-main.cfg",
         content => template('serverdensity/config.template'),
+        mode    => "0644",
+        notify  => Service['sd-agent'],
     }
 }
