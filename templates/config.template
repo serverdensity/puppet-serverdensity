@@ -1,6 +1,6 @@
 #
 # Server Density Agent Config
-# Docs: http://support.serverdensity.com/knowledgebase/articles/69360-agent-config-variables-linux-mac-freebsd
+# Docs: http://www.serverdensity.com/docs/agent/configvariables/
 #
 
 [Main]
@@ -10,7 +10,7 @@ agent_key: <%= @agent_key %>
 #
 # Plugins
 #
-# Leave blank to ignore. See http://support.serverdensity.com/knowledgebase/articles/76018-writing-a-plugin-linux-mac-and-freebsd
+# Leave blank to ignore. See http://www.serverdensity.com/docs/agent/writingplugins/
 #
 
 plugin_directory: <%= @plugin_directory %>
@@ -18,12 +18,12 @@ plugin_directory: <%= @plugin_directory %>
 #
 # Optional status monitoring
 #
-# See http://support.serverdensity.com/knowledgebase/topics/10921-configuration
+# See http://www.serverdensity.com/docs/agent/config/
 # Ignore these if you do not wish to monitor them
 #
 
 # Apache
-# See http://support.serverdensity.com/knowledgebase/articles/71145-apache-monitoring-linux-mac-and-freebsd
+# See http://www.serverdensity.com/docs/agent/apache/
 
 apache_status_url:  <%= @apache_status_url %>
 apache_status_user: <%= @apache_status_user %>
@@ -34,42 +34,45 @@ apache_status_pass: <%= @apache_status_pass %>
 fpm_status_url: <%= fpm_status_url %>
 
 # MongoDB
-# See http://support.serverdensity.com/knowledgebase/articles/71151-mongodb-monitoring-linux-mac-and-freebsd
+# See http://www.serverdensity.com/docs/agent/mongodb/
 
 mongodb_server: <%= @mongodb_server %>
 mongodb_dbstats: <%= @mongodb_dbstats %>
 mongodb_replset: <%= @mongodb_replset %>
 
 # MySQL
-# See http://support.serverdensity.com/knowledgebase/articles/71166-mysql-monitoring-linux-mac-and-freebsd
+# See http://www.serverdensity.com/docs/agent/mysql/
 
 mysql_server: <%= @mysql_server %>
 mysql_user: <%= @mysql_user %>
 mysql_pass: <%= @mysql_pass %>
 
 # nginx
-# See http://support.serverdensity.com/knowledgebase/articles/75885-nginx-monitoring-linux-mac-and-freebsd
+# See http://www.serverdensity.com/docs/agent/nginx/
 
 nginx_status_url: <%= @nginx_status_url %>
 
 # RabbitMQ
-# See http://support.serverdensity.com/knowledgebase/articles/75888-rabbitmq-monitoring-linux-mac-and-freebsd
+# See http://www.serverdensity.com/docs/agent/rabbitmq/
+# for rabbit <= 1.x use this url:
+# rabbitmq_status_url: http://www.example.com:55672/json
+# for newer versions use:
 
 rabbitmq_status_url:  <%= @rabbitmq_status_url %>
 rabbitmq_user: <%= @rabbitmq_user %>
 rabbitmq_pass: <%= @rabbitmq_pass %>
 
 # Temporary file location
-# See http://support.serverdensity.com/knowledgebase/articles/69360-agent-config-variables-linux-mac-freebsd
+# See http://www.serverdensity.com/docs/agent/config/
 
 # tmp_directory:  <%= @tmp_directory %>
 
 # Pid file location
-# See http://support.serverdensity.com/knowledgebase/articles/69360-agent-config-variables-linux-mac-freebsd
+# See http://www.serverdensity.com/docs/agent/config/
 
 # pidfile_directory:  <%= @pidfile_directory %>
 
 # Set log level
-# See http://support.serverdensity.com/knowledgebase/articles/69360-agent-config-variables-linux-mac-freebsd
+# See http://www.serverdensity.com/docs/agent/config/
 
 # logging_level: <%= @logging_level %>
