@@ -63,13 +63,13 @@ class serverdensity::config_file (
       path    => $location,
       ensure  => "directory",
       mode    => "0755",
-      notify  => Service['sd-agent'],
+      notify  => Class['serverdensity::agent::service'],
     }
 
     file { 'sd-agent-config-file':
         path    => "${location}/000-main.cfg",
         content => template('serverdensity/config.cfg.erb'),
         mode    => "0644",
-        notify  => Service['sd-agent'],
+        notify  => Class['serverdensity::agent::service'],
     }
 }

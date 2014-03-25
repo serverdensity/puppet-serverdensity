@@ -111,6 +111,11 @@
 #   Default: ''
 #   Valid values: debug, info, warn, error, fatal
 #
+# [*manage_services*]
+#   Boolean. Manage the sd-agent service. Useful when using an alternative process manager (e.g supervisor)
+#   Default: true
+#   Valid values: true, false
+#
 #
 # === Examples
 #
@@ -131,6 +136,7 @@
 # Copyright 2011 Server Density
 #
 class serverdensity(
+class serverdensity (
   $sd_url = 'https://example.serverdensity.com',
   $api_token = '',
   $api_username = '',
@@ -157,6 +163,7 @@ class serverdensity(
   $tmp_directory = '',
   $pidfile_directory = '',
   $logging_level = '',
+  $manage_services = true,
   ) {
 
   if $plugin_directory {
@@ -175,6 +182,7 @@ class serverdensity(
         ensure  => directory,
         mode    => "0755",
         notify  => Service['sd-agent'],
+        notify  => Class['serverdensity::agent::service'],
         require => Class['serverdensity::apt'],
       }
     }
@@ -186,6 +194,7 @@ class serverdensity(
         ensure  => directory,
         mode    => "0755",
         notify  => Service['sd-agent'],
+        notify  => Class['serverdensity::agent::service'],
         require => Class['serverdensity::yum'],
       }
     }
@@ -238,5 +247,6 @@ class serverdensity(
       # due to https://bugs.launchpad.net/ubuntu/+source/upstart/+bug/552786
       hasstatus => false,
       enable    => true,
+      notify              => Class['serverdensity::agent::service']
   }
 }
