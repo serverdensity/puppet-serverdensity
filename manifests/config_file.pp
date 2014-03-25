@@ -1,6 +1,6 @@
-class serverdensity::config_file (
+class serverdensity-agent::config_file (
         $location = '',
-        $sd_url = 'https://example.serverdensity.com',
+        $sd_url = 'https://example.serverdensity.io',
         $agent_key = '',
         $plugin_directory = '',
         $apache_status_url = 'http://www.example.com/server-status/?auto',
@@ -31,7 +31,7 @@ class serverdensity::config_file (
 
     file { 'sd-agent-config-file':
         path    => "${location}/000-main.cfg",
-        content => template('serverdensity/config.template'),
+        content => template('serverdensity-agent/config.template'),
         mode    => "0644",
         notify  => Service['sd-agent'],
     }

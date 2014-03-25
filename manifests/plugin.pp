@@ -1,4 +1,4 @@
-define serverdensity::plugin (
+define serverdensity-agent::plugin (
   $pluginname = $title,     # The name for the plugin, it will be placed at $plugindir/$pluginname.py
   $content = undef,         # The file content of the plugin
   $source = undef,          # Alternate way of specifying the content with a puppet:// url
@@ -6,16 +6,16 @@ define serverdensity::plugin (
   $config_priority = "500"  # Text to be pre-pended to the config filename to support ordering
 ) {
 
-  include serverdensity
+  include serverdensity-agent
 
-  if $serverdensity::location {
-    $configdir = $serverdensity::location
+  if $serverdensity-agent::location {
+    $configdir = $serverdensity-agent::location
   } else {
     $configdir = "/etc/sd-agent/conf.d"
   }
 
-  if $serverdensity::plugin_directory {
-    $plugindir = $serverdensity::plugin_directory
+  if $serverdensity-agent::plugin_directory {
+    $plugindir = $serverdensity-agent::plugin_directory
   } else {
     $plugindir = "/usr/bin/sd-agent/plugins"
   }
@@ -36,7 +36,7 @@ define serverdensity::plugin (
     file { "sd_config_${title}":
       ensure  => "file",
       path    => "${configdir}/${config_priority}-${pluginname}.cfg",
-      content => template("serverdensity/plugin/config.erb"),
+      content => template("serverdensity-agent/plugin/config.erb"),
       owner   => "root",
       group   => "root",
       mode    => "0644",

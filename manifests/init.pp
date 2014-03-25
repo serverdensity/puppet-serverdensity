@@ -1,5 +1,5 @@
-class serverdensity(
-  $sd_url = 'https://example.serverdensity.com',
+class serverdensity-agent(
+  $sd_url = 'https://example.serverdensity.io',
   $api_token = '',
   $api_username = '',
   $api_password = '',
