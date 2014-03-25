@@ -159,14 +159,26 @@ module Puppet::Parser::Functions
 
                 notice ["Making API request"]
 
-                uri = URI("#{ base_url }/inventory/devices?filter=#{ filter_json }&token=#{ token }")
-                req = Net::HTTP::Get.new(uri.request_uri)
-                https = Net::HTTP.new(uri.host, uri.port)
-                https.use_ssl = true
-                https.verify_mode = OpenSSL::SSL::VERIFY_NONE
-                res = https.start { |cx| cx.request(req) }
+                begin
+                    uri = URI("#{ base_url }/inventory/devices?filter=#{ filter_json }&token=#{ token }")
+                    req = Net::HTTP::Get.new(uri.request_uri)
+                    https = Net::HTTP.new(uri.host, uri.port)
+                    https.use_ssl = true
+                    https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+                    res = https.start { |cx| cx.request(req) }
 
-                list = PSON.parse(res.body)
+                    list = PSON.parse(res.body)
+
+                rescue
+                    err ["Error from SD API, stopping run"]
+                    raise Puppet::ParseError, "Error from SD API"
+                end
+
+                if Integer(res.code) >= 500
+                    err ["Error from SD API, stopping run"]
+                    raise Puppet::ParseError, "Error from SD API"
+                end
+
                 if list.length > 0
                     # keep this response -- device was found
                     break
@@ -199,6 +211,28 @@ module Puppet::Parser::Functions
 
             else
                 device = list[0]
+
+                # Has the group changed?
+                existing_group = device["group"]
+
+                if existing_group != group
+                    notice ["Updating group on #{device['_id']} from #{existing_group} to #{group}"]
+
+                    # update the group
+                    uri = URI("#{ base_url }/inventory/devices/#{ device['_id'] }?token=#{ token }")
+
+                    req = Net::HTTP::Put.new(uri.request_uri)
+
+                    update_data = {
+                        :group => group
+                    }
+                    req.set_form_data(update_data)
+                    https = Net::HTTP.new(uri.host, uri.port)
+                    https.use_ssl = true
+                    https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+                    res = https.start { |cx| cx.request(req) }
+
+                end
             end
 
             agent_key = device["agentKey"]
