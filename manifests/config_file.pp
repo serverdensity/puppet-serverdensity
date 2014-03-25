@@ -59,17 +59,17 @@ class serverdensity::config_file (
         $logging_level = 'fatal',
     ) {
 
-    file { "sd-agent-config-dir":
-      path    => $location,
-      ensure  => "directory",
-      mode    => "0755",
-      notify  => Service['sd-agent'],
+    file { 'sd-agent-config-dir':
+        ensure  => directory,
+        path    => $location,
+        mode    => '0755',
+        notify  => Class['serverdensity::agent::service'],
     }
 
     file { 'sd-agent-config-file':
         path    => "${location}/000-main.cfg",
-        content => template('serverdensity/config.template'),
-        mode    => "0644",
-        notify  => Service['sd-agent'],
+        content => template('serverdensity/config.cfg.erb'),
+        mode    => '0644',
+        notify  => Class['serverdensity::agent::service'],
     }
 }

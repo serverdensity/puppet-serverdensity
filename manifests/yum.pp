@@ -42,7 +42,7 @@ class serverdensity::yum {
   yumrepo { 'serverdensity':
     baseurl  => $repo_baseurl,
     gpgkey   => $repo_keyurl,
-    descr    => "Server Density",
+    descr    => 'Server Density',
     enabled  => 1,
     gpgcheck => 1,
   }
