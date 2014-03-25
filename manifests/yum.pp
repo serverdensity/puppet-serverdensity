@@ -5,7 +5,7 @@ class serverdensity-agent::yum {
     yumrepo { 'serverdensity-agent':
         baseurl  => $repo_baseurl,
         gpgkey   => $repo_keyurl,
-        descr    => "Server Density",
+        descr    => 'Server Density',
         enabled  => 1,
         gpgcheck => 1,
     }

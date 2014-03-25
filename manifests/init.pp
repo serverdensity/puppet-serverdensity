@@ -4,6 +4,11 @@
 #
 # === Parameters
 #
+# [*agent_key*]
+#   String. The unique key for the agent.
+#   Default: $::agent_key (uses the provided agent_key library to generate a
+#   new one if not set)
+#
 # [*sd_url*]
 #   String. Subdomain url of the serverdensity account
 #   Default: https://example.serverdensity.io
@@ -24,11 +29,6 @@
 #   Boolean. Use the puppet FQDN fact rather than hostname
 #   Default: false
 #   Valid values: true, false
-#
-# [*agent_key*]
-#   String. The unique key for the agent.
-#   Default: $::agent_key (uses the provided agent_key library to generate a
-#   new one if not set)
 #
 # [*server_name*]
 #   String. The reported name of the server
@@ -132,12 +132,12 @@
 #
 
 class serverdensity-agent(
+    $agent_key = $::agent_key,
     $sd_url = 'https://example.serverdensity.io',
     $api_token = '',
     $api_username = '',
     $api_password = '',
     $use_fqdn = false,
-    $agent_key = $::agent_key,
     $server_name = '',
     $server_group = '',
     $plugin_directory = '',
@@ -166,7 +166,7 @@ class serverdensity-agent(
         $sd_agent_plugin_dir = '/usr/bin/sd-agent/plugins'
     }
 
-     case $::osfamily {
+    case $::osfamily {
         'Debian': {
             include serverdensity-agent::apt
                 $location = '/etc/sd-agent/conf.d'
@@ -197,37 +197,37 @@ class serverdensity-agent(
 
     class {
         'config_file':
-            location            => $location,
+            location            => $::location,
             require             => Package['sd-agent'],
-            sd_url              => $sd_url,
+            sd_url              => $::sd_url,
             agent_key           => agent_key(
-                $api_username,
-                $api_password,
-                $sd_url,
-                $api_token,
-                $agent_key,
-                $server_name,
-                $server_group,
-                $use_fqdn
+                $::api_username,
+                $::api_password,
+                $::sd_url,
+                $::api_token,
+                $::agent_key,
+                $::server_name,
+                $::server_group,
+                $::use_fqdn
                 ),
-            plugin_directory    => $plugin_directory,
-            apache_status_url   => $apache_status_url,
-            apache_status_user  => $apache_status_user,
-            apache_status_pass  => $apache_status_pass,
-            fpm_status_url      => $fpm_status_url,
-            mongodb_server      => $mongodb_server,
-            mongodb_dbstats     => $mongodb_dbstats,
-            mongodb_replset     => $mongodb_replset,
-            mysql_server        => $mysql_server,
-            mysql_user          => $mysql_user,
-            mysql_pass          => $mysql_pass,
-            nginx_status_url    => $nginx_status_url,
-            rabbitmq_status_url => $rabbitmq_status_url,
-            rabbitmq_user       => $rabbitmq_user,
-            rabbitmq_pass       => $rabbitmq_pass,
-            tmp_directory       => $tmp_directory,
-            pidfile_directory   => $pidfile_directory,
-            logging_level       => $logging_level,
+            plugin_directory    => $::plugin_directory,
+            apache_status_url   => $::apache_status_url,
+            apache_status_user  => $::apache_status_user,
+            apache_status_pass  => $::apache_status_pass,
+            fpm_status_url      => $::fpm_status_url,
+            mongodb_server      => $::mongodb_server,
+            mongodb_dbstats     => $::mongodb_dbstats,
+            mongodb_replset     => $::mongodb_replset,
+            mysql_server        => $::mysql_server,
+            mysql_user          => $::mysql_user,
+            mysql_pass          => $::mysql_pass,
+            nginx_status_url    => $::nginx_status_url,
+            rabbitmq_status_url => $::rabbitmq_status_url,
+            rabbitmq_user       => $::rabbitmq_user,
+            rabbitmq_pass       => $::rabbitmq_pass,
+            tmp_directory       => $::tmp_directory,
+            pidfile_directory   => $::pidfile_directory,
+            logging_level       => $::logging_level,
             notify              => Service['sd-agent']
     }
 
