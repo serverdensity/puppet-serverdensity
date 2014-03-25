@@ -203,6 +203,11 @@ class serverdensity (
     }
   }
 
+  # Include everything and let each module determine its own state
+  anchor { 'serverdensity::begin': } ->
+  class { 'serverdensity::agent::service': } ->
+  anchor {'serverdensity::end': }
+
   class {
     'config_file':
       location            => $location,
@@ -236,17 +241,6 @@ class serverdensity (
       tmp_directory       => $tmp_directory,
       pidfile_directory   => $pidfile_directory,
       logging_level       => $logging_level,
-      notify              => Service['sd-agent']
-  }
-
-  service {
-    'sd-agent':
-      ensure    => running,
-      name      => 'sd-agent',
-      pattern   => 'python /usr/bin/sd-agent/agent.py start init --clean',
-      # due to https://bugs.launchpad.net/ubuntu/+source/upstart/+bug/552786
-      hasstatus => false,
-      enable    => true,
       notify              => Class['serverdensity::agent::service']
   }
 }
