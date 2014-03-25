@@ -166,14 +166,14 @@ class serverdensity (
   ) {
 
 
-   case $::osfamily {
+  case $::osfamily {
     'Debian': {
       include serverdensity::apt
         $location = '/etc/sd-agent/conf.d'
 
       file { 'sd-agent-plugin-dir':
-        path    => $plugin_directory,
         ensure  => directory,
+        path    => $plugin_directory,
         mode    => '0755',
         notify  => Class['serverdensity::agent::service'],
         require => Class['serverdensity::apt'],
@@ -183,8 +183,8 @@ class serverdensity (
       include serverdensity::yum
         $location = '/etc/sd-agent/conf.d'
       file { 'sd-agent-plugin-dir':
-        path    => $plugin_directory,
         ensure  => directory,
+        path    => $plugin_directory,
         mode    => '0755',
         notify  => Class['serverdensity::agent::service'],
         require => Class['serverdensity::yum'],
