@@ -1,0 +1,78 @@
+#
+# Server Density Agent Config
+# Docs: http://www.serverdensity.com/docs/agent/configvariables/
+#
+
+[Main]
+sd_url: <%= @sd_url %>
+agent_key: <%= @agent_key %>
+
+#
+# Plugins
+#
+# Leave blank to ignore. See http://www.serverdensity.com/docs/agent/writingplugins/
+#
+
+plugin_directory: <%= @plugin_directory %>
+
+#
+# Optional status monitoring
+#
+# See http://www.serverdensity.com/docs/agent/config/
+# Ignore these if you do not wish to monitor them
+#
+
+# Apache
+# See http://www.serverdensity.com/docs/agent/apache/
+
+apache_status_url:  <%= @apache_status_url %>
+apache_status_user: <%= @apache_status_user %>
+apache_status_pass: <%= @apache_status_pass %>
+
+# PHP-FPM
+
+fpm_status_url: <%= fpm_status_url %>
+
+# MongoDB
+# See http://www.serverdensity.com/docs/agent/mongodb/
+
+mongodb_server: <%= @mongodb_server %>
+mongodb_dbstats: <%= @mongodb_dbstats %>
+mongodb_replset: <%= @mongodb_replset %>
+
+# MySQL
+# See http://www.serverdensity.com/docs/agent/mysql/
+
+mysql_server: <%= @mysql_server %>
+mysql_user: <%= @mysql_user %>
+mysql_pass: <%= @mysql_pass %>
+
+# nginx
+# See http://www.serverdensity.com/docs/agent/nginx/
+
+nginx_status_url: <%= @nginx_status_url %>
+
+# RabbitMQ
+# See http://www.serverdensity.com/docs/agent/rabbitmq/
+# for rabbit <= 1.x use this url:
+# rabbitmq_status_url: http://www.example.com:55672/json
+# for newer versions use:
+
+rabbitmq_status_url:  <%= @rabbitmq_status_url %>
+rabbitmq_user: <%= @rabbitmq_user %>
+rabbitmq_pass: <%= @rabbitmq_pass %>
+
+# Temporary file location
+# See http://www.serverdensity.com/docs/agent/config/
+
+# tmp_directory:  <%= @tmp_directory %>
+
+# Pid file location
+# See http://www.serverdensity.com/docs/agent/config/
+
+# pidfile_directory:  <%= @pidfile_directory %>
+
+# Set log level
+# See http://www.serverdensity.com/docs/agent/config/
+
+# logging_level: <%= @logging_level %>
