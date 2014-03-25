@@ -176,7 +176,7 @@ class serverdensity-agent(
                 path    => $sd_agent_plugin_dir,
                 mode    => '0755',
                 notify  => Service['sd-agent'],
-                require => Class['serverdensity::apt'],
+                require => Class['serverdensity-agent::apt'],
             }
         }
         'RedHat': {
@@ -187,7 +187,7 @@ class serverdensity-agent(
                 path    => $sd_agent_plugin_dir,
                 mode    => '0755',
                 notify  => Service['sd-agent'],
-                require => Class['serverdensity::yum'],
+                require => Class['serverdensity-agent::yum'],
             }
         }
         default: {
