@@ -135,7 +135,6 @@
 #
 # Copyright 2011 Server Density
 #
-class serverdensity(
 class serverdensity (
   $sd_url = 'https://example.serverdensity.com',
   $api_token = '',
@@ -145,7 +144,7 @@ class serverdensity (
   $agent_key = $::agent_key,
   $server_name = '',
   $server_group = '',
-  $plugin_directory = '',
+  $plugin_directory = '/usr/bin/sd-agent/plugins',
   $apache_status_url = 'http://www.example.com/server-status/?auto',
   $apache_status_user = '',
   $apache_status_pass = '',
@@ -166,11 +165,6 @@ class serverdensity (
   $manage_services = true,
   ) {
 
-  if $plugin_directory {
-    $sd_agent_plugin_dir = $plugin_directory
-  } else {
-    $sd_agent_plugin_dir = "/usr/bin/sd-agent/plugins"
-  }
 
    case $::osfamily {
     'Debian': {
@@ -178,10 +172,9 @@ class serverdensity (
         $location = '/etc/sd-agent/conf.d'
 
       file { 'sd-agent-plugin-dir':
-        path    => $sd_agent_plugin_dir,
+        path    => $plugin_directory,
         ensure  => directory,
-        mode    => "0755",
-        notify  => Service['sd-agent'],
+        mode    => '0755',
         notify  => Class['serverdensity::agent::service'],
         require => Class['serverdensity::apt'],
       }
@@ -190,10 +183,9 @@ class serverdensity (
       include serverdensity::yum
         $location = '/etc/sd-agent/conf.d'
       file { 'sd-agent-plugin-dir':
-        path    => $sd_agent_plugin_dir,
+        path    => $plugin_directory,
         ensure  => directory,
-        mode    => "0755",
-        notify  => Service['sd-agent'],
+        mode    => '0755',
         notify  => Class['serverdensity::agent::service'],
         require => Class['serverdensity::yum'],
       }
