@@ -132,12 +132,12 @@
 #
 
 class serverdensity-agent(
+    $agent_key = $::agent_key,
     $sd_url = 'https://example.serverdensity.io',
     $api_token = '',
     $api_username = '',
     $api_password = '',
     $use_fqdn = false,
-    $agent_key = $::agent_key,
     $server_name = '',
     $server_group = '',
     $plugin_directory = '',
