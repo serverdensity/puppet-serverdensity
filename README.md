@@ -1,7 +1,7 @@
 serverdensity-agent
 ====================
 
-Puppet Module for deploying the Server Density Agent
+Puppet Module for deploying the Server Density Agent and agent plugins
 
 ### Platforms
 
@@ -52,6 +52,30 @@ class {
             sd_url => 'https://example.serverdensity.com',
             agent_key => '1234567890abcdef',
     }
+```
+
+### Installing an agent plugin
+
+This will upload a plugin, and add custom config for it.
+
+```puppet
+serverdensity::plugin{ 'MyPlugin':
+    source  => 'puppet:///mymodule/myplugin.py',
+    config  => {
+        custom_key1 => 'foo',
+    }
+}
+```
+
+NB - To access the value for `custom_key1` from your plugin script, you can read it from the rawConfig dict, e.g:
+
+```python
+def __init__(self, agentConfig, checksLogger, rawConfig):
+    self.agentConfig = agentConfig
+    self.checksLogger = checksLogger
+    self.rawConfig = rawConfig
+    # Grab the custom key
+    self.key1 = self.rawConfig['MyPlugin']['custom_key1']
 ```
 
 ### Optional Parameters
