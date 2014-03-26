@@ -59,17 +59,17 @@
 #   Default: http://www.example.com/phpfpm_status
 #
 # [*mongodb_server*]
-#   String. Server to get MongoDB status monitoring from. 
+#   String. Server to get MongoDB status monitoring from.
 #   Takes a full MongoDB connection URI
 #   Default: ''
 #
 # [*mongodb_dbstats*]
-#   String. Enable MongoDB stats monitoring (only if $mongodb_server 
+#   String. Enable MongoDB stats monitoring (only if $mongodb_server
 #   is also set)
 #   Default: 'no'
 #
 # [*mongodb_replset*]
-#   String. Enable MongoDB replica monitoring (only if $mongodb_server 
+#   String. Enable MongoDB replica monitoring (only if $mongodb_server
 #   is also set)
 #   Default: 'no'
 #
@@ -102,12 +102,12 @@
 #   Default: ''
 #
 # [*tmp_directory*]
-#   String. Directory where the agent stores temporary files. 
+#   String. Directory where the agent stores temporary files.
 #   Defaults to system tmp if unset
 #   Default: ''
 #
 # [*pidfile_directory*]
-#   String. Directory where agent stores its PID file. Defaults to 
+#   String. Directory where agent stores its PID file. Defaults to
 #   $tmp_directory or system temp
 #   Default: ''
 #
@@ -209,37 +209,37 @@ class serverdensity_agent(
 
     class {
         'config_file':
-            location            => $::location,
+            location            => $location,
             require             => Package['sd-agent'],
-            sd_url              => $::sd_url,
+            sd_url              => $sd_url,
             agent_key           => agent_key(
-                $::api_username,
-                $::api_password,
-                $::sd_url,
-                $::api_token,
-                $::agent_key,
-                $::server_name,
-                $::server_group,
-                $::use_fqdn
+                $api_username,
+                $api_password,
+                $sd_url,
+                $api_token,
+                $agent_key,
+                $server_name,
+                $server_group,
+                $use_fqdn
                 ),
-            plugin_directory    => $::plugin_directory,
-            apache_status_url   => $::apache_status_url,
-            apache_status_user  => $::apache_status_user,
-            apache_status_pass  => $::apache_status_pass,
-            fpm_status_url      => $::fpm_status_url,
-            mongodb_server      => $::mongodb_server,
-            mongodb_dbstats     => $::mongodb_dbstats,
-            mongodb_replset     => $::mongodb_replset,
-            mysql_server        => $::mysql_server,
-            mysql_user          => $::mysql_user,
-            mysql_pass          => $::mysql_pass,
-            nginx_status_url    => $::nginx_status_url,
-            rabbitmq_status_url => $::rabbitmq_status_url,
-            rabbitmq_user       => $::rabbitmq_user,
-            rabbitmq_pass       => $::rabbitmq_pass,
-            tmp_directory       => $::tmp_directory,
-            pidfile_directory   => $::pidfile_directory,
-            logging_level       => $::logging_level,
+            plugin_directory    => $plugin_directory,
+            apache_status_url   => $apache_status_url,
+            apache_status_user  => $apache_status_user,
+            apache_status_pass  => $apache_status_pass,
+            fpm_status_url      => $fpm_status_url,
+            mongodb_server      => $mongodb_server,
+            mongodb_dbstats     => $mongodb_dbstats,
+            mongodb_replset     => $mongodb_replset,
+            mysql_server        => $mysql_server,
+            mysql_user          => $mysql_user,
+            mysql_pass          => $mysql_pass,
+            nginx_status_url    => $nginx_status_url,
+            rabbitmq_status_url => $rabbitmq_status_url,
+            rabbitmq_user       => $rabbitmq_user,
+            rabbitmq_pass       => $rabbitmq_pass,
+            tmp_directory       => $tmp_directory,
+            pidfile_directory   => $pidfile_directory,
+            logging_level       => $logging_level,
             notify              => Class['serverdensity_agent::service']
     }
 }
