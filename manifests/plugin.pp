@@ -66,7 +66,7 @@ define serverdensity-agent::plugin (
     group   => 'root',
     mode    => '0755',
     require => File['sd-agent-plugin-dir'],
-    notify  => Class['serverdensity::agent::service'],
+    notify  => Class['serverdensity-agent::service'],
   }
 
   if size(keys($config)) > 0 {

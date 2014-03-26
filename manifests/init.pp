@@ -176,7 +176,7 @@ class serverdensity-agent(
                 ensure  => directory,
                 path    => $plugin_directory,
                 mode    => '0755',
-                notify  => Class['serverdensity::agent::service'],
+                notify  => Class['serverdensity-agent::service'],
                 require => Class['serverdensity-agent::apt'],
             }
         }
@@ -188,7 +188,7 @@ class serverdensity-agent(
                 ensure  => directory,
                 path    => $plugin_directory,
                 mode    => '0755',
-                notify  => Class['serverdensity::agent::service'],
+                notify  => Class['serverdensity-agent::service'],
                 require => Class['serverdensity-agent::yum'],
             }
         }
@@ -198,9 +198,9 @@ class serverdensity-agent(
     }
 
     # Include everything and let each module determine its own state
-    anchor { 'serverdensity::begin': } ->
-    class { 'serverdensity::agent::service': } ->
-    anchor {'serverdensity::end': }
+    anchor { 'serverdensity-agent::begin': } ->
+    class { 'serverdensity-agent::service': } ->
+    anchor {'serverdensity-agent::end': }
 
     class {
         'config_file':
@@ -235,6 +235,6 @@ class serverdensity-agent(
             tmp_directory       => $::tmp_directory,
             pidfile_directory   => $::pidfile_directory,
             logging_level       => $::logging_level,
-            notify              => Class['serverdensity::agent::service']
+            notify              => Class['serverdensity-agent::service']
     }
 }
