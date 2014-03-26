@@ -5,7 +5,8 @@
 # === Parameters
 #
 # [*pluginname*]
-#   String. The name for the plugin, it will be placed at $plugindir/$pluginname.py
+#   String. The name for the plugin, it will be placed 
+#   at $plugindir/$pluginname.py
 #   Default: $title
 #
 # [*content*]
@@ -13,11 +14,13 @@
 #   Default: undef
 #
 # [*source*]
-#   String. Alternate way of specifying the content with a puppet filebucket URI (puppet:///)
+#   String. Alternate way of specifying the content with a puppet 
+#   filebucket URI (puppet:///)
 #   Default: undef
 #
 # [*config*]
-#   Hashmap. A single level hash of key value pairs that will be placed under $configdir/$priority-$pluginname.cfg in the [$pluginname] section
+#   Hashmap. A single level hash of key value pairs that will be placed 
+#   under $configdir/$priority-$pluginname.cfg in the [$pluginname] section
 #   Default: undef
 #
 # [*config_priority*]

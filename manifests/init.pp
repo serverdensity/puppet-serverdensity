@@ -59,15 +59,18 @@
 #   Default: http://www.example.com/phpfpm_status
 #
 # [*mongodb_server*]
-#   String. Server to get MongoDB status monitoring from. Takes a full MongoDB connection URI
+#   String. Server to get MongoDB status monitoring from. 
+#   Takes a full MongoDB connection URI
 #   Default: ''
 #
 # [*mongodb_dbstats*]
-#   String. Enable MongoDB stats monitoring (only if $mongodb_server is also set)
+#   String. Enable MongoDB stats monitoring (only if $mongodb_server 
+#   is also set)
 #   Default: 'no'
 #
 # [*mongodb_replset*]
-#   String. Enable MongoDB replica monitoring (only if $mongodb_server is also set)
+#   String. Enable MongoDB replica monitoring (only if $mongodb_server 
+#   is also set)
 #   Default: 'no'
 #
 # [*mysql_server*]
@@ -99,11 +102,13 @@
 #   Default: ''
 #
 # [*tmp_directory*]
-#   String. Directory where the agent stores temporary files. Defaults to system tmp
+#   String. Directory where the agent stores temporary files. 
+#   Defaults to system tmp if unset
 #   Default: ''
 #
 # [*pidfile_directory*]
-#   String. Directory where agent stores its PID file. Defaults to $tmp_directory or system temp
+#   String. Directory where agent stores its PID file. Defaults to 
+#   $tmp_directory or system temp
 #   Default: ''
 #
 # [*logging_level*]
