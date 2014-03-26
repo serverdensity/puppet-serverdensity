@@ -1,3 +1,16 @@
+# == Class: serverdensity_agent::config_file
+#
+# Defines the agent config file
+#
+# === Authors
+#
+# Server Density <hello@serverdensity.com>
+#
+# === Copyright
+#
+# Copyright 2014 Server Density
+#
+
 class serverdensity_agent::config_file (
         $location = '',
         $sd_url = 'https://example.serverdensity.io',

@@ -1,3 +1,16 @@
+# == Class: serverdensity_agent::apt
+#
+# Sets up the apt repository for the agent
+#
+# === Authors
+#
+# Server Density <hello@serverdensity.com>
+#
+# === Copyright
+#
+# Copyright 2014 Server Density
+#
+
 class serverdensity_agent::apt {
     $repo_baseurl = 'http://www.serverdensity.com/downloads/linux/deb'
     $repo_keyurl = 'https://www.serverdensity.com/downloads/boxedice-public.key'

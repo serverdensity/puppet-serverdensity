@@ -3,6 +3,7 @@
 # Manages the serverdensity agent service
 #
 #
+
 class serverdensity_agent::service {
 
   if $caller_module_name != $module_name {
