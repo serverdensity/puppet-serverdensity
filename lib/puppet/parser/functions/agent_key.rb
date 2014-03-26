@@ -109,7 +109,7 @@ module Puppet::Parser::Functions
                 params = {
                     'name' => server_name,
                     'hostName' => hostname,
-                    'notes' => 'Created automatically by Puppet (serverdensity-agent)',
+                    'notes' => 'Created automatically by Puppet (serverdensity_agent)',
                 }
 
                 unless group.nil? or group.empty?

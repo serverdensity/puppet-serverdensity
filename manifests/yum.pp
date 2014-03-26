@@ -1,8 +1,8 @@
-class serverdensity-agent::yum {
+class serverdensity_agent::yum {
     $repo_baseurl = 'http://www.serverdensity.com/downloads/linux/redhat/'
     $repo_keyurl = 'https://www.serverdensity.com/downloads/boxedice-public.key'
 
-    yumrepo { 'serverdensity-agent':
+    yumrepo { 'serverdensity_agent':
         baseurl  => $repo_baseurl,
         gpgkey   => $repo_keyurl,
         descr    => 'Server Density',
@@ -12,6 +12,6 @@ class serverdensity-agent::yum {
     # install SD agent package
     package { 'sd-agent':
         ensure   => present,
-        require  => Yumrepo['serverdensity-agent']
+        require  => Yumrepo['serverdensity_agent']
     }
 }

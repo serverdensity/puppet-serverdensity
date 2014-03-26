@@ -1,15 +1,15 @@
-# == Class: serverdensity-agent::service
+# == Class: serverdensity_agent::service
 #
 # Manages the serverdensity agent service
 #
 #
-class serverdensity-agent::service {
+class serverdensity_agent::service {
 
   if $caller_module_name != $module_name {
     fail("Use of private class ${name} by ${caller_module_name}")
   }
 
-  if $serverdensity-agent::manage_services {
+  if $serverdensity_agent::manage_services {
     $ensure = 'running'
     $enable = true
   }
@@ -26,6 +26,6 @@ class serverdensity-agent::service {
     pattern     => 'python /usr/bin/sd-agent/agent.py start init --clean',
     hasrestart  => true,
     hasstatus   => false,
-    subscribe   => Class['serverdensity-agent::config_file'],
+    subscribe   => Class['serverdensity_agent::config_file'],
   }
 }

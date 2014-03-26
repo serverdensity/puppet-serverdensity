@@ -1,4 +1,4 @@
-class serverdensity-agent::config_file (
+class serverdensity_agent::config_file (
         $location = '',
         $sd_url = 'https://example.serverdensity.io',
         $agent_key = '',
@@ -26,13 +26,13 @@ class serverdensity-agent::config_file (
       ensure  => 'directory',
       path    => $location,
       mode    => '0755',
-      notify  => Class['serverdensity-agent::service'],
+      notify  => Class['serverdensity_agent::service'],
     }
 
     file { 'sd-agent-config-file':
         path    => "${location}/000-main.cfg",
-        content => template('serverdensity-agent/config.cfg.erb'),
+        content => template('serverdensity_agent/config.cfg.erb'),
         mode    => '0644',
-        notify  => Class['serverdensity-agent::service'],
+        notify  => Class['serverdensity_agent::service'],
     }
 }

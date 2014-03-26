@@ -1,6 +1,6 @@
-# == Class: serverdensity-agent
+# == Class: serverdensity_agent
 #
-# Base serverdensity-agent class
+# Base serverdensity_agent class
 #
 # === Parameters
 #
@@ -121,7 +121,7 @@
 #
 #  V2 API
 #
-#  class { 'serverdensity-agent':
+#  class { 'serverdensity_agent':
 #    sd_url     => 'https://example.serverdensity.io',
 #    api_token  => 'APITOKENHERE',
 #  }
@@ -136,7 +136,7 @@
 # Copyright 2014 Server Density
 #
 
-class serverdensity-agent(
+class serverdensity_agent(
     $agent_key = $::agent_key,
     $sd_url = 'https://example.serverdensity.io',
     $api_token = '',
@@ -169,27 +169,27 @@ class serverdensity-agent(
 
     case $::osfamily {
         'Debian': {
-            include serverdensity-agent::apt
+            include serverdensity_agent::apt
             $location = '/etc/sd-agent/conf.d'
 
             file { 'sd-agent-plugin-dir':
                 ensure  => directory,
                 path    => $plugin_directory,
                 mode    => '0755',
-                notify  => Class['serverdensity-agent::service'],
-                require => Class['serverdensity-agent::apt'],
+                notify  => Class['serverdensity_agent::service'],
+                require => Class['serverdensity_agent::apt'],
             }
         }
         'RedHat': {
-            include serverdensity-agent::yum
+            include serverdensity_agent::yum
             $location = '/etc/sd-agent/conf.d'
 
             file { 'sd-agent-plugin-dir':
                 ensure  => directory,
                 path    => $plugin_directory,
                 mode    => '0755',
-                notify  => Class['serverdensity-agent::service'],
-                require => Class['serverdensity-agent::yum'],
+                notify  => Class['serverdensity_agent::service'],
+                require => Class['serverdensity_agent::yum'],
             }
         }
         default: {
@@ -198,9 +198,9 @@ class serverdensity-agent(
     }
 
     # Include everything and let each module determine its own state
-    anchor { 'serverdensity-agent::begin': } ->
-    class { 'serverdensity-agent::service': } ->
-    anchor {'serverdensity-agent::end': }
+    anchor { 'serverdensity_agent::begin': } ->
+    class { 'serverdensity_agent::service': } ->
+    anchor {'serverdensity_agent::end': }
 
     class {
         'config_file':
@@ -235,6 +235,6 @@ class serverdensity-agent(
             tmp_directory       => $::tmp_directory,
             pidfile_directory   => $::pidfile_directory,
             logging_level       => $::logging_level,
-            notify              => Class['serverdensity-agent::service']
+            notify              => Class['serverdensity_agent::service']
     }
 }

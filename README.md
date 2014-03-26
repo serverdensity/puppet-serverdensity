@@ -1,4 +1,4 @@
-serverdensity-agent
+serverdensity_agent
 ====================
 
 Puppet Module for deploying the Server Density Agent and agent plugins
@@ -21,7 +21,7 @@ Create an API token by logging into your Server Density account, clicking your n
 ```puppet
 class {
 
-        'serverdensity-agent':
+        'serverdensity_agent':
             sd_url => 'https://example.serverdensity.io',
             api_token => 'APITOKENHERE',
 }
@@ -34,7 +34,7 @@ You can use the Server Density API to create a new device, based on the hostname
 
 ```puppet
 class {
-        'serverdensity-agent':
+        'serverdensity_agent':
             sd_url => 'https://example.serverdensity.com',
             api_username => 'username',
             api_password => 'password',
@@ -48,7 +48,7 @@ This will install the agent, with the basic configuration, using the key that is
 
 ```puppet
 class {
-        'serverdensity-agent':
+        'serverdensity_agent':
             sd_url => 'https://example.serverdensity.com',
             agent_key => '1234567890abcdef',
     }

@@ -1,6 +1,6 @@
-# == Define: serverdensity-agent::plugin
+# == Define: serverdensity_agent::plugin
 #
-# Defines serverdensity-agent plugins
+# Defines serverdensity_agent plugins
 #
 # === Parameters
 #
@@ -26,7 +26,7 @@
 #
 # === Examples
 #
-# serverdensity-agent::plugin{ 'myplugin':
+# serverdensity_agent::plugin{ 'myplugin':
 #   source    => 'puppet:///mymodule/myplugin.py',
 #   config    => {
 #     custom_key1   => 'foo',
@@ -35,7 +35,7 @@
 # }
 #
 #
-define serverdensity-agent::plugin (
+define serverdensity_agent::plugin (
   $pluginname = $title,
   $content = undef,
   $source = undef,
@@ -43,16 +43,16 @@ define serverdensity-agent::plugin (
   $config_priority = '500'
 ) {
 
-  include serverdensity-agent
+  include serverdensity_agent
 
-  if $serverdensity-agent::location {
-    $configdir = $serverdensity-agent::location
+  if $serverdensity_agent::location {
+    $configdir = $serverdensity_agent::location
   } else {
     $configdir = '/etc/sd-agent/conf.d'
   }
 
-  if $serverdensity-agent::plugin_directory {
-    $plugindir = $serverdensity-agent::plugin_directory
+  if $serverdensity_agent::plugin_directory {
+    $plugindir = $serverdensity_agent::plugin_directory
   } else {
     $plugindir = '/usr/bin/sd-agent/plugins'
   }
@@ -66,14 +66,14 @@ define serverdensity-agent::plugin (
     group   => 'root',
     mode    => '0755',
     require => File['sd-agent-plugin-dir'],
-    notify  => Class['serverdensity-agent::service'],
+    notify  => Class['serverdensity_agent::service'],
   }
 
   if size(keys($config)) > 0 {
     file { "sd_config_${title}":
       ensure  => file,
       path    => "${configdir}/${config_priority}-${pluginname}.cfg",
-      content => template('serverdensity-agent/plugin/config.erb'),
+      content => template('serverdensity_agent/plugin/config.erb'),
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
