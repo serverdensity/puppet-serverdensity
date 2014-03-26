@@ -111,6 +111,11 @@
 #   Default: ''
 #   Valid values: debug, info, warn, error, fatal
 #
+# [*manage_services*]
+#   Boolean. Manage the sd-agent service from this module.
+#   Default: true
+#   Valid values: true, false
+#
 #
 # === Examples
 #
@@ -140,7 +145,7 @@ class serverdensity-agent(
     $use_fqdn = false,
     $server_name = '',
     $server_group = '',
-    $plugin_directory = '',
+    $plugin_directory = '/usr/bin/sd-agent/plugins',
     $apache_status_url = 'http://www.example.com/server-status/?auto',
     $apache_status_user = '',
     $apache_status_pass = '',
@@ -158,35 +163,32 @@ class serverdensity-agent(
     $tmp_directory = '',
     $pidfile_directory = '',
     $logging_level = '',
+    $manage_services = true,
     ) {
 
-    if $plugin_directory {
-        $sd_agent_plugin_dir = $plugin_directory
-    } else {
-        $sd_agent_plugin_dir = '/usr/bin/sd-agent/plugins'
-    }
 
     case $::osfamily {
         'Debian': {
             include serverdensity-agent::apt
-                $location = '/etc/sd-agent/conf.d'
+            $location = '/etc/sd-agent/conf.d'
 
             file { 'sd-agent-plugin-dir':
                 ensure  => directory,
-                path    => $sd_agent_plugin_dir,
+                path    => $plugin_directory,
                 mode    => '0755',
-                notify  => Service['sd-agent'],
+                notify  => Class['serverdensity::agent::service'],
                 require => Class['serverdensity-agent::apt'],
             }
         }
         'RedHat': {
             include serverdensity-agent::yum
-                $location = '/etc/sd-agent/conf.d'
+            $location = '/etc/sd-agent/conf.d'
+
             file { 'sd-agent-plugin-dir':
                 ensure  => directory,
-                path    => $sd_agent_plugin_dir,
+                path    => $plugin_directory,
                 mode    => '0755',
-                notify  => Service['sd-agent'],
+                notify  => Class['serverdensity::agent::service'],
                 require => Class['serverdensity-agent::yum'],
             }
         }
@@ -194,6 +196,11 @@ class serverdensity-agent(
             fail("OSfamily ${::operatingsystem} not supported.")
         }
     }
+
+    # Include everything and let each module determine its own state
+    anchor { 'serverdensity::begin': } ->
+    class { 'serverdensity::agent::service': } ->
+    anchor {'serverdensity::end': }
 
     class {
         'config_file':
@@ -228,16 +235,6 @@ class serverdensity-agent(
             tmp_directory       => $::tmp_directory,
             pidfile_directory   => $::pidfile_directory,
             logging_level       => $::logging_level,
-            notify              => Service['sd-agent']
-    }
-
-    service {
-        'sd-agent':
-            ensure    => running,
-            name      => 'sd-agent',
-            pattern   => 'python /usr/bin/sd-agent/agent.py start init --clean',
-            # due to https://bugs.launchpad.net/ubuntu/+source/upstart/+bug/552786
-            hasstatus => false,
-            enable    => true,
+            notify              => Class['serverdensity::agent::service']
     }
 }
