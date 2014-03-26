@@ -140,7 +140,7 @@ class serverdensity-agent(
     $use_fqdn = false,
     $server_name = '',
     $server_group = '',
-    $plugin_directory = '',
+    $plugin_directory = '/usr/bin/sd-agent/plugins',
     $apache_status_url = 'http://www.example.com/server-status/?auto',
     $apache_status_user = '',
     $apache_status_pass = '',
@@ -160,20 +160,15 @@ class serverdensity-agent(
     $logging_level = '',
     ) {
 
-    if $plugin_directory {
-        $sd_agent_plugin_dir = $plugin_directory
-    } else {
-        $sd_agent_plugin_dir = '/usr/bin/sd-agent/plugins'
-    }
 
     case $::osfamily {
         'Debian': {
             include serverdensity-agent::apt
-                $location = '/etc/sd-agent/conf.d'
+            $location = '/etc/sd-agent/conf.d'
 
             file { 'sd-agent-plugin-dir':
                 ensure  => directory,
-                path    => $sd_agent_plugin_dir,
+                path    => $plugin_directory,
                 mode    => '0755',
                 notify  => Service['sd-agent'],
                 require => Class['serverdensity-agent::apt'],
@@ -181,10 +176,11 @@ class serverdensity-agent(
         }
         'RedHat': {
             include serverdensity-agent::yum
-                $location = '/etc/sd-agent/conf.d'
+            $location = '/etc/sd-agent/conf.d'
+
             file { 'sd-agent-plugin-dir':
                 ensure  => directory,
-                path    => $sd_agent_plugin_dir,
+                path    => $plugin_directory,
                 mode    => '0755',
                 notify  => Service['sd-agent'],
                 require => Class['serverdensity-agent::yum'],
