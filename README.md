@@ -59,7 +59,7 @@ class {
 This will upload a plugin, and add custom config for it.
 
 ```puppet
-serverdensity::plugin{ 'MyPlugin':
+serverdensity_agent::plugin{ 'MyPlugin':
     source  => 'puppet:///mymodule/myplugin.py',
     config  => {
         custom_key1 => 'foo',
