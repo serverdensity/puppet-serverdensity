@@ -113,7 +113,7 @@
 #
 # [*logging_level*]
 #   String. Logging level to use for agent. Defaults to info if not set
-#   Default: ''
+#   Default: 'warn'
 #   Valid values: debug, info, warn, error, fatal
 #
 # [*manage_services*]
@@ -167,7 +167,7 @@ class serverdensity_agent(
     $rabbitmq_pass = '',
     $tmp_directory = '',
     $pidfile_directory = '',
-    $logging_level = '',
+    $logging_level = 'warn',
     $manage_services = true,
     ) {
 
