@@ -113,8 +113,8 @@
 #
 # [*logging_level*]
 #   String. Logging level to use for agent. Defaults to info if not set
-#   Default: ''
-#   Valid values: debug, info, warn, error, fatal
+#   Default: 'WARN'
+#   Valid values: DEBUG, INFO, WARN, ERROR, FATAL
 #
 # [*manage_services*]
 #   Boolean. Manage the sd-agent service from this module.
@@ -167,7 +167,7 @@ class serverdensity_agent(
     $rabbitmq_pass = '',
     $tmp_directory = '',
     $pidfile_directory = '',
-    $logging_level = '',
+    $logging_level = 'WARN',
     $manage_services = true,
     ) {
 
