@@ -150,14 +150,26 @@ module Puppet::Parser::Functions
             # attempt to find the device by hostname (which may be local or FQDN)
             list = nil
             checks.each do |hn|
-                filter = {
-                    'type' => 'device',
-                    'hostname' => hn,
-                }
+                hn_split=hn.split(".")
+                # attempt to detect google cloud devices
+                if hn.end_with?(".internal") and hn_split.length >=4 and hn_split[-3] == 'c'
+                    projectId=hn_split[-2]
+                    name=hn_split[0..-4].join('.')
+                    filter = {
+                        'type' => 'device',
+                        'name' => name,
+                        'projectId' => projectId,
+                    }
+                else
+                    filter = {
+                        'type' => 'device',
+                        'hostname' => hn,
+                    }
+                end
 
                 filter_json = URI.escape(PSON.dump(filter))
 
-                notice ["Making API request"]
+                notice ["Making API request for hostname: #{ hn }"]
 
                 begin
                     uri = URI("#{ base_url }/inventory/devices?filter=#{ filter_json }&token=#{ token }")
