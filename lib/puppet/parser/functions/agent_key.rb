@@ -158,7 +158,9 @@ module Puppet::Parser::Functions
                     filter = {
                         'type' => 'device',
                         'name' => name,
-                        'projectId' => projectId,
+                        # Pending an upgrade that makes sure all google devices have projectId
+                        # 'projectId' => projectId,
+                        'provider' => 'google'
                     }
                 else
                     filter = {
@@ -220,7 +222,8 @@ module Puppet::Parser::Functions
                 res = https.start { |cx| cx.request(req) }
 
                 device = PSON.parse(res.body)
-
+            elsif list.length > 1
+                fail ["More than one existing device matches this hostname or fqdn. Please manually set token"]
             else
                 device = list[0]
 
