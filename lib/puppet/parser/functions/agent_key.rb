@@ -158,8 +158,7 @@ module Puppet::Parser::Functions
                     filter = {
                         'type' => 'device',
                         'name' => name,
-                        # Pending an upgrade that makes sure all google devices have projectId
-                        # 'projectId' => projectId,
+                        'projectId' => projectId,
                         'provider' => 'google'
                     }
                 else
