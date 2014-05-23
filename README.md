@@ -20,7 +20,6 @@ Create an API token by logging into your Server Density account, clicking your n
 
 ```puppet
 class {
-
         'serverdensity_agent':
             sd_url => 'https://example.serverdensity.io',
             api_token => 'APITOKENHERE',
