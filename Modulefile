@@ -1,4 +1,4 @@
-name 'serverdensity_agent'
+name 'serverdensity-agent'
 version '0.9.1'
 author 'Server Density'
 summary 'Puppet module to install the Server Density monitoring agent and register servers automatically.'
