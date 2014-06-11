@@ -4,14 +4,10 @@
   "author": "Server Density",
   "summary": "Puppet module to install the Server Density monitoring agent and register servers automatically.",
   "license": "Simplified BSD License",
-  "source": "",
+  "source": "https://github.com/serverdensity/puppet-serverdensity/",
   "project_page": "https://github.com/serverdensity/puppet-serverdensity/",
-  "issues_url": null,
+  "issues_url": "https://github.com/serverdensity/puppet-serverdensity/issues",
   "description": "Official Puppet module for automatically installing the Server Density monitoring agent. Will install the agent packages, register new servers with the API and generate the correct config.",
-  "dependencies": [
-    {"name":"puppetlabs/apt"},
-    {"name":"puppetlabs/stdlib"}
-  ],
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat"
@@ -25,5 +21,15 @@
     {
       "operatingsystem": "CentOS"
     }
+  ],
+  "dependencies": [
+    {
+      "name": "puppetlabs/apt"
+    },
+    {
+      "name": "puppetlabs/stdlib"
+    },
+    {"name":"puppetlabs/apt","version_requirement":">= 1.1.0"},
+    {"name":"puppetlabs/stdlib","version_requirement":">= 3.0.0"}
   ]
 }
