@@ -23,12 +23,6 @@
     }
   ],
   "dependencies": [
-    {
-      "name": "puppetlabs/apt"
-    },
-    {
-      "name": "puppetlabs/stdlib"
-    },
     {"name":"puppetlabs/apt","version_requirement":">= 1.1.0"},
     {"name":"puppetlabs/stdlib","version_requirement":">= 3.0.0"}
   ]
