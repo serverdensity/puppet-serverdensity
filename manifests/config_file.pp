@@ -32,7 +32,7 @@ class serverdensity_agent::config_file (
         $rabbitmq_pass = 'guest',
         $tmp_directory = '/var/log/custom_location',
         $pidfile_directory = '/var/log/custom_location',
-        $logging_level = 'fatal',
+        $logging_level = 'INFO',
         $logtail_paths = '',
     ) {
 

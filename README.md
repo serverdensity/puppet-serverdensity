@@ -101,5 +101,5 @@ There are some optional parameters that can be used to configure other parts of 
 * `$rabbitmq_pass` - Password to authenticate to the RabbitMQ management API, required if `rabbitmq_status_url` is set
 * `$tmp_directory` - Override where the agent stores temporary files, system default tmp will be used if not set
 * `$pidfile_directory` - Override where the agent stores it's PID file, temp dir (above or system default) is used if not set
-* `$logging_level` - String. Logging level to use for agent. Defaults to WARN if not set.
+* `$logging_level` - String. Logging level to use for agent. Defaults to INFO if not set.
 * `manage_services` - Allow puppet to manage the sd-agent service, default: true. Useful when using an alternative process manager, e.g supervisor

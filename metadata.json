@@ -1,6 +1,6 @@
 {
   "name": "serverdensity-serverdensity_agent",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "author": "Server Density",
   "summary": "Puppet module to install the Server Density monitoring agent and register servers automatically.",
   "license": "Simplified BSD License",
