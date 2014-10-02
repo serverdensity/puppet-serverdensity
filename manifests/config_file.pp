@@ -33,6 +33,7 @@ class serverdensity_agent::config_file (
         $tmp_directory = '/var/log/custom_location',
         $pidfile_directory = '/var/log/custom_location',
         $logging_level = 'fatal',
+        $logtail_paths = '',
     ) {
 
     file { 'sd-agent-config-dir':

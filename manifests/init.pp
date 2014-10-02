@@ -113,8 +113,12 @@
 #
 # [*logging_level*]
 #   String. Logging level to use for agent. Defaults to info if not set
-#   Default: 'WARN'
+#   Default: 'INF'
 #   Valid values: DEBUG, INFO, WARN, ERROR, FATAL
+#
+# [*logtail_paths*]
+#   String. Specify path match patterns to tail the files to post back
+#   Default: ''
 #
 # [*manage_services*]
 #   Boolean. Manage the sd-agent service from this module.
@@ -168,6 +172,7 @@ class serverdensity_agent(
     $tmp_directory = '',
     $pidfile_directory = '',
     $logging_level = 'WARN',
+    $logtail_paths = '',
     $manage_services = true,
     ) {
 
@@ -240,6 +245,7 @@ class serverdensity_agent(
             tmp_directory       => $tmp_directory,
             pidfile_directory   => $pidfile_directory,
             logging_level       => $logging_level,
+            logtail_paths       => $logtail_paths,
             notify              => Class['serverdensity_agent::service']
     }
 }
