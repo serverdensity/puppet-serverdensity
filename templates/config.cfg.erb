@@ -76,3 +76,10 @@ rabbitmq_pass: <%= @rabbitmq_pass %>
 # See http://www.serverdensity.com/docs/agent/config/
 
 logging_level: <%= @logging_level %>
+
+# Log tailer
+# Specify path match patterns to tail the files to post back
+# You must enable this feature from within your account
+# Comma separated: e.g. /var/log/apache2/*.log,/var/log/*.log
+
+logtail_paths: <%= @logtail_paths %>
