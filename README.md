@@ -102,4 +102,5 @@ There are some optional parameters that can be used to configure other parts of 
 * `$tmp_directory` - Override where the agent stores temporary files, system default tmp will be used if not set
 * `$pidfile_directory` - Override where the agent stores it's PID file, temp dir (above or system default) is used if not set
 * `$logging_level` - String. Logging level to use for agent. Defaults to INFO if not set.
+* `$logtail_paths` - String. Specify path match patterns to tail the files to post back. Comma separated: e.g. `/var/log/apache2/*.log,/var/log/*.log`. You must enable this in your account first.
 * `manage_services` - Allow puppet to manage the sd-agent service, default: true. Useful when using an alternative process manager, e.g supervisor
