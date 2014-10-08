@@ -19,6 +19,7 @@ module Puppet::Parser::Functions
         fqdn = lookupvar("fqdn")
         provider = lookupvar('sd_provider')
         provider_id = lookupvar('sd_provider_id')
+        project_id = lookupvar('sd_project_id')
 
         if server_name.nil? or server_name.empty?
             server_name = fqdn
@@ -157,6 +158,9 @@ module Puppet::Parser::Functions
                     'provider' => provider,
                     'providerId' => provider_id
                 }
+                if project_id
+                    filter['projectId'] = project_id
+                end
                 notice ["Making API request for provider: #{ provider } and providerId: #{ provider_id }"]
                 filter_json = URI.escape(PSON.dump(filter))
                 begin
@@ -185,15 +189,14 @@ module Puppet::Parser::Functions
                 # attempt to find the device by hostname (which may be local or FQDN)
                 list = nil
                 checks.each do |hn|
-                    hn_split=hn.split(".")
                     # attempt to detect google cloud devices
-                    if hn.end_with?(".internal") and hn_split.length >=4 and hn_split[-3] == 'c'
-                        projectId=hn_split[-2]
+                    if provider == 'google'
+                        hn_split=hn.split(".")
                         name=hn_split[0..-4].join('.')
                         filter = {
                             'type' => 'device',
                             'name' => name,
-                            'projectId' => projectId,
+                            'projectId' => project_id,
                             'provider' => 'google'
                         }
                     else
