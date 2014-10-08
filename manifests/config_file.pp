@@ -37,10 +37,10 @@ class serverdensity_agent::config_file (
     ) {
 
     file { 'sd-agent-config-dir':
-      ensure  => 'directory',
-      path    => $location,
-      mode    => '0755',
-      notify  => Class['serverdensity_agent::service'],
+      ensure => 'directory',
+      path   => $location,
+      mode   => '0755',
+      notify => Class['serverdensity_agent::service'],
     }
 
     file { 'sd-agent-config-file':

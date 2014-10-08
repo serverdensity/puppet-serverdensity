@@ -20,13 +20,13 @@ class serverdensity_agent::service {
   }
 
   service { 'sd-agent':
-    ensure      => $ensure,
-    enable      => $enable,
-    name        => 'sd-agent',
+    ensure     => $ensure,
+    enable     => $enable,
+    name       => 'sd-agent',
     # due to https://bugs.launchpad.net/ubuntu/+source/upstart/+bug/552786
-    pattern     => 'python /usr/bin/sd-agent/agent.py start init --clean',
-    hasrestart  => true,
-    hasstatus   => false,
-    subscribe   => Class['serverdensity_agent::config_file'],
+    pattern    => 'python /usr/bin/sd-agent/agent.py start init --clean',
+    hasrestart => true,
+    hasstatus  => false,
+    subscribe  => Class['serverdensity_agent::config_file'],
   }
 }

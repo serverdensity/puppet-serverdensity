@@ -2,6 +2,6 @@ language: ruby
 rvm:
   - 1.9.2
 script: 'puppet parser validate `find . manifests -name "*.pp"`'
-script: 'puppet-lint --with-filename manifests'
+script: 'puppet-lint --no-autoloader_layout-check --with-filename manifests'
 env:
   - PUPPET_VERSION="2.7"
