@@ -24,7 +24,7 @@ class serverdensity_agent::yum {
     }
     # install SD agent package
     package { 'sd-agent':
-        ensure   => present,
-        require  => Yumrepo['serverdensity_agent']
+        ensure  => present,
+        require => Yumrepo['serverdensity_agent']
     }
 }
