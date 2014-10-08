@@ -1,6 +1,5 @@
 require 'facter'
 require 'json'
-require 'rubygems'
 
 # just in case we don't get any of them
 provider = nil
@@ -13,7 +12,7 @@ if Facter.value('ec2_instance_id')
 else
     # Check for GCE
     gce = nil
-    if Gem::Version.new(Facter.value('facterversion')) >= Gem::Version.new('2.1.0')
+    if Facter.value('facterversion') >= '2.1'
         # Facter already extracts GCE metadata.
         gce = Facter.value('gce')
     else
