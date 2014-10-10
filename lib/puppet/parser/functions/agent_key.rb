@@ -17,6 +17,9 @@ module Puppet::Parser::Functions
 
         hostname = lookupvar("hostname")
         fqdn = lookupvar("fqdn")
+        provider = lookupvar('sd_provider')
+        provider_id = lookupvar('sd_provider_id')
+        project_id = lookupvar('sd_project_id')
 
         if server_name.nil? or server_name.empty?
             server_name = fqdn
@@ -147,31 +150,19 @@ module Puppet::Parser::Functions
 
             base_url = "https://api.serverdensity.io"
 
-            # attempt to find the device by hostname (which may be local or FQDN)
             list = nil
-            checks.each do |hn|
-                hn_split=hn.split(".")
-                # attempt to detect google cloud devices
-                if hn.end_with?(".internal") and hn_split.length >=4 and hn_split[-3] == 'c'
-                    projectId=hn_split[-2]
-                    name=hn_split[0..-4].join('.')
-                    filter = {
-                        'type' => 'device',
-                        'name' => name,
-                        'projectId' => projectId,
-                        'provider' => 'google'
-                    }
-                else
-                    filter = {
-                        'type' => 'device',
-                        'hostname' => hn,
-                    }
+            if provider and provider_id
+                # attempt to find the device by providerId
+                filter = {
+                    'type' => 'device',
+                    'provider' => provider,
+                    'providerId' => provider_id
+                }
+                if project_id
+                    filter['projectId'] = project_id
                 end
-
+                notice ["Making API request for provider: #{ provider } and providerId: #{ provider_id }"]
                 filter_json = URI.escape(PSON.dump(filter))
-
-                notice ["Making API request for hostname: #{ hn }"]
-
                 begin
                     uri = URI("#{ base_url }/inventory/devices?filter=#{ filter_json }&token=#{ token }")
                     req = Net::HTTP::Get.new(uri.request_uri)
@@ -192,9 +183,57 @@ module Puppet::Parser::Functions
                     raise Puppet::ParseError, "Error from SD API"
                 end
 
-                if list.length > 0
-                    # keep this response -- device was found
-                    break
+            end
+
+            if list.length == 0
+                # attempt to find the device by hostname (which may be local or FQDN)
+                list = nil
+                checks.each do |hn|
+                    # attempt to detect google cloud devices
+                    if provider == 'google'
+                        hn_split=hn.split(".")
+                        name=hn_split[0..-4].join('.')
+                        filter = {
+                            'type' => 'device',
+                            'name' => name,
+                            'projectId' => project_id,
+                            'provider' => 'google'
+                        }
+                    else
+                        filter = {
+                            'type' => 'device',
+                            'hostname' => hn,
+                        }
+                    end
+
+                    filter_json = URI.escape(PSON.dump(filter))
+
+                    notice ["Making API request for hostname: #{ hn }"]
+
+                    begin
+                        uri = URI("#{ base_url }/inventory/devices?filter=#{ filter_json }&token=#{ token }")
+                        req = Net::HTTP::Get.new(uri.request_uri)
+                        https = Net::HTTP.new(uri.host, uri.port)
+                        https.use_ssl = true
+                        https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+                        res = https.start { |cx| cx.request(req) }
+
+                        list = PSON.parse(res.body)
+
+                    rescue
+                        err ["Error from SD API, stopping run"]
+                        raise Puppet::ParseError, "Error from SD API"
+                    end
+
+                    if Integer(res.code) >= 500
+                        err ["Error from SD API, stopping run"]
+                        raise Puppet::ParseError, "Error from SD API"
+                    end
+
+                    if list.length > 0
+                        # keep this response -- device was found
+                        break
+                    end
                 end
             end
 
@@ -209,6 +248,13 @@ module Puppet::Parser::Functions
                     data['group'] = group
                 end
 
+                if provider
+                    data['provider'] = provider
+                    if provider_id
+                        data['providerId'] = provider_id
+                    end
+                end
+
                 uri = URI("#{ base_url }/inventory/devices?token=#{ token }")
                 req = Net::HTTP::Post.new(uri.request_uri)
 
@@ -219,6 +265,11 @@ module Puppet::Parser::Functions
                 https.use_ssl = true
                 https.verify_mode = OpenSSL::SSL::VERIFY_NONE
                 res = https.start { |cx| cx.request(req) }
+
+                if Integer(res.code) >= 500
+                    err ["Error from SD API, stopping run"]
+                    raise Puppet::ParseError, "Error from SD API"
+                end
 
                 device = PSON.parse(res.body)
             elsif list.length > 1
