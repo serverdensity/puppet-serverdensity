@@ -185,7 +185,7 @@ module Puppet::Parser::Functions
 
             end
 
-            if list.nil? or list.length == 0
+            if list.nil? or list.empty?
                 # attempt to find the device by hostname (which may be local or FQDN)
                 list = nil
                 checks.each do |hn|
