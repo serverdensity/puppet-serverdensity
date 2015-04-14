@@ -195,6 +195,7 @@ module Puppet::Parser::Functions
                         name=hn_split[0..-4].join('.')
                         filter = {
                             'type' => 'device',
+                            'deleted' => false,
                             'name' => name,
                             'projectId' => project_id,
                             'provider' => 'google'
@@ -202,6 +203,7 @@ module Puppet::Parser::Functions
                     else
                         filter = {
                             'type' => 'device',
+                            'deleted' => false,
                             'hostname' => hn,
                         }
                     end
