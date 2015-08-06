@@ -23,6 +23,9 @@ Facter.add(:agent_key, :timeout => 10) do
             }
         
         result = res.body.split(':').last if res.code == 200
+    elsif File::exist?('/etc/sd-agent/conf.d/000-main.cfg')
+        # use the agent key stored in the configuration file
+        result = Facter::Util::Resolution.exec("awk -F ':' '/^agent_key/ {print $2}' /etc/sd-agent/conf.d/000-main.cfg").strip!
     end
 
     # if we get to here and neither of the above
