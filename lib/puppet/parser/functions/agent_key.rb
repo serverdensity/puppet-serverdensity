@@ -66,86 +66,6 @@ module Puppet::Parser::Functions
             raise Puppet::ParseError, "SD URL not set"
         end
 
-        if token.nil? or token.empty?
-            api_version = "1.4"
-        else
-            api_version = "2"
-        end
-
-
-        if api_version == "1.4"
-
-            if sd_password.nil? or sd_password.empty?
-                raise Puppet::ParseError, "SD Password not set"
-            end
-            if sd_username.nil? or sd_username.empty?
-                raise Puppet::ParseError, "SD Username not set"
-            end
-
-            notice ["Starting retrieval"]
-            base_url = 'http://api.serverdensity.com/1.4/'
-            # attempt to find the device by hostname (which may be local or FQDN)
-            device = nil
-            checks.each do |hn|
-                uri = URI("#{ base_url }devices/getByHostName?hostName=#{ hn }&account=#{ sd_url }")
-
-                req = Net::HTTP::Get.new(uri.request_uri)
-                req.basic_auth sd_username, sd_password
-
-                res = Net::HTTP.start(uri.host, uri.port) {|http|
-                    http.request(req)
-                }
-                device = PSON.parse(res.body)
-                if device['status'] == 1
-                    # keep this response -- device was found
-                    break
-                end
-            end
-
-            if device['status'] == 2
-                notice ["Device not found, creating a new one"]
-
-                uri = URI("#{ base_url }devices/add?account=#{ sd_url }")
-                req = Net::HTTP::Post.new(uri.request_uri)
-                req.basic_auth sd_username, sd_password
-
-                params = {
-                    'name' => server_name,
-                    'hostName' => hostname,
-                    'notes' => 'Created automatically by Puppet (serverdensity_agent)',
-                }
-
-                unless group.nil? or group.empty?
-                    params['group'] = group
-                end
-
-                # Create new device
-                req.set_form_data(params)
-
-                res = Net::HTTP.start(uri.host, uri.port) {|http|
-                    http.request(req)
-                }
-                device = PSON.parse(res.body)
-
-                if device['status'] == 2
-                    message = device['error']['message']
-                    raise Puppet::ParseError, "Failure creating new device: #{ message }"
-                end
-
-                agent_key = device['data']['agentKey']
-            else
-                notice ["Reusing existing device"]
-                # Validate that the found device is correct (this is to correct
-                # for erroneous results that can be returned from the API
-                # getByHostName query)
-                found_hostname = device['data']['device']['hostName']
-                if not checks.include? found_hostname
-                    raise Puppet::ParseError, "Serverdensity getByHostname API call returned a device with mismatching hostname '#{found_hostname}'.  You may need to recreate device(s)."
-                end
-                agent_key = device['data']['device']['agentKey']
-            end
-
-        elsif api_version == "2"
             notice ["Using SD Version 2"]
 
             base_url = "https://api.serverdensity.io"
@@ -303,7 +223,6 @@ module Puppet::Parser::Functions
             end
 
             agent_key = device["agentKey"]
-        end
 
         notice ["Agent Key: #{ agent_key }"]
         return agent_key
