@@ -66,23 +66,72 @@ module Puppet::Parser::Functions
             raise Puppet::ParseError, "SD URL not set"
         end
 
-            notice ["Using SD Version 2"]
+        notice ["Using SD Version 2"]
 
-            base_url = "https://api.serverdensity.io"
+        base_url = "https://api.serverdensity.io"
 
+        list = nil
+        if provider and provider_id
+            # attempt to find the device by providerId
+            filter = {
+                'type' => 'device',
+                'provider' => provider,
+                'providerId' => provider_id
+            }
+            if project_id
+                filter['projectId'] = project_id
+            end
+            notice ["Making API request for provider: #{ provider } and providerId: #{ provider_id }"]
+            filter_json = URI.escape(PSON.dump(filter))
+            begin
+                uri = URI("#{ base_url }/inventory/devices?filter=#{ filter_json }&token=#{ token }")
+                req = Net::HTTP::Get.new(uri.request_uri)
+                https = Net::HTTP.new(uri.host, uri.port)
+                https.use_ssl = true
+                https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+                res = https.start { |cx| cx.request(req) }
+
+                list = PSON.parse(res.body)
+
+            rescue
+                err ["Error from SD API, stopping run"]
+                raise Puppet::ParseError, "Error from SD API"
+            end
+
+            if Integer(res.code) >= 500
+                err ["Error from SD API, stopping run"]
+                raise Puppet::ParseError, "Error from SD API"
+            end
+
+        end
+
+        if list.nil? or list.empty?
+            # attempt to find the device by hostname (which may be local or FQDN)
             list = nil
-            if provider and provider_id
-                # attempt to find the device by providerId
-                filter = {
-                    'type' => 'device',
-                    'provider' => provider,
-                    'providerId' => provider_id
-                }
-                if project_id
-                    filter['projectId'] = project_id
+            checks.each do |hn|
+                # attempt to detect google cloud devices
+                if provider == 'google'
+                    hn_split=hn.split(".")
+                    name=hn_split[0..-4].join('.')
+                    filter = {
+                        'type' => 'device',
+                        'deleted' => false,
+                        'name' => name,
+                        'projectId' => project_id,
+                        'provider' => 'google'
+                    }
+                else
+                    filter = {
+                        'type' => 'device',
+                        'deleted' => false,
+                        'hostname' => hn,
+                    }
                 end
-                notice ["Making API request for provider: #{ provider } and providerId: #{ provider_id }"]
+
                 filter_json = URI.escape(PSON.dump(filter))
+
+                notice ["Making API request for hostname: #{ hn }"]
+
                 begin
                     uri = URI("#{ base_url }/inventory/devices?filter=#{ filter_json }&token=#{ token }")
                     req = Net::HTTP::Get.new(uri.request_uri)
@@ -103,126 +152,77 @@ module Puppet::Parser::Functions
                     raise Puppet::ParseError, "Error from SD API"
                 end
 
+                if list.length > 0
+                    # keep this response -- device was found
+                    break
+                end
+            end
+        end
+
+        if Integer(res.code) >= 300 or list.length == 0
+            notice ["Device not found, creating a new one"]
+
+            data = {
+                :name => server_name,
+                :hostname => hostname,
+            }
+            unless group.nil? or group.empty?
+                data['group'] = group
             end
 
-            if list.nil? or list.empty?
-                # attempt to find the device by hostname (which may be local or FQDN)
-                list = nil
-                checks.each do |hn|
-                    # attempt to detect google cloud devices
-                    if provider == 'google'
-                        hn_split=hn.split(".")
-                        name=hn_split[0..-4].join('.')
-                        filter = {
-                            'type' => 'device',
-                            'deleted' => false,
-                            'name' => name,
-                            'projectId' => project_id,
-                            'provider' => 'google'
-                        }
-                    else
-                        filter = {
-                            'type' => 'device',
-                            'deleted' => false,
-                            'hostname' => hn,
-                        }
-                    end
-
-                    filter_json = URI.escape(PSON.dump(filter))
-
-                    notice ["Making API request for hostname: #{ hn }"]
-
-                    begin
-                        uri = URI("#{ base_url }/inventory/devices?filter=#{ filter_json }&token=#{ token }")
-                        req = Net::HTTP::Get.new(uri.request_uri)
-                        https = Net::HTTP.new(uri.host, uri.port)
-                        https.use_ssl = true
-                        https.verify_mode = OpenSSL::SSL::VERIFY_NONE
-                        res = https.start { |cx| cx.request(req) }
-
-                        list = PSON.parse(res.body)
-
-                    rescue
-                        err ["Error from SD API, stopping run"]
-                        raise Puppet::ParseError, "Error from SD API"
-                    end
-
-                    if Integer(res.code) >= 500
-                        err ["Error from SD API, stopping run"]
-                        raise Puppet::ParseError, "Error from SD API"
-                    end
-
-                    if list.length > 0
-                        # keep this response -- device was found
-                        break
-                    end
+            if provider
+                data['provider'] = provider
+                if provider_id
+                    data['providerId'] = provider_id
                 end
             end
 
-            if Integer(res.code) >= 300 or list.length == 0
-                notice ["Device not found, creating a new one"]
+            uri = URI("#{ base_url }/inventory/devices?token=#{ token }")
+            req = Net::HTTP::Post.new(uri.request_uri)
 
-                data = {
-                    :name => server_name,
-                    :hostname => hostname,
+            # Create new device
+            req.set_form_data(data)
+
+            https = Net::HTTP.new(uri.host, uri.port)
+            https.use_ssl = true
+            https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+            res = https.start { |cx| cx.request(req) }
+
+            if Integer(res.code) >= 500
+                err ["Error from SD API, stopping run"]
+                raise Puppet::ParseError, "Error from SD API"
+            end
+
+            device = PSON.parse(res.body)
+        elsif list.length > 1
+            fail ["More than one existing device matches this hostname or fqdn. Please manually set token"]
+        else
+            device = list[0]
+
+            # Has the group changed?
+            existing_group = device["group"]
+
+            if existing_group != group
+                notice ["Updating group on #{device['_id']} from #{existing_group} to #{group}"]
+
+                # update the group
+                uri = URI("#{ base_url }/inventory/devices/#{ device['_id'] }?token=#{ token }")
+
+                req = Net::HTTP::Put.new(uri.request_uri)
+
+                update_data = {
+                    :group => group
                 }
-                unless group.nil? or group.empty?
-                    data['group'] = group
-                end
-
-                if provider
-                    data['provider'] = provider
-                    if provider_id
-                        data['providerId'] = provider_id
-                    end
-                end
-
-                uri = URI("#{ base_url }/inventory/devices?token=#{ token }")
-                req = Net::HTTP::Post.new(uri.request_uri)
-
-                # Create new device
-                req.set_form_data(data)
-
+                req.set_form_data(update_data)
                 https = Net::HTTP.new(uri.host, uri.port)
                 https.use_ssl = true
                 https.verify_mode = OpenSSL::SSL::VERIFY_NONE
                 res = https.start { |cx| cx.request(req) }
 
-                if Integer(res.code) >= 500
-                    err ["Error from SD API, stopping run"]
-                    raise Puppet::ParseError, "Error from SD API"
-                end
-
-                device = PSON.parse(res.body)
-            elsif list.length > 1
-                fail ["More than one existing device matches this hostname or fqdn. Please manually set token"]
-            else
-                device = list[0]
-
-                # Has the group changed?
-                existing_group = device["group"]
-
-                if existing_group != group
-                    notice ["Updating group on #{device['_id']} from #{existing_group} to #{group}"]
-
-                    # update the group
-                    uri = URI("#{ base_url }/inventory/devices/#{ device['_id'] }?token=#{ token }")
-
-                    req = Net::HTTP::Put.new(uri.request_uri)
-
-                    update_data = {
-                        :group => group
-                    }
-                    req.set_form_data(update_data)
-                    https = Net::HTTP.new(uri.host, uri.port)
-                    https.use_ssl = true
-                    https.verify_mode = OpenSSL::SSL::VERIFY_NONE
-                    res = https.start { |cx| cx.request(req) }
-
-                end
             end
+        end
 
-            agent_key = device["agentKey"]
+        agent_key = device["agentKey"]
 
         notice ["Agent Key: #{ agent_key }"]
         return agent_key
