@@ -12,8 +12,6 @@ Puppet Module for deploying the Server Density Agent and agent plugins
 
 ### v2 API Config
 
-*If your account URL ends in .io you are using v2*
-
 This will create a new device, and then use the agent key provided automatically by the API to configure the agent on the node.
 
 Create an API token by logging into your Server Density account, clicking your name top left, clicking Preferences then going to the Security tab.
@@ -25,21 +23,6 @@ class {
             api_token => 'APITOKENHERE',
 }
 ```
-### v1 API Config
-
-*If your account URL ends in .com you are using v1*
-
-You can use the Server Density API to create a new device, based on the hostname of the node.
-
-```puppet
-class {
-        'serverdensity_agent':
-            sd_url => 'https://example.serverdensity.com',
-            api_username => 'username',
-            api_password => 'password',
-    }
-
-```
 
 ### Fixed key config
 
@@ -48,7 +31,7 @@ This will install the agent, with the basic configuration, using the key that is
 ```puppet
 class {
         'serverdensity_agent':
-            sd_url => 'https://example.serverdensity.com',
+            sd_url => 'https://example.serverdensity.io',
             agent_key => '1234567890abcdef',
     }
 ```
