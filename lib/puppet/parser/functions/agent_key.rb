@@ -26,12 +26,12 @@ def sd_device(base_url, token, filter_json)
         if list['errors'].any?{ |e| e['type'] == 'invalid_command'  }
             raise Puppet::ParseError, "SD API: " + list['message']
         elsif list['errors'].any?{ |e| e['subject'] == 'device' &&  e['type'] == 'not_found'  }
-            raise NameError.new(list['message'])
+            raise NameError, list['message']
         end
     end
 
     if list.nil? or list.empty?
-        raise NameError.new("Device not found")
+        raise NameError, "Device not found"
     end
 
     if list.length > 1
