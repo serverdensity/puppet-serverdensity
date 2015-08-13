@@ -139,7 +139,28 @@ module Puppet::Parser::Functions
         base_url = "https://api.serverdensity.io"
 
         device = nil
-        if provider and provider_id
+
+        unless agent_key.nil?
+            filter = {
+                'type' => 'device',
+                'deleted' => false,
+                'agentKey' => agent_key,
+            }
+            begin
+                device = sd_device(base_url, token, filter)
+            rescue RangeError => e
+                error_msg = "Filter returned more than a single device for #{ filter }"
+                err [error_msg]
+                raise Puppet::ParseError, error_msg
+            rescue NameError
+                warning ["Provided agent_key (#{ agent_key }) does not exist."]
+                device = nil
+            rescue => e
+                err e
+            end
+        end
+
+        if provider and provider_id and device.nil?
             # attempt to find the device by providerId
             filter = {
                 'type' => 'device',
@@ -186,8 +207,6 @@ module Puppet::Parser::Functions
                         'hostname' => hn,
                     }
                 end
-
-                filter_json = URI.escape(PSON.dump(filter))
 
                 notice ["Making API request for hostname: #{ hn }"]
 
