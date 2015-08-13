@@ -2,21 +2,17 @@ require 'net/http'
 require 'net/https'
 require 'uri'
 
-def sd_device(base_url, token, filter_json)
-    begin
-        uri = URI("#{ base_url }/inventory/devices?filter=#{ filter_json }&token=#{ token }")
-        req = Net::HTTP::Get.new(uri.request_uri)
-        https = Net::HTTP.new(uri.host, uri.port)
-        https.use_ssl = true
-        https.verify_mode = OpenSSL::SSL::VERIFY_NONE
-        res = https.start { |cx| cx.request(req) }
 
-        list = PSON.parse(res.body)
-    rescue => e
-        err "Unhandled error"
-        err e
-        raise Puppet::ParseError, "Error from SD API"
-    end
+def sd_device(base_url, token, filter)
+    filter_json = URI.escape(PSON.dump(filter))
+    uri = URI("#{ base_url }/inventory/devices?filter=#{ filter_json }&token=#{ token }")
+    req = Net::HTTP::Get.new(uri.request_uri)
+    https = Net::HTTP.new(uri.host, uri.port)
+    https.use_ssl = true
+    https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    res = https.start { |cx| cx.request(req) }
+
+    list = PSON.parse(res.body)
 
     if Integer(res.code) >= 500
         raise Puppet::ParseError, "Error from SD API"
@@ -37,13 +33,14 @@ def sd_device(base_url, token, filter_json)
     if list.length > 1
         raise RangeError, "More than one existing device matches this hostname or fqdn. Please manually set token"
     end
+
     device = list[0]
     return device
-
 
 end
 
 def sd_create_device(base_url, token, data)
+
     uri = URI("#{ base_url }/inventory/devices?token=#{ token }")
     req = Net::HTTP::Post.new(uri.request_uri)
 
@@ -62,6 +59,7 @@ def sd_create_device(base_url, token, data)
 
     device = PSON.parse(res.body)
     return device
+
 end
 
 def sd_update_device(base_url, token, device, update_data)
@@ -76,6 +74,7 @@ def sd_update_device(base_url, token, device, update_data)
     https.use_ssl = true
     https.verify_mode = OpenSSL::SSL::VERIFY_NONE
     res = https.start { |cx| cx.request(req) }
+
 end
 
 
@@ -116,26 +115,20 @@ module Puppet::Parser::Functions
 
         sd_url = sd_url.sub(/^https?\:\/\//, '')
 
-        # can we get the agent key from the environment
-        # we set it on cloud devices created on Amazon or Rackspace
-        # created via the serverdensity UI
-        # uses custom agent_key fact
+        # can we get the agent key from the environment?
+        # - parameter from serverdensity_agent puppet class
+        # - custom agent_key fact set on:
+        #   - cloud devices created on Amazon or Rackspace
+        #     created via the serverdensity UI
+        #   - configuration file from already provisioned agents
         agent_key = lookupvar("agent_key")
 
         # lookupvar returns undef if no value
-        # test against nil just in case
-        unless agent_key.nil? or agent_key == :undef
-            notice ["Agent Key Provided via Facter: #{ agent_key }"]
-            return agent_key
-        end
-
-        if agent_key == :undef
-            agent_key = ""
-        end
-
-        unless agent_key.nil? or agent_key.empty?
-            notice ["Agent Key Provided: #{ agent_key }"]
-            return agent_key
+        # test against nil and empty string just in case and normalize value
+        if agent_key.nil? or agent_key == :undef or agent_key.empty?
+            agent_key = nil
+        else
+            notice ["Agent Key Provided by fact or manifest: #{ agent_key }"]
         end
 
         if sd_url.nil? or sd_url.empty?
@@ -143,7 +136,6 @@ module Puppet::Parser::Functions
         end
 
         notice ["Using SD Version 2"]
-
         base_url = "https://api.serverdensity.io"
 
         device = nil
@@ -158,18 +150,17 @@ module Puppet::Parser::Functions
                 filter['projectId'] = project_id
             end
             notice ["Making API request for provider: #{ provider } and providerId: #{ provider_id }"]
-            filter_json = URI.escape(PSON.dump(filter))
             begin
-                device = sd_device(base_url, token, filter_json)
+                device = sd_device(base_url, token, filter)
             rescue RangeError => e
-                # Filter returns more than a single device
-                err e.message
-                break
+                error_msg = "Filter returned more than a single device for #{ filter }"
+                err [error_msg]
+                raise Puppet::ParseError, error_msg
             rescue NameError
             # Device not found
             rescue => e
-                err "unhandled e"
-                err e
+                err ["Unhandled error", e]
+                err ["Please contact https://support.serverdensity.com/"]
             end
         end
 
@@ -201,12 +192,12 @@ module Puppet::Parser::Functions
                 notice ["Making API request for hostname: #{ hn }"]
 
                 begin
-                    device = sd_device(base_url, token, filter_json)
+                    device = sd_device(base_url, token, filter)
                     break
                 rescue RangeError => e
-                    # Filter returns more than a single device
-                    err e.message
-                    break
+                    error_msg = "Filter returned more than a single device for #{ filter }"
+                    err [error_msg]
+                    raise Puppet::ParseError, error_msg
                 rescue NameError
                 # Device not found
                 rescue => e
@@ -233,7 +224,14 @@ module Puppet::Parser::Functions
                     data['providerId'] = provider_id
                 end
             end
-            device = sd_create_device(base_url, token, data)
+                begin
+                    device = sd_create_device(base_url, token, data)
+                rescue PSON::ParserError => e
+                    warning ["Unexpected API response while creating device", data]
+                rescue => e
+                    err ["Unhandled error", e]
+                    err ["Please contact https://support.serverdensity.com/"]
+                end
         else
             # Has the group changed?
             existing_group = device["group"]
@@ -243,13 +241,29 @@ module Puppet::Parser::Functions
                 update_data = {
                     :group => group
                 }
-
-                sd_update_device(base_url, token, device, update_data)
+                begin
+                    sd_update_device(base_url, token, device, update_data)
+                rescue PSON.PSONError => e
+                    warning ["Unexpected API response while updating device", device]
+                rescue => e
+                    err ["Unhandled error", e]
+                    err ["Please contact https://support.serverdensity.com/"]
+                end
             end
         end
 
-        agent_key = device["agentKey"]
+        if device.nil? and agent_key.nil?
+            raise Puppet::ParseError, "Agent Key not provided and SD API couldn't be contacted."
+        end
 
+        api_agent_key = device["agentKey"]
+        if agent_key != api_agent_key
+            if not agent_key.nil?
+                warning ["Provided Agent Key differs from API. Trusting the API.",
+                         "(Local: #{ agent_key } API: #{ api_agent_key })"]
+            end
+            agent_key = api_agent_key
+        end
         notice ["Agent Key: #{ agent_key }"]
         return agent_key
     end
