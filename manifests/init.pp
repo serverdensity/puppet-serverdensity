@@ -202,6 +202,18 @@ class serverdensity_agent(
                 require => Class['serverdensity_agent::yum'],
             }
         }
+        'FreeBSD': {
+            include serverdensity_agent::freebsd
+            $location = '/usr/local/etc/sd-agent/conf.d'
+
+            file { 'sd-agent-plugin-dir':
+                ensure  => directory,
+                path    => $plugin_directory,
+                mode    => '0755',
+                notify  => Class['serverdensity_agent::service'],
+                require => Class['serverdensity_agent::freebsd'],
+            }
+        }
         default: {
             fail("OSfamily ${::operatingsystem} not supported.")
         }
