@@ -23,6 +23,10 @@ module Puppet::Parser::Functions
 
         if server_name.nil? or server_name.empty?
             server_name = fqdn
+            if provider == 'google'
+                hn_split = fqdn.split(".")
+                server_name = hn_split[0..-4].join('.')
+            end
         end
 
         if use_fqdn
@@ -111,12 +115,10 @@ module Puppet::Parser::Functions
             checks.each do |hn|
                 # attempt to detect google cloud devices
                 if provider == 'google'
-                    hn_split=hn.split(".")
-                    name=hn_split[0..-4].join('.')
                     filter = {
                         'type' => 'device',
                         'deleted' => false,
-                        'name' => name,
+                        'name' => server_name,
                         'projectId' => project_id,
                         'provider' => 'google'
                     }
