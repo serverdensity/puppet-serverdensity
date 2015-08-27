@@ -7,6 +7,7 @@ Puppet Module for deploying the Server Density Agent and agent plugins
 
 * Ubuntu
 * CentOS
+* FreeBSD
 
 ## Usage
 
