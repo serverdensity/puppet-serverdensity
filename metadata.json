@@ -20,12 +20,19 @@
     },
     {
       "operatingsystem": "CentOS"
+    },
+    {
+      "operatingsystem": "FreeBSD"
     }
   ],
   "dependencies": [
     {
       "name": "puppetlabs/apt",
       "version_requirement": ">= 1.1.0"
+    },
+    {
+      "name": "zleslie/pkgng",
+      "version_requirement": ">= 0.2.0"
     },
     {
       "name": "puppetlabs/stdlib",
