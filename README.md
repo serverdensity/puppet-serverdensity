@@ -10,8 +10,6 @@ Puppet Module for deploying the Server Density Agent and agent plugins
 
 ## Usage
 
-### v2 API Config
-
 This will create a new device, and then use the agent key provided automatically by the API to configure the agent on the node.
 
 Create an API token by logging into your Server Density account, clicking your name top left, clicking Preferences then going to the Security tab.
