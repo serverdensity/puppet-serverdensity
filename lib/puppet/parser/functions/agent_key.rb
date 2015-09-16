@@ -177,9 +177,6 @@ module Puppet::Parser::Functions
                 if provider_id
                     data['providerId'] = provider_id
                 end
-                if project_id
-                    data['projectId'] = project_id
-                end
             end
 
             uri = URI("#{ base_url }/inventory/devices?token=#{ token }")
