@@ -25,6 +25,18 @@ Facter.add(:sd_agent_key, :timeout => 10) do
         result = res.body.split(':').last if res.code == 200
     end
 
+    # If the configuration file exists and has a valid agent_key use it
+    if File::exist?('/etc/sd-agent/config.cfg')
+        agent_key_line = File.foreach('/etc/sd-agent/config.cfg').find {|l| l.include?("agent_key")}
+        agent_key = agent_key_line.split(':').last.strip
+        # String.hex returns 0 if String is an invalid hex number
+        if agent_key.hex > 0
+            result = agent_key
+        else
+            result = nil
+        end
+    end
+
     # if we get to here and neither of the above
     # methods have worked
     # the custom function will use the api to create
