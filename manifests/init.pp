@@ -17,14 +17,6 @@
 #   String. Agent API token to use (for V2 API)
 #   Default: ''
 #
-# [*api_username*]
-#   String. Agent API username to use (for V1 API)
-#   Default: ''
-#
-# [*api_password*]
-#   String: Agent API password to use (for V1 API)
-#   Default: ''
-#
 # [*use_fqdn*]
 #   Boolean. Use the puppet FQDN fact rather than hostname
 #   Default: false
@@ -90,8 +82,6 @@ class serverdensity_agent(
   $agent_key = $::agent_key,
   $sd_url = 'https://example.serverdensity.io',
   $api_token = '',
-  $api_username = '',
-  $api_password = '',
   $use_fqdn = false,
   $server_name = '',
   $server_group = '',
@@ -138,14 +128,11 @@ class serverdensity_agent(
   class { 'serverdensity_agent::service': } ->
   anchor {'serverdensity_agent::end': }
 
-  class {
-    'config_file':
+  class {'serverdensity_agent::config_file':
       location            => $location,
       require             => Package['sd-agent'],
       sd_url              => $sd_url,
       agent_key           => agent_key(
-        $api_username,
-        $api_password,
         $sd_url,
         $api_token,
         $agent_key,

@@ -5,15 +5,12 @@ require 'uri'
 module Puppet::Parser::Functions
 
     newfunction(:agent_key, :type => :rvalue) do |args|
-
-        sd_username = args[0]
-        sd_password = args[1]
-        sd_url = args[2]
-        token = args[3]
-        agent_key = args[4]
-        server_name = args[5]
-        group = args[6]
-        use_fqdn = args[7]
+        sd_url = args[0]
+        token = args[1]
+        agent_key = args[2]
+        server_name = args[3]
+        group = args[4]
+        use_fqdn = args[5]
 
         hostname = lookupvar("hostname")
         fqdn = lookupvar("fqdn")
