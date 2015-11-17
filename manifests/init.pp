@@ -85,11 +85,18 @@ class serverdensity_agent(
   $use_fqdn = false,
   $server_name = '',
   $server_group = '',
+  $proxy_host = undef,
+  $proxy_port = undef,
+  $proxy_user = undef,
+  $proxy_password = undef,
+  $proxy_forbid_method_switch = undef,
   $plugin_directory = '/usr/bin/sd-agent/plugins',
-  $tmp_directory = '',
-  $pidfile_directory = '',
-  $logging_level = 'INFO',
-  $logtail_paths = '',
+  $log_level = undef,
+  $collector_log_file = undef,
+  $forwarder_log_file = undef,
+  $log_to_syslog = undef,
+  $syslog_host = undef,
+  $syslog_port = undef,
   $service_enabled = true,
   ) {
 
@@ -127,20 +134,17 @@ class serverdensity_agent(
   anchor {'serverdensity_agent::end': }
 
   class {'serverdensity_agent::config_file':
-      require             => Package['sd-agent'],
-      sd_url              => $sd_url,
-      agent_key           => agent_key(
+      sd_url            => $sd_url,
+      agent_key      => agent_key(
         $sd_url,
         $api_token,
         $agent_key,
         $server_name,
         $server_group,
         $use_fqdn ),
-      plugin_directory    => $plugin_directory,
-      tmp_directory       => $tmp_directory,
-      pidfile_directory   => $pidfile_directory,
-      logging_level       => $logging_level,
-      logtail_paths       => $logtail_paths,
-      notify              => Class['serverdensity_agent::service']
+      plugin_directory  => $plugin_directory,
+      log_level         => $log_level,
+      require           => Package['sd-agent'],
+      notify            => Class['serverdensity_agent::service']
   }
 }

@@ -12,14 +12,21 @@
 #
 
 class serverdensity_agent::config_file (
-  $location = '',
   $sd_url = 'https://example.serverdensity.io',
   $agent_key = '',
+  $proxy_host = undef,
+  $proxy_port = undef,
+  $proxy_user = undef,
+  $proxy_password = undef,
+  $proxy_forbid_method_switch = undef,
+  $server_name = undef,
   $plugin_directory = '',
-  $tmp_directory = '/var/log/custom_location',
-  $pidfile_directory = '/var/log/custom_location',
-  $logging_level = 'INFO',
-  $logtail_paths = '',
+  $log_level = undef,
+  $collector_log_file = undef,
+  $forwarder_log_file = undef,
+  $log_to_syslog = undef,
+  $syslog_host = undef,
+  $syslog_port = undef,
   ) {
 
   file { '/etc/sd-agent/conf.d':
