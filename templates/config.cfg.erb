@@ -3,11 +3,10 @@
 # This file is managed by Puppet. Any changes will be overwritten on the next Puppet run.
 
 sd_account: <%= @sd_account %>
-agent_key: <%= @agent_key %>
-<%- if @sd_url %>
+agent_key: <%= @sd_agent_key %>
+<%- if @sd_url -%>
 sd_url: <%= @sd_url %>
 <%- end -%>
-
 <%- if @proxy_host %>
 proxy_host: <%= @proxy_host %>
   <%- if @proxy_port %>
@@ -24,8 +23,8 @@ proxy_forbid_method_switch: <%= @proxy_forbid_method_switch %>
   <%- end -%>
 
 <%- end -%>
-<%- if @hostname %>
-hostname: <%= @hostname %>
+<%- if @server_name -%>
+hostname: <%= @server_name %>
 
 <%- end -%>
 plugin_directory: <%= @plugin_directory %>
