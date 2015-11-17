@@ -10,7 +10,7 @@ class serverdensity_agent::service {
     fail("Use of private class ${name} by ${caller_module_name}")
   }
 
-  if $serverdensity_agent::manage_services {
+  if $serverdensity_agent::service_enabled {
     $ensure = 'running'
     $enable = true
   }

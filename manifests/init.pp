@@ -61,8 +61,8 @@
 #   String. Specify path match patterns to tail the files to post back
 #   Default: ''
 #
-# [*manage_services*]
-#   Boolean. Manage the sd-agent service from this module.
+# [*service_enabled*]
+#   Boolean. Ensures the sd-agent service is enabled and running through the system service facility.
 #   Default: true
 #   Valid values: true, false
 #
@@ -100,7 +100,7 @@ class serverdensity_agent(
   $pidfile_directory = '',
   $logging_level = 'INFO',
   $logtail_paths = '',
-  $manage_services = true,
+  $service_enabled = true,
   ) {
 
   case $::osfamily {
