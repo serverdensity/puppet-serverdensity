@@ -12,7 +12,7 @@
 #
 
 class serverdensity_agent::apt {
-  $repo_baseurl = 'http://www.serverdensity.com/downloads/linux/deb'
+  $repo_baseurl = 'http://archive.serverdensity.com/ubuntu'
   $repo_keyurl = 'https://www.serverdensity.com/downloads/boxedice-public.key'
 
   apt::source { 'serverdensity_agent':
