@@ -79,7 +79,7 @@
 #
 
 class serverdensity_agent(
-  $agent_key = $::agent_key,
+  $agent_key = $::sd_agent_key,
   $sd_url = 'https://example.serverdensity.io',
   $api_token = '',
   $use_fqdn = false,

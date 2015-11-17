@@ -41,7 +41,7 @@ module Puppet::Parser::Functions
         # we set it on cloud devices created on Amazon or Rackspace
         # created via the serverdensity UI
         # uses custom agent_key fact
-        agent_key = lookupvar("agent_key")
+        agent_key = lookupvar("sd_agent_key")
 
         # lookupvar returns undef if no value
         # test against nil just in case
