@@ -42,65 +42,6 @@
 #   String. The directory to install agent plugins to
 #   Default: /usr/bin/sd-agent/plugins
 #
-# [*apache_status_url*]
-#   String. Url to the apache status page provided by the mod_status module
-#   Default: http://www.example.com/server-status/?auto
-#
-# [*apache_status_user*]
-#   String. Username required to access apache status URL
-#   Default: ''
-#
-# [*apache_status_pass*]
-#   String. Password required to access apache status URL
-#   Default: ''
-#
-# [*fpm_status_url*]
-#   String. URL to the phpfpm status page
-#   Default: http://www.example.com/phpfpm_status
-#
-# [*mongodb_server*]
-#   String. Server to get MongoDB status monitoring from.
-#   Takes a full MongoDB connection URI
-#   Default: ''
-#
-# [*mongodb_dbstats*]
-#   String. Enable MongoDB stats monitoring (only if $mongodb_server
-#   is also set)
-#   Default: 'no'
-#
-# [*mongodb_replset*]
-#   String. Enable MongoDB replica monitoring (only if $mongodb_server
-#   is also set)
-#   Default: 'no'
-#
-# [*mysql_server*]
-#   String. MySQL server to get status monitoring from
-#   Default: ''
-#
-# [*mysql_user*]
-#   String. Username to access MySQL server
-#   Default: ''
-#
-# [*mysql_pass*]
-#   String. Password required to access MySQL server
-#   Default: ''
-#
-# [*nginx_status_url*]
-#   String. URL to get nginx status (using HttpStubStatusModule)
-#   Default: http://www.example.com/nginx_status
-#
-# [*rabbitmq_status_url*]
-#   String. URL to rabbitmq status endpoint
-#   Default: http://www.example.com:55672/json
-#
-# [*rabbitmq_user*]
-#   String. Username required to access RabbitMQ status
-#   Default: ''
-#
-# [*rabbitmq_pass*]
-#   String. Password required to access RabbitMQ status
-#   Default: ''
-#
 # [*tmp_directory*]
 #   String. Directory where the agent stores temporary files.
 #   Defaults to system tmp if unset
@@ -155,20 +96,6 @@ class serverdensity_agent(
   $server_name = '',
   $server_group = '',
   $plugin_directory = '/usr/bin/sd-agent/plugins',
-  $apache_status_url = 'http://www.example.com/server-status/?auto',
-  $apache_status_user = '',
-  $apache_status_pass = '',
-  $fpm_status_url = 'http://www.example.com/phpfpm_status',
-  $mongodb_server = '',
-  $mongodb_dbstats = 'no',
-  $mongodb_replset = 'no',
-  $mysql_server = '',
-  $mysql_user = '',
-  $mysql_pass = '',
-  $nginx_status_url = 'http://www.example.com/nginx_status',
-  $rabbitmq_status_url = 'http://www.example.com:55672/json',
-  $rabbitmq_user = '',
-  $rabbitmq_pass = '',
   $tmp_directory = '',
   $pidfile_directory = '',
   $logging_level = 'INFO',
@@ -226,20 +153,6 @@ class serverdensity_agent(
         $server_group,
         $use_fqdn ),
       plugin_directory    => $plugin_directory,
-      apache_status_url   => $apache_status_url,
-      apache_status_user  => $apache_status_user,
-      apache_status_pass  => $apache_status_pass,
-      fpm_status_url      => $fpm_status_url,
-      mongodb_server      => $mongodb_server,
-      mongodb_dbstats     => $mongodb_dbstats,
-      mongodb_replset     => $mongodb_replset,
-      mysql_server        => $mysql_server,
-      mysql_user          => $mysql_user,
-      mysql_pass          => $mysql_pass,
-      nginx_status_url    => $nginx_status_url,
-      rabbitmq_status_url => $rabbitmq_status_url,
-      rabbitmq_user       => $rabbitmq_user,
-      rabbitmq_pass       => $rabbitmq_pass,
       tmp_directory       => $tmp_directory,
       pidfile_directory   => $pidfile_directory,
       logging_level       => $logging_level,
