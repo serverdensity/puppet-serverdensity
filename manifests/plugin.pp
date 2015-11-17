@@ -44,7 +44,7 @@ define serverdensity_agent::plugin (
   $source = undef,
   $config = undef,
   $config_priority = '500'
-) {
+  ) {
 
   include serverdensity_agent
 

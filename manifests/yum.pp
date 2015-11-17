@@ -12,19 +12,19 @@
 #
 
 class serverdensity_agent::yum {
-    $repo_baseurl = 'http://www.serverdensity.com/downloads/linux/redhat/'
-    $repo_keyurl = 'https://www.serverdensity.com/downloads/boxedice-public.key'
+  $repo_baseurl = 'http://www.serverdensity.com/downloads/linux/redhat/'
+  $repo_keyurl = 'https://www.serverdensity.com/downloads/boxedice-public.key'
 
-    yumrepo { 'serverdensity_agent':
-        baseurl  => $repo_baseurl,
-        gpgkey   => $repo_keyurl,
-        descr    => 'Server Density',
-        enabled  => 1,
-        gpgcheck => 1,
-    }
-    # install SD agent package
-    package { 'sd-agent':
-        ensure  => present,
-        require => Yumrepo['serverdensity_agent']
-    }
+  yumrepo { 'serverdensity_agent':
+    baseurl  => $repo_baseurl,
+    gpgkey   => $repo_keyurl,
+    descr    => 'Server Density',
+    enabled  => 1,
+    gpgcheck => 1,
+  }
+  # install SD agent package
+  package { 'sd-agent':
+    ensure  => present,
+    require => Yumrepo['serverdensity_agent']
+  }
 }
