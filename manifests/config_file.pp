@@ -22,16 +22,15 @@ class serverdensity_agent::config_file (
   $logtail_paths = '',
   ) {
 
-  file { 'sd-agent-config-dir':
+  file { '/etc/sd-agent/conf.d':
     ensure => 'directory',
-    path   => $location,
     mode   => '0755',
     notify => Class['serverdensity_agent::service'],
   }
 
-  file { 'sd-agent-config-file':
-    path    => "${location}/000-main.cfg",
+  file { '/etc/sd-agent/config.cfg':
     content => template('serverdensity_agent/config.cfg.erb'),
+    ensure  => 'file',
     mode    => '0644',
     notify  => Class['serverdensity_agent::service'],
   }
