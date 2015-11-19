@@ -34,24 +34,10 @@
 #   String. The directory to install agent plugins to
 #   Default: /usr/bin/sd-agent/plugins
 #
-# [*tmp_directory*]
-#   String. Directory where the agent stores temporary files.
-#   Defaults to system tmp if unset
-#   Default: ''
-#
-# [*pidfile_directory*]
-#   String. Directory where agent stores its PID file. Defaults to
-#   $tmp_directory or system temp
-#   Default: ''
-#
 # [*logging_level*]
 #   String. Logging level to use for agent. Defaults to info if not set
 #   Default: 'INFO'
 #   Valid values: DEBUG, INFO, WARN, ERROR, FATAL
-#
-# [*logtail_paths*]
-#   String. Specify path match patterns to tail the files to post back
-#   Default: ''
 #
 # [*service_enabled*]
 #   Boolean. Ensures the sd-agent service is enabled and running through the system service facility.
