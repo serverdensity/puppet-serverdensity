@@ -12,6 +12,11 @@ module Puppet::Parser::Functions
         group = args[4]
         use_fqdn = args[5]
 
+        unless agent_key.nil? or agent_key.empty?
+            notice ["Agent Key Provided: #{ agent_key }"]
+            return agent_key
+        end
+
         hostname = lookupvar("hostname")
         fqdn = lookupvar("fqdn")
         provider = lookupvar('sd_provider')
@@ -45,18 +50,13 @@ module Puppet::Parser::Functions
 
         # lookupvar returns undef if no value
         # test against nil just in case
-        unless agent_key.nil? or agent_key == :undef
+        unless agent_key.nil? or agent_key == :undefined or agent_key == :undef
             notice ["Agent Key Provided via Facter: #{ agent_key }"]
             return agent_key
         end
 
         if agent_key == :undef
             agent_key = ""
-        end
-
-        unless agent_key.nil? or agent_key.empty?
-            notice ["Agent Key Provided: #{ agent_key }"]
-            return agent_key
         end
 
         if sd_url.nil? or sd_url.empty?
