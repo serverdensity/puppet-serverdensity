@@ -1,0 +1,11 @@
+init_config:
+
+instances:
+  - apache_status_url: <%= @apache_status_url %>
+<%- if @apache_user -%>
+    apache_user: <%= @apache_user %>
+<%- if @apache_password -%>
+    apache_password: <%= @apache_password %>
+<%- end -%>
+<%- end -%>
+
