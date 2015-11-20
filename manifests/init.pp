@@ -6,12 +6,12 @@
 #
 # [*agent_key*]
 #   String. The unique key for the agent.
-#   Default: $::agent_key (uses the provided agent_key library to generate a
+#   Default: $::sd_agent_key (uses the provided agent_key library to generate a
 #   new one if not set)
 #
 # [*sd_url*]
 #   String. Subdomain url of the serverdensity account
-#   Default: https://example.serverdensity.io
+#   Default: https://example.agent.serverdensity.io
 #
 # [*api_token*]
 #   String. Agent API token to use (for V2 API)
@@ -32,7 +32,7 @@
 #
 # [*plugin_directory*]
 #   String. The directory to install agent plugins to
-#   Default: /usr/bin/sd-agent/plugins
+#   Default: /usr/local/sd-agent-plugins
 #
 # [*logging_level*]
 #   String. Logging level to use for agent. Defaults to info if not set
@@ -50,7 +50,7 @@
 #  V2 API
 #
 #  class { 'serverdensity_agent':
-  #    sd_url     => 'https://example.serverdensity.io',
+  #    sd_url     => 'https://example.agent.serverdensity.io',
   #    api_token  => 'APITOKENHERE',
   #  }
 #
@@ -66,7 +66,7 @@
 
 class serverdensity_agent(
   $agent_key = $::sd_agent_key,
-  $sd_url = 'https://example.serverdensity.io',
+  $sd_url = 'https://example.agent.serverdensity.io',
   $api_token = '',
   $use_fqdn = false,
   $server_name = '',
@@ -76,7 +76,7 @@ class serverdensity_agent(
   $proxy_user = undef,
   $proxy_password = undef,
   $proxy_forbid_method_switch = undef,
-  $plugin_directory = '/usr/bin/sd-agent/plugins',
+  $plugin_directory = '/usr/local/sd-agent-plugins',
   $log_level = undef,
   $collector_log_file = undef,
   $forwarder_log_file = undef,
