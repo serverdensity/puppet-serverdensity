@@ -10,11 +10,11 @@
 #   new one if not set)
 #
 # [*sd_account*]
-#   String. Serverdensity account
+#   String. Server Density account
 #   Default: ''
 #
 # [*sd_url*]
-#   String. Subdomain url of the serverdensity account
+#   String. Subdomain url of the Server Density account
 #   Default: None
 #
 # [*api_token*]
@@ -51,13 +51,15 @@
 #
 # === Examples
 #
-#  V2 API
+#  class { 'serverdensity_agent':
+#    sd_account => 'example',
+#    api_token  => 'APITOKENHERE',
+#  }
 #
 #  class { 'serverdensity_agent':
-  #    sd_url     => 'https://example.agent.serverdensity.io',
-  #    api_token  => 'APITOKENHERE',
-  #  }
-#
+#    sd_url     => 'https://example.agent.serverdensity.io',
+#    api_token  => 'APITOKENHERE',
+#  }
 #
 # === Authors
 #
