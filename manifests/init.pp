@@ -15,7 +15,7 @@
 #
 # [*sd_url*]
 #   String. Subdomain url of the serverdensity account
-#   Default: https://example.agent.serverdensity.io
+#   Default: None
 #
 # [*api_token*]
 #   String. Agent API token to use (for V2 API)
@@ -70,7 +70,7 @@
 
 class serverdensity_agent(
   $agent_key = $::sd_agent_key,
-  $sd_url = 'https://example.agent.serverdensity.io',
+  $sd_url = undef,
   $sd_account = '',
   $api_token = '',
   $use_fqdn = false,
