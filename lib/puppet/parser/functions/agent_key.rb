@@ -5,12 +5,11 @@ require 'uri'
 module Puppet::Parser::Functions
 
     newfunction(:agent_key, :type => :rvalue) do |args|
-        sd_url = args[0]
-        token = args[1]
-        agent_key = args[2]
-        server_name = args[3]
-        group = args[4]
-        use_fqdn = args[5]
+        token = args[0]
+        agent_key = args[1]
+        server_name = args[2]
+        group = args[3]
+        use_fqdn = args[4]
 
         unless agent_key.nil? or agent_key.empty?
             notice ["Agent Key Provided: #{ agent_key }"]
@@ -40,8 +39,6 @@ module Puppet::Parser::Functions
 
         notice ["Server Name: #{ server_name }"]
 
-        sd_url = sd_url.sub(/^https?\:\/\//, '')
-
         # can we get the agent key from the environment
         # we set it on cloud devices created on Amazon or Rackspace
         # created via the serverdensity UI
@@ -57,10 +54,6 @@ module Puppet::Parser::Functions
 
         if agent_key == :undef
             agent_key = ""
-        end
-
-        if sd_url.nil? or sd_url.empty?
-            raise Puppet::ParseError, "SD URL not set"
         end
 
         notice ["Using SD Version 2"]
