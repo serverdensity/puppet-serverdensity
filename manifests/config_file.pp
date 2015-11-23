@@ -12,8 +12,11 @@
 #
 
 class serverdensity_agent::config_file (
-  $sd_url = 'https://example.serverdensity.io',
-  $agent_key = '',
+  $api_token,
+  $provided_agent_key = $::sd_agent_key,
+  $server_name,
+  $server_group,
+  $use_fqdn,
   $proxy_host = undef,
   $proxy_port = undef,
   $proxy_user = undef,
@@ -28,6 +31,12 @@ class serverdensity_agent::config_file (
   $syslog_host = undef,
   $syslog_port = undef,
   ) {
+  $agent_key = agent_key(
+    $api_token,
+    $provided_agent_key,
+    $server_name,
+    $server_group,
+    $use_fqdn )
 
   file { '/etc/sd-agent/conf.d':
     ensure => 'directory',

@@ -119,18 +119,15 @@ class serverdensity_agent(
   class { 'serverdensity_agent::service': } ->
   anchor {'serverdensity_agent::end': }
 
-  class {'serverdensity_agent::config_file':
-      sd_url            => $sd_url,
-      agent_key      => agent_key(
-        $sd_url,
-        $api_token,
-        $agent_key,
-        $server_name,
-        $server_group,
-        $use_fqdn ),
-      plugin_directory  => $plugin_directory,
-      log_level         => $log_level,
-      require           => Package['sd-agent'],
-      notify            => Class['serverdensity_agent::service']
+  class { 'serverdensity_agent::config_file':
+    api_token          => $api_token,
+    provided_agent_key => $agent_key,
+    server_name        => $server_name,
+    server_group       => $server_group,
+    use_fqdn           => $use_fqdn ,
+    plugin_directory   => $plugin_directory,
+    log_level          => $log_level,
+    require            => Package['sd-agent'],
+    notify             => Class['serverdensity_agent::service']
   }
 }
