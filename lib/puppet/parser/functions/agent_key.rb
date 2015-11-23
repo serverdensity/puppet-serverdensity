@@ -160,7 +160,7 @@ module Puppet::Parser::Functions
                 data['group'] = group
             end
 
-            if provider
+            if ["amazon", "google", "rackspace"].include?(provider)
                 data['provider'] = provider
                 if provider_id
                     data['providerId'] = provider_id
