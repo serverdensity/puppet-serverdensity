@@ -9,6 +9,10 @@
 #   Default: $::sd_agent_key (uses the provided agent_key library to generate a
 #   new one if not set)
 #
+# [*sd_account*]
+#   String. Serverdensity account
+#   Default: ''
+#
 # [*sd_url*]
 #   String. Subdomain url of the serverdensity account
 #   Default: https://example.agent.serverdensity.io
@@ -67,6 +71,7 @@
 class serverdensity_agent(
   $agent_key = $::sd_agent_key,
   $sd_url = 'https://example.agent.serverdensity.io',
+  $sd_account = '',
   $api_token = '',
   $use_fqdn = false,
   $server_name = '',
