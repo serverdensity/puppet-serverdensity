@@ -1,6 +1,6 @@
 # == Class: serverdensity_agent::service
 #
-# Manages the serverdensity agent service
+# Manages the Server Density agent service
 #
 #
 

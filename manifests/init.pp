@@ -34,11 +34,11 @@
 #   String. The server group to assign this host to
 #   Default: ''
 #
-# [*plugin_directory*]
-#   String. The directory to install agent plugins to
+# [*v1_plugin_directory*]
+#   String. The directory to install 3rd party legacy agent plugins to
 #   Default: /usr/local/sd-agent-plugins
 #
-# [*logging_level*]
+# [*log_level*]
 #   String. Logging level to use for agent. Defaults to info if not set
 #   Default: 'INFO'
 #   Valid values: DEBUG, INFO, WARN, ERROR, FATAL
@@ -47,7 +47,6 @@
 #   Boolean. Ensures the sd-agent service is enabled and running through the system service facility.
 #   Default: true
 #   Valid values: true, false
-#
 #
 # === Examples
 #
@@ -67,7 +66,7 @@
 #
 # === Copyright
 #
-# Copyright 2014 Server Density
+# Copyright 2014-2015 Server Density
 #
 
 class serverdensity_agent(
