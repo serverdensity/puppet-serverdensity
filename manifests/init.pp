@@ -83,7 +83,7 @@ class serverdensity_agent(
   $proxy_user = undef,
   $proxy_password = undef,
   $proxy_forbid_method_switch = undef,
-  $plugin_directory = '/usr/local/sd-agent-plugins',
+  $v1_plugin_directory = '/usr/local/sd-agent-plugins',
   $log_level = undef,
   $collector_log_file = undef,
   $forwarder_log_file = undef,
@@ -97,9 +97,9 @@ class serverdensity_agent(
     'Debian': {
       include serverdensity_agent::apt
 
-      file { 'sd-agent-plugin-dir':
+      file { 'sd-agent-v1-plugin-dir':
         ensure  => directory,
-        path    => $plugin_directory,
+        path    => $v1_plugin_directory,
         mode    => '0755',
         notify  => Class['serverdensity_agent::service'],
         require => Class['serverdensity_agent::apt'],
@@ -108,9 +108,9 @@ class serverdensity_agent(
     'RedHat': {
       include serverdensity_agent::yum
 
-      file { 'sd-agent-plugin-dir':
+      file { 'sd-agent-v1-plugin-dir':
         ensure  => directory,
-        path    => $plugin_directory,
+        path    => $v1_plugin_directory,
         mode    => '0755',
         notify  => Class['serverdensity_agent::service'],
         require => Class['serverdensity_agent::yum'],
@@ -132,7 +132,6 @@ class serverdensity_agent(
     server_name        => $server_name,
     server_group       => $server_group,
     use_fqdn           => $use_fqdn ,
-    plugin_directory   => $plugin_directory,
     log_level          => $log_level,
     require            => Package['sd-agent'],
     notify             => Class['serverdensity_agent::service']

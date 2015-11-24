@@ -50,4 +50,11 @@ class serverdensity_agent::config_file (
     mode    => '0644',
     notify  => Class['serverdensity_agent::service'],
   }
+
+  # Legacy configurations for V1 plugins
+  file { '/etc/sd-agent/plugins.d':
+    ensure => 'directory',
+    mode   => '0755',
+    notify => Class['serverdensity_agent::service'],
+  }
 }
