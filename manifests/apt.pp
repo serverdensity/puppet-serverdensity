@@ -19,7 +19,7 @@ class serverdensity_agent::apt {
     location    => $repo_baseurl,
     release     => 'all',
     repos       => 'main',
-    key         => '0FB77536E797A2DE23AD2FC443D26D8613C2E6F8',
+    key         => '4381EE1BA673897A16AC92D43B2F6FF074371316',
     key_source  => $repo_keyurl,
     include_src => false
   }
