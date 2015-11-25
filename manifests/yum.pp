@@ -13,7 +13,7 @@
 
 class serverdensity_agent::yum {
   $repo_baseurl = 'http://archive.serverdensity.com/el/$releasever'
-  $repo_keyurl = 'https://www.serverdensity.com/downloads/boxedice-public.key'
+  $repo_keyurl = 'https://archive.serverdensity.com/sd-packaging-public.key'
 
   yumrepo { 'serverdensity_agent':
     baseurl  => $repo_baseurl,
