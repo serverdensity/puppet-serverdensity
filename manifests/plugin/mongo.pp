@@ -8,8 +8,6 @@
 #   String. Specify the MongoDB URI, with database to use for reporting
 #   Default: none
 #
-# # Optional SSL parameters, see https://github.com/mongodb/mongo-python-driver/blob/2.6.3/pymongo/mongo_client.py#L193-L212
-#
 # [*ssl*]
 #   Boolean. Enable SSL connection
 #   Default: none
@@ -19,11 +17,13 @@
 #   Default: none
 #
 # [*ssl_certfile*]
-#   String. Path to the certificate file used to identify the local connection against mongod.
+#   String. Path to the certificate file used to identify the local connection
+#           against mongod.
 #   Default: none
 #
 # [*ssl_cert_reqs*]
-#   String. Specifies whether a certificate is required from the other side of the connection, and whether it will be validated if provided.
+#   String. Specifies whether a certificate is required from the other side of
+#           the connection, and whether it will be validated if provided.
 #   Default: none
 #
 # [*ssl_ca_carts*]

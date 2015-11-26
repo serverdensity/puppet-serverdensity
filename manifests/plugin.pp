@@ -39,9 +39,9 @@
 #
 #
 define serverdensity_agent::plugin (
-  $package = "sd-agent-$title",
+  $package = "sd-agent-${title}",
   $config_file = "/etc/sd-agent/conf.d/${title}.yaml",
-  $config_content = ""
+  $config_content = ''
   ) {
 
   file { $config_file:

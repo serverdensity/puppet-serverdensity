@@ -44,7 +44,8 @@
 #   Valid values: DEBUG, INFO, WARN, ERROR, FATAL
 #
 # [*service_enabled*]
-#   Boolean. Ensures the sd-agent service is enabled and running through the system service facility.
+#   Boolean. Ensures the sd-agent service is enabled and running through the
+#            system service facility.
 #   Default: true
 #   Valid values: true, false
 #

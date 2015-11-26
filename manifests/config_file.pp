@@ -45,8 +45,8 @@ class serverdensity_agent::config_file (
   }
 
   file { '/etc/sd-agent/config.cfg':
-    content => template('serverdensity_agent/config.cfg.erb'),
     ensure  => 'file',
+    content => template('serverdensity_agent/config.cfg.erb'),
     mode    => '0644',
     notify  => Class['serverdensity_agent::service'],
   }
