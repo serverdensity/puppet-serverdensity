@@ -66,22 +66,8 @@ There are some optional parameters that can be used to configure other parts of 
 * `$server_name`
 * `$server_group` - Sets the group for the server that is added
 * `$plugin_directory` -  Sets the directory the agent looks for plugins, if left blank it is ignored
-* `$apache_status_url` - URL to get the Apache2 status page from (e.g. `mod_status`), disabled if not set
-* `$apache_status_user` - Username to authenticate to the Apache2 status page, required if `apache_status_url` is set
-* `$apache_status_pass` - Password to authenticate to the Apache2 status page, required if `apache_status_url` is set
-* `$fpm_status_url` - URL to get the PHP-FPM status page from, disabled if not set
-* `$mongodb_server` - Server to get MongoDB status monitoring from, this takes a full [MongoDB connection URI](http://docs.mongodb.org/manual/reference/connection-string/) so you can set username/password etc. details here if needed, disabled if not set
-* `$mongodb_dbstats` - Enables MongoDB stats if `true` and `mongodb_server` is set, *default*: `false`
-* `$mongodb_replset` - Enables MongoDB replset stats if `true` and `mongodb_server` is set, *default*: `false`
-* `$mysql_server` - Server to get MySQL status monitoring from, disabled if not set
-* `$mysql_user` - Username to authenticate to MySQL, required if `mysql_server` is set
-* `$mysql_pass` - Password to authenticate to MySQL, required if `mysql_server` is set
-* `$nginx_status_url` - URL to get th Nginx status page from, disabled if not set
-* `$rabbitmq_status_url` - URL to get the RabbitMQ status from via [HTTP management API](http://www.rabbitmq.com/management.html), disabled if not set
-* `$rabbitmq_user` - Username to authenticate to the RabbitMQ management API, required if `rabbitmq_status_url` is set
-* `$rabbitmq_pass` - Password to authenticate to the RabbitMQ management API, required if `rabbitmq_status_url` is set
 * `$tmp_directory` - Override where the agent stores temporary files, system default tmp will be used if not set
 * `$pidfile_directory` - Override where the agent stores it's PID file, temp dir (above or system default) is used if not set
 * `$logging_level` - String. Logging level to use for agent. Defaults to INFO if not set.
 * `$logtail_paths` - String. Specify path match patterns to tail the files to post back. Comma separated: e.g. `/var/log/apache2/*.log,/var/log/*.log`. You must enable this in your account first.
-* `manage_services` - Allow puppet to manage the sd-agent service, default: true. Useful when using an alternative process manager, e.g supervisor
+* `service_enabled` - Boolean. Ensures the sd-agent service is enabled and running through the system service facility, default: true. Useful when using an alternative process manager, e.g supervisor

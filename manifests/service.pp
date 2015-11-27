@@ -1,6 +1,6 @@
 # == Class: serverdensity_agent::service
 #
-# Manages the serverdensity agent service
+# Manages the Server Density agent service
 #
 #
 
@@ -10,7 +10,7 @@ class serverdensity_agent::service {
     fail("Use of private class ${name} by ${caller_module_name}")
   }
 
-  if $serverdensity_agent::manage_services {
+  if $serverdensity_agent::service_enabled {
     $ensure = 'running'
     $enable = true
   }
@@ -23,8 +23,6 @@ class serverdensity_agent::service {
     ensure     => $ensure,
     enable     => $enable,
     name       => 'sd-agent',
-    # due to https://bugs.launchpad.net/ubuntu/+source/upstart/+bug/552786
-    pattern    => 'python /usr/bin/sd-agent/agent.py start init --clean',
     hasrestart => true,
     hasstatus  => false,
     subscribe  => Class['serverdensity_agent::config_file'],

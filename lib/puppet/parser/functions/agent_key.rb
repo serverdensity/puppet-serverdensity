@@ -5,15 +5,16 @@ require 'uri'
 module Puppet::Parser::Functions
 
     newfunction(:agent_key, :type => :rvalue) do |args|
+        token = args[0]
+        agent_key = args[1]
+        server_name = args[2]
+        group = args[3]
+        use_fqdn = args[4]
 
-        sd_username = args[0]
-        sd_password = args[1]
-        sd_url = args[2]
-        token = args[3]
-        agent_key = args[4]
-        server_name = args[5]
-        group = args[6]
-        use_fqdn = args[7]
+        unless agent_key.nil? or agent_key.empty?
+            notice ["Agent Key Provided: #{ agent_key }"]
+            return agent_key
+        end
 
         hostname = lookupvar("hostname")
         fqdn = lookupvar("fqdn")
@@ -38,32 +39,21 @@ module Puppet::Parser::Functions
 
         notice ["Server Name: #{ server_name }"]
 
-        sd_url = sd_url.sub(/^https?\:\/\//, '')
-
         # can we get the agent key from the environment
         # we set it on cloud devices created on Amazon or Rackspace
         # created via the serverdensity UI
         # uses custom agent_key fact
-        agent_key = lookupvar("agent_key")
+        agent_key = lookupvar("sd_agent_key")
 
         # lookupvar returns undef if no value
         # test against nil just in case
-        unless agent_key.nil? or agent_key == :undef
+        unless agent_key.nil? or agent_key == :undefined or agent_key == :undef
             notice ["Agent Key Provided via Facter: #{ agent_key }"]
             return agent_key
         end
 
         if agent_key == :undef
             agent_key = ""
-        end
-
-        unless agent_key.nil? or agent_key.empty?
-            notice ["Agent Key Provided: #{ agent_key }"]
-            return agent_key
-        end
-
-        if sd_url.nil? or sd_url.empty?
-            raise Puppet::ParseError, "SD URL not set"
         end
 
         notice ["Using SD Version 2"]
@@ -170,10 +160,13 @@ module Puppet::Parser::Functions
                 data['group'] = group
             end
 
-            if provider
+            if ["amazon", "google", "rackspace"].include?(provider)
                 data['provider'] = provider
                 if provider_id
                     data['providerId'] = provider_id
+                end
+                if project_id
+                    data['projectId'] = project_id
                 end
             end
 

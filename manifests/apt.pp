@@ -12,20 +12,20 @@
 #
 
 class serverdensity_agent::apt {
-    $repo_baseurl = 'http://www.serverdensity.com/downloads/linux/deb'
-    $repo_keyurl = 'https://www.serverdensity.com/downloads/boxedice-public.key'
+  $repo_baseurl = 'http://archive.serverdensity.com/ubuntu'
+  $repo_keyurl = 'https://archive.serverdensity.com/sd-packaging-public.key'
 
-    apt::source { 'serverdensity_agent':
-        location    => $repo_baseurl,
-        release     => 'all',
-        repos       => 'main',
-        key         => '0FB77536E797A2DE23AD2FC443D26D8613C2E6F8',
-        key_source  => $repo_keyurl,
-        include_src => false
-    }
-    package {
-            'sd-agent':
-                    ensure  => 'present',
-                    require => Apt::Source['serverdensity_agent'],
-    }
+  apt::source { 'serverdensity_agent':
+    location    => $repo_baseurl,
+    release     => 'all',
+    repos       => 'main',
+    key         => '4381EE1BA673897A16AC92D43B2F6FF074371316',
+    key_source  => $repo_keyurl,
+    include_src => false
+  }
+  package {
+    'sd-agent':
+      ensure  => 'present',
+      require => Apt::Source['serverdensity_agent'],
+  }
 }
