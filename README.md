@@ -17,8 +17,8 @@ Create an API token by logging into your Server Density account, clicking your n
 ```puppet
 class {
         'serverdensity_agent':
-            sd_url => 'https://example.serverdensity.io',
-            api_token => 'APITOKENHERE',
+            sd_account => 'example',
+            api_token  => 'APITOKENHERE',
 }
 ```
 
@@ -29,8 +29,8 @@ This will install the agent, with the basic configuration, using the key that is
 ```puppet
 class {
         'serverdensity_agent':
-            sd_url => 'https://example.serverdensity.io',
-            agent_key => '1234567890abcdef',
+            sd_account => 'example',
+            agent_key  => '1234567890abcdef',
     }
 ```
 
@@ -39,7 +39,7 @@ class {
 This will upload a plugin, and add custom config for it.
 
 ```puppet
-serverdensity_agent::plugin{ 'MyPlugin':
+serverdensity_agent::plugin::v1{ 'MyPlugin':
     source  => 'puppet:///mymodule/myplugin.py',
     config  => {
         custom_key1 => 'foo',
@@ -65,9 +65,12 @@ There are some optional parameters that can be used to configure other parts of 
 * `$use_fqdn` - This will cause the class to use the facter Fully Qualified Domain Name rather than the detected hostname. Useful in times where the sd-agent and puppet disagree on what the hostname should be.
 * `$server_name`
 * `$server_group` - Sets the group for the server that is added
-* `$plugin_directory` -  Sets the directory the agent looks for plugins, if left blank it is ignored
-* `$tmp_directory` - Override where the agent stores temporary files, system default tmp will be used if not set
-* `$pidfile_directory` - Override where the agent stores it's PID file, temp dir (above or system default) is used if not set
-* `$logging_level` - String. Logging level to use for agent. Defaults to INFO if not set.
-* `$logtail_paths` - String. Specify path match patterns to tail the files to post back. Comma separated: e.g. `/var/log/apache2/*.log,/var/log/*.log`. You must enable this in your account first.
+* `$v1_plugin_directory` - The directory to install 3rd party legacy agent plugins to
+* `$log_level` - String. Logging level to use for agent. Defaults to INFO if not set.
 * `service_enabled` - Boolean. Ensures the sd-agent service is enabled and running through the system service facility, default: true. Useful when using an alternative process manager, e.g supervisor
+
+### Known issues
+
+## Restart the puppet master on module upgrade
+
+If using Puppet in infrastructure mode a restart of the Puppet master is needed to clean up the facter and custom functions caches.
