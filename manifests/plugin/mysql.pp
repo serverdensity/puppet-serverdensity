@@ -34,8 +34,8 @@
 #   server   => 'localhost',
 #   user     => 'root',
 #   password => 'honshu'
-#   }
 # }
+#
 class serverdensity_agent::plugin::mysql (
   $server = 'localhost',
   $user = 'root',

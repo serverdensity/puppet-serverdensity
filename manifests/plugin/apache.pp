@@ -22,8 +22,8 @@
 #   apache_status_url => 'http://localhost/server-status?auto',
 #   apache_user       => 'admin',
 #   apache_password   => 'honshu'
-#   }
 # }
+#
 class serverdensity_agent::plugin::apache (
   $apache_status_url = 'http://localhost/server-status/',
   $apache_user = undef,
