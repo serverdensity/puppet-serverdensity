@@ -14,7 +14,7 @@
 #
 # === Examples
 #
-# class { 'serverdensity_agent::plugin::apache':
+# class { 'serverdensity_agent::plugin::nginx':
 #   nginx_status_url => 'http://localhost/nginx_status/',
 #   ssl_validation   => false,
 # }
