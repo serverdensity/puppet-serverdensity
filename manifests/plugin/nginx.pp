@@ -17,8 +17,8 @@
 # class { 'serverdensity_agent::plugin::apache':
 #   nginx_status_url => 'http://localhost/nginx_status/',
 #   ssl_validation   => false,
-#   }
 # }
+#
 class serverdensity_agent::plugin::nginx (
   $nginx_status_url = 'http://localhost/nginx_status/',
   $ssl_validation = false,

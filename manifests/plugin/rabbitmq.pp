@@ -22,8 +22,8 @@
 #   rabbitmq_api_url => 'http://localhost:55672/api/',
 #   rabbitmq_user    => 'guest',
 #   rabbitmq_pass    => 'guest'
-#   }
 # }
+#
 class serverdensity_agent::plugin::rabbitmq (
   $rabbitmq_api_url = 'http://localhost:55672/api/',
   $rabbitmq_user = 'guest',
