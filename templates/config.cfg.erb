@@ -1,85 +1,50 @@
-#
-# Server Density Agent Config
-# Docs: http://www.serverdensity.com/docs/agent/configvariables/
-#
-
 [Main]
-sd_url: <%= @sd_url %>
+# Server Density Agent Config
+# This file is managed by Puppet. Any changes will be overwritten on the next Puppet run.
+
+sd_account: <%= @sd_account %>
 agent_key: <%= @agent_key %>
+<%- if @sd_url -%>
+sd_url: <%= @sd_url %>
+<%- end -%>
+<%- if @proxy_host %>
+proxy_host: <%= @proxy_host %>
+  <%- if @proxy_port %>
+proxy_port: <%= @proxy_port %>
+  <%- end -%>
+  <%- if @proxy_user %>
+proxy_user: <%= @proxy_user %>
+  <%- end -%>
+  <%- if @proxy_password %>
+proxy_password: <%= @proxy_password %>
+  <%- end -%>
+  <%- if @proxy_forbid_method_switch %>
+proxy_forbid_method_switch: <%= @proxy_forbid_method_switch %>
+  <%- end -%>
 
-#
-# Plugins
-#
-# Leave blank to ignore. See http://www.serverdensity.com/docs/agent/writingplugins/
-#
+<%- end -%>
+<%- if @server_name -%>
+hostname: <%= @server_name %>
 
-plugin_directory: <%= @plugin_directory %>
+<%- end -%>
+plugin_directory: <%= @v1_plugin_directory %>
 
-#
-# Optional status monitoring
-#
-# See http://www.serverdensity.com/docs/agent/config/
-# Ignore these if you do not wish to monitor them
-#
+<%- if @log_level %>
+log_level: <%= @log_level %>
+<%- end -%>
+<%- if @collector_log_file %>
+collector_log_file: <%= @collector_log_file %>
+<%- end -%>
+<%- if @forwarder_log_file %>
+forwarder_log_file: <%= @forwarder_log_file %>
 
-# Apache
-# See http://www.serverdensity.com/docs/agent/apache/
-
-apache_status_url:  <%= @apache_status_url %>
-apache_status_user: <%= @apache_status_user %>
-apache_status_pass: <%= @apache_status_pass %>
-
-# PHP-FPM
-
-fpm_status_url: <%= @fpm_status_url %>
-
-# MongoDB
-# See http://www.serverdensity.com/docs/agent/mongodb/
-
-mongodb_server: <%= @mongodb_server %>
-mongodb_dbstats: <%= @mongodb_dbstats %>
-mongodb_replset: <%= @mongodb_replset %>
-
-# MySQL
-# See http://www.serverdensity.com/docs/agent/mysql/
-
-mysql_server: <%= @mysql_server %>
-mysql_user: <%= @mysql_user %>
-mysql_pass: <%= @mysql_pass %>
-
-# nginx
-# See http://www.serverdensity.com/docs/agent/nginx/
-
-nginx_status_url: <%= @nginx_status_url %>
-
-# RabbitMQ
-# See http://www.serverdensity.com/docs/agent/rabbitmq/
-# for rabbit <= 1.x use this url:
-# rabbitmq_status_url: http://www.example.com:55672/json
-# for newer versions use:
-
-rabbitmq_status_url:  <%= @rabbitmq_status_url %>
-rabbitmq_user: <%= @rabbitmq_user %>
-rabbitmq_pass: <%= @rabbitmq_pass %>
-
-# Temporary file location
-# See http://www.serverdensity.com/docs/agent/config/
-
-# tmp_directory:  <%= @tmp_directory %>
-
-# Pid file location
-# See http://www.serverdensity.com/docs/agent/config/
-
-# pidfile_directory:  <%= @pidfile_directory %>
-
-# Set log level
-# See http://www.serverdensity.com/docs/agent/config/
-
-logging_level: <%= @logging_level %>
-
-# Log tailer
-# Specify path match patterns to tail the files to post back
-# You must enable this feature from within your account
-# Comma separated: e.g. /var/log/apache2/*.log,/var/log/*.log
-
-logtail_paths: <%= @logtail_paths %>
+<%- end -%>
+<%- if @log_to_syslog %>
+log_to_syslog: <%= @log_to_syslog %>
+<%- end -%>
+<%- if @syslog_host %>
+syslog_host: <%= @syslog_host %>
+<%- end -%>
+<%- if @syslog_port %>
+syslog_port: <%= @syslog_port %>
+<%- end -%>

@@ -1,0 +1,20 @@
+init_config:
+
+instances:
+  - server: <%= @server %>
+<%- if @ssl -%>
+    ssl: <%= @ssl %>
+<%- if @ssl_keyfile -%>
+    ssl_keyfile: <%= @ssl_keyfile %>
+<%- end -%>
+<%- if @ssl_certfile -%>
+    ssl_certfile: <%= @ssl_certfile %>
+<%- end -%>
+<%- if @ssl_cert_reqs -%>
+    ssl_cert_reqs: <%= @ssl_cert_reqs %>
+<%- end -%>
+<%- if @ssl_ca_certs -%>
+    ssl_cert_reqs: <%= @ssl_cert_reqs %>
+<%- end -%>
+<%- end -%>
+

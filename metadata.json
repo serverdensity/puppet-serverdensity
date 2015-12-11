@@ -1,6 +1,6 @@
 {
   "name": "serverdensity-serverdensity_agent",
-  "version": "0.9.5",
+  "version": "2.0.1",
   "author": "Server Density",
   "summary": "Puppet module to install the Server Density monitoring agent and register servers automatically.",
   "license": "Simplified BSD License",
@@ -28,7 +28,7 @@
   "dependencies": [
     {
       "name": "puppetlabs/apt",
-      "version_requirement": ">= 1.1.0"
+      "version_requirement": ">= 1.8.0"
     },
     {
       "name": "zleslie/pkgng",

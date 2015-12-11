@@ -1,0 +1,20 @@
+init_config:
+
+instances:
+  - server: <%= @server %>
+<%- if @user -%>
+    user: <%= @user %>
+<%- if @pass -%>
+    pass: <%= @pass %>
+<%- end -%>
+<%- end -%>
+<%- if @port -%>
+    port: <%= @port %>
+<%- end -%>
+<%- if @sock -%>
+    sock: <%= @sock %>
+<%- end -%>
+<%- if @defaults_file -%>
+    defaults_file: <%= @defaults_file %>
+<%- end -%>
+

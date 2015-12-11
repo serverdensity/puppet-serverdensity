@@ -11,35 +11,15 @@ Puppet Module for deploying the Server Density Agent and agent plugins
 
 ## Usage
 
-### v2 API Config
-
-*If your account URL ends in .io you are using v2*
-
 This will create a new device, and then use the agent key provided automatically by the API to configure the agent on the node.
 
 Create an API token by logging into your Server Density account, clicking your name top left, clicking Preferences then going to the Security tab.
 
 ```puppet
-class {
-        'serverdensity_agent':
-            sd_url => 'https://example.serverdensity.io',
-            api_token => 'APITOKENHERE',
+class { 'serverdensity_agent':
+    sd_account => 'example',
+    api_token  => 'APITOKENHERE',
 }
-```
-### v1 API Config
-
-*If your account URL ends in .com you are using v1*
-
-You can use the Server Density API to create a new device, based on the hostname of the node.
-
-```puppet
-class {
-        'serverdensity_agent':
-            sd_url => 'https://example.serverdensity.com',
-            api_username => 'username',
-            api_password => 'password',
-    }
-
 ```
 
 ### Fixed key config
@@ -47,11 +27,10 @@ class {
 This will install the agent, with the basic configuration, using the key that is provided.
 
 ```puppet
-class {
-        'serverdensity_agent':
-            sd_url => 'https://example.serverdensity.com',
-            agent_key => '1234567890abcdef',
-    }
+class { 'serverdensity_agent':
+    sd_account => 'example',
+    agent_key  => '1234567890abcdef',
+}
 ```
 
 ### Installing an agent plugin
@@ -59,7 +38,7 @@ class {
 This will upload a plugin, and add custom config for it.
 
 ```puppet
-serverdensity_agent::plugin{ 'MyPlugin':
+serverdensity_agent::plugin::v1{ 'MyPlugin':
     source  => 'puppet:///mymodule/myplugin.py',
     config  => {
         custom_key1 => 'foo',
@@ -82,26 +61,145 @@ def __init__(self, agentConfig, checksLogger, rawConfig):
 
 There are some optional parameters that can be used to configure other parts of the agent
 
-* `$use_fqdn` - This will cause the class to use the facter Fully Qualified Domain Name rather than the detected hostname. Useful in times where the sd-agent and puppet disagree on what the hostname should be.
-* `$server_name`
-* `$server_group` - Sets the group for the server that is added
-* `$plugin_directory` -  Sets the directory the agent looks for plugins, if left blank it is ignored
-* `$apache_status_url` - URL to get the Apache2 status page from (e.g. `mod_status`), disabled if not set
-* `$apache_status_user` - Username to authenticate to the Apache2 status page, required if `apache_status_url` is set
-* `$apache_status_pass` - Password to authenticate to the Apache2 status page, required if `apache_status_url` is set
-* `$fpm_status_url` - URL to get the PHP-FPM status page from, disabled if not set
-* `$mongodb_server` - Server to get MongoDB status monitoring from, this takes a full [MongoDB connection URI](http://docs.mongodb.org/manual/reference/connection-string/) so you can set username/password etc. details here if needed, disabled if not set
-* `$mongodb_dbstats` - Enables MongoDB stats if `true` and `mongodb_server` is set, *default*: `false`
-* `$mongodb_replset` - Enables MongoDB replset stats if `true` and `mongodb_server` is set, *default*: `false`
-* `$mysql_server` - Server to get MySQL status monitoring from, disabled if not set
-* `$mysql_user` - Username to authenticate to MySQL, required if `mysql_server` is set
-* `$mysql_pass` - Password to authenticate to MySQL, required if `mysql_server` is set
-* `$nginx_status_url` - URL to get th Nginx status page from, disabled if not set
-* `$rabbitmq_status_url` - URL to get the RabbitMQ status from via [HTTP management API](http://www.rabbitmq.com/management.html), disabled if not set
-* `$rabbitmq_user` - Username to authenticate to the RabbitMQ management API, required if `rabbitmq_status_url` is set
-* `$rabbitmq_pass` - Password to authenticate to the RabbitMQ management API, required if `rabbitmq_status_url` is set
-* `$tmp_directory` - Override where the agent stores temporary files, system default tmp will be used if not set
-* `$pidfile_directory` - Override where the agent stores it's PID file, temp dir (above or system default) is used if not set
-* `$logging_level` - String. Logging level to use for agent. Defaults to INFO if not set.
-* `$logtail_paths` - String. Specify path match patterns to tail the files to post back. Comma separated: e.g. `/var/log/apache2/*.log,/var/log/*.log`. You must enable this in your account first.
-* `manage_services` - Allow puppet to manage the sd-agent service, default: true. Useful when using an alternative process manager, e.g supervisor
+* `use_fqdn` - This will cause the class to use the facter Fully Qualified Domain Name rather than the detected hostname. Useful in times where the sd-agent and puppet disagree on what the hostname should be.
+* `server_name` - String. The reported name of the server
+* `server_group` - Sets the group for the server that is added
+* `v1_plugin_directory` - The directory to install 3rd party legacy agent plugins to
+* `log_level` - String. Logging level to use for agent. Defaults to INFO if not set.
+* `service_enabled` - Boolean. Ensures the sd-agent service is enabled and running through the system service facility, default: true. Useful when using an alternative process manager, e.g supervisor
+
+## Upgrade to Server Density Agent Puppet Module 2.x
+
+Many parameters have been deprecated and some have changed between the 0.9.x/1.x puppet module to the 2.x series. The 0.9.x series will be identified by 1.x. in this section
+
+### sd_url changes and new sd_account parameter
+
+- The `sd_url` parameter points to `https://accountname.agent.serverdensity.io/` instead of `https://accountname.serverdensity.io/`. Notice the `.agent` subdomain after the account name.
+- The `sd_account` parameter is prefered over `sd_url`.
+
+Hence the 1.x declaration:
+
+```puppet
+class { 'serverdensity_agent':
+  sd_url    => 'https://example.serverdensity.io/',
+  api_token => 'APITOKENHERE',
+}
+```
+
+Should read in the 2.x version:
+
+```puppet
+class { 'serverdensity_agent':
+  sd_url    => 'https://example.agent.serverdensity.io/',
+  api_token => 'APITOKENHERE',
+}
+```
+
+But the use of `sd_account` is preferred so this is the current best practice:
+
+```puppet
+class { 'serverdensity_agent':
+  sd_account => 'example',
+  api_token  => 'APITOKENHERE',
+}
+```
+
+### Changed parameters
+#### plugin_directory -> v1_plugin_directory
+
+The name has changed and the default location has changed from `/usr/bin/sd-agent/plugins` to `/usr/local/sd-agent-plugins`.
+
+#### logging_level -> log_level
+
+Aesthetic change to maintain coherence with the v2 agent configuration file.
+
+### Deprecated parameters
+#### Deprecated by the serverdensity_agent::plugin::apache class
+
+- apache_status_url
+- apache_status_user
+- apache_status_pass
+
+Check the class documentation for further details. Basic example:
+
+```puppet
+class { 'serverdensity_agent::plugin::apache':
+  apache_status_url => 'http://localhost/server-status?auto',
+  apache_user       => 'admin',
+  apache_password   => 'honshu'
+}
+```
+
+#### Deprecated by the serverdensity_agent::plugin::mongo class
+
+- mongodb_server
+- mongodb_dbstats
+- mongodb_replset
+
+Check the class documentation for further details. Basic example:
+
+```puppet
+serverdensity_agent::plugin::mongo { 'mongodb://localhost:27017/admin': }
+```
+
+#### Deprecated by the serverdensity_agent::plugin::mysql class
+
+- mysql_server
+- mysql_user
+- mysql_pass
+
+Check the class documentation for further details. Basic example:
+
+```puppet
+class { 'serverdensity_agent::plugin::mysql':
+  server   => 'localhost',
+  user     => 'root',
+  password => 'honshu'
+}
+```
+
+
+#### Deprecated by the serverdensity_agent::plugin::nginx class
+
+- nginx_status_url
+
+Check the class documentation for further details. Basic example:
+
+```puppet
+class { 'serverdensity_agent::plugin::nginx':
+  nginx_status_url => 'http://localhost/nginx_status/',
+  ssl_validation   => false,
+}
+```
+
+
+#### Deprecated by the serverdensity_agent::plugin::rabbitmq class
+
+- rabbitmq_status_url
+- rabbitmq_user
+- rabbitmq_pass
+
+Check the class documentation for further details. Basic example:
+
+```puppet
+class { 'serverdensity_agent::plugin::rabbitmq':
+  rabbitmq_api_url => 'http://localhost:55672/api/',
+  rabbitmq_user    => 'guest',
+  rabbitmq_pass    => 'guest'
+}
+```
+
+#### Removed parameters
+- api_username
+- api_password
+- fpm_status_url
+- tmp_directory
+- pidfile_directory
+- logtail_paths
+
+
+## Known issues
+
+### Restart the puppet master on module upgrade
+
+When using Puppet in infrastructure mode a restart of the Puppet master is needed to clean up the facter and custom functions caches.

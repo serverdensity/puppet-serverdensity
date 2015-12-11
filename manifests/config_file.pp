@@ -12,41 +12,49 @@
 #
 
 class serverdensity_agent::config_file (
-        $location = '',
-        $sd_url = 'https://example.serverdensity.io',
-        $agent_key = '',
-        $plugin_directory = '',
-        $apache_status_url = 'http://www.example.com/server-status/?auto',
-        $apache_status_user = '',
-        $apache_status_pass = '',
-        $fpm_status_url = '',
-        $mongodb_server = '',
-        $mongodb_dbstats = 'no',
-        $mongodb_replset = 'no',
-        $mysql_server = '',
-        $mysql_user = '',
-        $mysql_pass = '',
-        $nginx_status_url = '',
-        $rabbitmq_status_url = 'http://www.example.com/nginx_status',
-        $rabbitmq_user = 'guest',
-        $rabbitmq_pass = 'guest',
-        $tmp_directory = '/var/log/custom_location',
-        $pidfile_directory = '/var/log/custom_location',
-        $logging_level = 'INFO',
-        $logtail_paths = '',
-    ) {
+  $api_token,
+  $provided_agent_key = $::sd_agent_key,
+  $server_name,
+  $server_group,
+  $use_fqdn,
+  $proxy_host = undef,
+  $proxy_port = undef,
+  $proxy_user = undef,
+  $proxy_password = undef,
+  $proxy_forbid_method_switch = undef,
+  $server_name = undef,
+  $plugin_directory = '',
+  $log_level = undef,
+  $collector_log_file = undef,
+  $forwarder_log_file = undef,
+  $log_to_syslog = undef,
+  $syslog_host = undef,
+  $syslog_port = undef,
+  ) {
+  $agent_key = agent_key(
+    $api_token,
+    $provided_agent_key,
+    $server_name,
+    $server_group,
+    $use_fqdn )
 
-    file { 'sd-agent-config-dir':
-      ensure => 'directory',
-      path   => $location,
-      mode   => '0755',
-      notify => Class['serverdensity_agent::service'],
-    }
+  file { '/etc/sd-agent/conf.d':
+    ensure => 'directory',
+    mode   => '0755',
+    notify => Class['serverdensity_agent::service'],
+  }
 
-    file { 'sd-agent-config-file':
-        path    => "${location}/000-main.cfg",
-        content => template('serverdensity_agent/config.cfg.erb'),
-        mode    => '0644',
-        notify  => Class['serverdensity_agent::service'],
-    }
+  file { '/etc/sd-agent/config.cfg':
+    ensure  => 'file',
+    content => template('serverdensity_agent/config.cfg.erb'),
+    mode    => '0644',
+    notify  => Class['serverdensity_agent::service'],
+  }
+
+  # Legacy configurations for V1 plugins
+  file { '/etc/sd-agent/plugins.d':
+    ensure => 'directory',
+    mode   => '0755',
+    notify => Class['serverdensity_agent::service'],
+  }
 }
