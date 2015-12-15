@@ -46,14 +46,10 @@ module Puppet::Parser::Functions
         agent_key = lookupvar("sd_agent_key")
 
         # lookupvar returns undef if no value
-        # test against nil just in case
-        unless agent_key.nil? or agent_key == :undefined or agent_key == :undef
+        # test against no key just in case
+        unless agent_key.eql? "" 
             notice ["Agent Key Provided via Facter: #{ agent_key }"]
             return agent_key
-        end
-
-        if agent_key == :undef
-            agent_key = ""
         end
 
         notice ["Using SD Version 2"]

@@ -41,5 +41,10 @@ if provider
         Facter.add(:sd_project_id) { setcode { projectid } }
     end
 else
+    #If we don't set these, strict_variables will cry
+    Facter.add(:sd_provider) { setcode { '' } }
+    Facter.add(:sd_provider_id) { setcode { '' } }
+    Facter.add(:sd_project_id) { setcode { '' } }
+    
     Facter.debug "Unknown provider"
 end
