@@ -12,6 +12,7 @@
 #
 
 class serverdensity_agent::config_file (
+  $sd_account,
   $api_token,
   $provided_agent_key = $::sd_agent_key,
   $server_name,

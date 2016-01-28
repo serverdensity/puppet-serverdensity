@@ -127,6 +127,7 @@ class serverdensity_agent(
   anchor {'serverdensity_agent::end': }
 
   class { 'serverdensity_agent::config_file':
+    sd_account         => $sd_account,
     api_token          => $api_token,
     provided_agent_key => $agent_key,
     server_name        => $server_name,
