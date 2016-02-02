@@ -84,7 +84,7 @@ class serverdensity_agent(
   $proxy_password = undef,
   $proxy_forbid_method_switch = undef,
   $v1_plugin_directory = '/usr/local/sd-agent-plugins',
-  $log_level = undef,
+  $log_level = 'INFO',
   $collector_log_file = undef,
   $forwarder_log_file = undef,
   $log_to_syslog = undef,
@@ -134,6 +134,7 @@ class serverdensity_agent(
     use_fqdn           => $use_fqdn ,
     log_level          => $log_level,
     require            => Package['sd-agent'],
+    sd_account         => $sd_account,
     notify             => Class['serverdensity_agent::service']
   }
 }
