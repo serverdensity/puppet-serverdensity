@@ -13,7 +13,7 @@
 
 class serverdensity_agent::apt {
   $repo_baseurl = 'http://archive.serverdensity.com/ubuntu'
-  $repo_keyurl = 'https://archive.serverdensity.com/sd-packaging-public.key'
+  $repo_keyurl  = 'https://archive.serverdensity.com/sd-packaging-public.key'
 
   apt::source { 'serverdensity_agent':
     location => $repo_baseurl,
