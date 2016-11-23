@@ -1,4 +1,4 @@
-source :rubygems
+source 'https://rubygems.org'
 
 if ENV.key?('PUPPET_VERSION')
   puppetversion = "= #{ENV['PUPPET_VERSION']}"
@@ -9,4 +9,4 @@ end
 gem 'rake'
 gem 'puppet-lint'
 gem 'rspec-puppet'
-gem 'json'
+gem 'json', '<= 1.8.3'
