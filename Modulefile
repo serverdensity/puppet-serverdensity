@@ -1,5 +1,5 @@
 name 'serverdensity-serverdensity_agent'
-version '2.0.1'
+version '2.0.2'
 author 'Server Density'
 summary 'Puppet module to install the Server Density monitoring agent and register servers automatically.'
 description 'Official Puppet module for automatically installing the Server Density monitoring agent. Will install the agent packages, register new servers with the API and generate the correct config.'
