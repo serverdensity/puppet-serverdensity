@@ -135,6 +135,15 @@ class serverdensity_agent(
     log_level          => $log_level,
     require            => Package['sd-agent'],
     sd_account         => $sd_account,
-    notify             => Class['serverdensity_agent::service']
+    notify             => Class['serverdensity_agent::service'],
+    proxy_host         => $proxy_host,
+    proxy_port         => $proxy_port,
+    proxy_user         => $proxy_user,
+    proxy_password     => $proxy_password,
+    collector_log_file => $collector_log_file,
+    forwarder_log_file => $forwarder_log_file,
+    log_to_syslog      => $log_to_syslog,
+    syslog_host        => $syslog_host,
+    syslog_port        => $syslog_port,
   }
 }
