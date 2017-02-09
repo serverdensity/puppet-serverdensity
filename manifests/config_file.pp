@@ -23,7 +23,7 @@ class serverdensity_agent::config_file (
   $proxy_password = undef,
   $proxy_forbid_method_switch = undef,
   $server_name = undef,
-  $plugin_directory = '',
+  $v1_plugin_directory = '',
   $log_level = undef,
   $collector_log_file = undef,
   $forwarder_log_file = undef,
