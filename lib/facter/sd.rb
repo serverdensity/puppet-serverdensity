@@ -5,16 +5,25 @@ require 'json'
 provider = nil
 providerid = nil
 
-if Facter.value('ec2_instance_id')
-    # It's an amazon cloud.
-    provider = 'amazon'
-    providerid = Facter.value('ec2_instance_id')
+if Facter.value('facterversion') >= '3'
+    if Facter.value('ec2_metadata')
+        metadata = Facter.value('ec2_metadata')
+        # It's an amazon cloud.
+        provider = 'amazon'
+        providerid = metadata['instance-id']
+    else
+        # Check for GCE
+        gce = nil
+        if Facter.value('gce')
+            # Facter already extracts GCE metadata.
+            gce = Facter.value('gce')
+        end
+    end
 else
-    # Check for GCE
-    gce = nil
-    if Facter.value('facterversion') >= '2.1'
-        # Facter already extracts GCE metadata.
-        gce = Facter.value('gce')
+    if Facter.value('ec2_instance_id')
+        # It's an amazon cloud.
+        provider = 'amazon'
+        providerid = Facter.value('ec2_instance_id')
     else
         begin
             body = open("http://metadata/computeMetadata/v1beta1/?recursive=true&alt=json").read
@@ -25,13 +34,12 @@ else
             gce = ::JSON.parse(body)
         end
     end
-    if gce
-        provider = 'google'
-        providerid = gce['instance']['id']
-        projectid = gce['project']['projectId']
-    end
 end
-
+if gce
+    provider = 'google'
+    providerid = gce['instance']['id'].to_s
+    projectid = gce['project']['projectId']
+end
 if provider
     Facter.add(:sd_provider) { setcode { provider } }
     if providerid
