@@ -49,7 +49,8 @@ define serverdensity_agent::plugin (
     owner   => 'root',
     group   => 'root',
     content => $config_content,
-    require => File['/etc/sd-agent/conf.d']
+    require => File['/etc/sd-agent/conf.d'],
+    notify  => Class['serverdensity_agent::service'],
   }
 
   package { $package:
