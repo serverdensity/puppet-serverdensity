@@ -1,4 +1,4 @@
-# == Class: serverdensity_agent::plugin::phpfpm
+# == Class: serverdensity_agent::plugin::php_fpm
 #
 # Defines PHP-FPM instances
 #
@@ -18,16 +18,16 @@
 #
 # === Examples
 #
-# class { 'serverdensity_agent::plugin::phpfpm':
+# class { 'serverdensity_agent::plugin::php_fpm':
 #   status_url => 'http://localhost/status',
 # }
 #
-class serverdensity_agent::plugin::phpfpm (
+class serverdensity_agent::plugin::php_fpm (
   $status_url = 'http://localhost/status',
   $ping_url   = 'http://localhost/ping',
   $ping_reply = 'pong',
   ) {
-  serverdensity_agent::plugin { 'phpfpm':
-    config_content => template('serverdensity_agent/plugin/phpfpm.yaml.erb'),
+  serverdensity_agent::plugin { 'php_fpm':
+    config_content => template('serverdensity_agent/plugin/php_fpm.yaml.erb'),
   }
 }
