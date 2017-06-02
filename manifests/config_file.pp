@@ -17,6 +17,7 @@ class serverdensity_agent::config_file (
   $sd_account,
   $server_group,
   $use_fqdn,
+  $sd_url = undef,
   $proxy_host = undef,
   $proxy_port = undef,
   $proxy_user = undef,

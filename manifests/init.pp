@@ -130,6 +130,7 @@ class serverdensity_agent(
     api_token          => $api_token,
     provided_agent_key => $agent_key,
     server_name        => $server_name,
+    sd_url             => $sd_url,
     server_group       => $server_group,
     use_fqdn           => $use_fqdn ,
     log_level          => $log_level,
