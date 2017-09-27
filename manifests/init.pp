@@ -145,5 +145,6 @@ class serverdensity_agent(
     log_to_syslog      => $log_to_syslog,
     syslog_host        => $syslog_host,
     syslog_port        => $syslog_port,
+    plugin_directory   => $v1_plugin_directory,
   }
 }
