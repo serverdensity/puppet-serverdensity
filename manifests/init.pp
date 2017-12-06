@@ -106,15 +106,19 @@ class serverdensity_agent(
       }
     }
     'RedHat': {
-      include serverdensity_agent::yum
-
-      file { 'sd-agent-v1-plugin-dir':
-        ensure  => directory,
-        path    => $v1_plugin_directory,
-        mode    => '0755',
-        notify  => Class['serverdensity_agent::service'],
-        require => Class['serverdensity_agent::yum'],
+      if $facts['os']['name'] == 'Amazon' {
+        include serverdensity_agent::amazon
       }
+      else {
+        include serverdensity_agent::yum
+      }
+        file { 'sd-agent-v1-plugin-dir':
+          ensure  => directory,
+          path    => $v1_plugin_directory,
+          mode    => '0755',
+          notify  => Class['serverdensity_agent::service'],
+          require => Package['sd-agent'],
+        }
     }
     default: {
       fail("OSfamily ${::operatingsystem} not supported.")
