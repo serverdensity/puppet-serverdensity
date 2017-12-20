@@ -28,6 +28,26 @@ class serverdensity_agent::yum {
     enabled  => 1,
     gpgcheck => 1,
   }
+
+  if $::operatingsystemmajrelease >= '6' and $::operatingsystemmajrelease < '7' {
+    package { 'epel-release':
+      ensure   => installed,
+      provider => 'rpm',
+      source   => 'https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm'
+    }
+    if downcase($::lsbdistid) == 'centos' {
+      $location = downcase($::lsbdistid)
+    }
+    else {
+      $location = 'rhel'
+    }
+    package { 'ius-release':
+      ensure   => installed,
+      provider => 'rpm',
+      source   => "https://${location}6.iuscommunity.org/ius-release.rpm"
+    }
+  }
+
   # install SD agent package
   package { 'sd-agent':
     ensure  => present,

@@ -5,8 +5,13 @@ Puppet Module for deploying the Server Density Agent and agent plugins
 
 ### Platforms
 
-* Ubuntu
+* Amazon Linux
 * CentOS
+* RHEL
+* Debian
+* Ubuntu
+
+> Support for Ubuntu Precise is now deprecated and agent updates are no longer provided after 2.1.6. This mainfest will install agent 2.1.6 for any server detected as Ubuntu Precise
 
 ## Usage
 
