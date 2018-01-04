@@ -46,7 +46,7 @@ class serverdensity_agent::plugin::mysql (
   $pass = undef,
   $port = undef,
   $sock = undef,
-  $repl = False,
+  $repl = false,
   $defaults_file = undef,
   ) {
   serverdensity_agent::plugin { 'mysql':
