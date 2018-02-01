@@ -162,6 +162,16 @@ class { 'serverdensity_agent::plugin::mysql':
 }
 ```
 
+Basic example with replication monitoring enabled:
+
+```puppet
+class { 'serverdensity_agent::plugin::mysql':
+  server   => 'localhost',
+  user     => 'root',
+  password => 'honshu',
+  repl     => true,
+}
+```
 
 #### Deprecated by the serverdensity_agent::plugin::nginx class
 
