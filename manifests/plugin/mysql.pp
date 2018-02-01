@@ -24,6 +24,10 @@
 #   String. Path of the unix socket if that is the method to connect
 #   Default: undef
 #
+# [*repl*]
+#   Boolean. Whether replication monitoring should be enabled
+#   Default: False
+#
 # [*defaults_file*]
 #   String. Path to a my.cnf to use as alternate configuration mechanism
 #   Default: undef
@@ -42,6 +46,7 @@ class serverdensity_agent::plugin::mysql (
   $pass = undef,
   $port = undef,
   $sock = undef,
+  $repl = false,
   $defaults_file = undef,
   ) {
   serverdensity_agent::plugin { 'mysql':

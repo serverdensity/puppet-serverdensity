@@ -14,6 +14,10 @@ instances:
 <%- if @sock -%>
     sock: <%= @sock %>
 <%- end -%>
+<%- if @repl -%>
+    options:
+       replication: 1
+<%- end -%>
 <%- if @defaults_file -%>
     defaults_file: <%= @defaults_file %>
 <%- end -%>
