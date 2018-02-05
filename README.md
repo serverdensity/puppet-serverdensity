@@ -211,6 +211,31 @@ class { 'serverdensity_agent::plugin::rabbitmq':
 - pidfile_directory
 - logtail_paths
 
+### New Classes
+#### Disk
+Check the class documentation for further details. Basic example:
+```puppet
+class { 'serverdensity_agent::plugin::disk':
+    use_mount              => 'no',
+    excluded_filesystems   => ['tmpfs', 'run'],
+    excluded_disks         => ['/dev/sda', '/dev/sdb'],
+    excluded_disk_re     => '/dev/sda.*',
+    excluded_mountpoint_re => '/mnt/no-monitor.*',
+    all_partitions         => false,
+    tag_by_filesystem    => 'yes'
+ }
+ ```
+
+#### Network
+Check the class documentation for further details. Basic example:
+```puppet
+class { 'serverdensity_agent::plugin::network':
+  excluded_interfaces => ['lo','lo0'],
+  collect_connection_state  => true,
+  excluded_interface_re => [],
+  combine_connection_states => true
+}
+```
 
 ## Known issues
 
