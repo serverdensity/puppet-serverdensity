@@ -1,0 +1,17 @@
+init_config:
+
+instances:
+  - collect_connection_state: <%= @collect_connection_state %>
+<% if !@excluded_interfaces.empty? -%>
+    excluded_interfaces:
+<%- (@excluded_interfaces.each do |i| -%>
+      - <%= i %>
+<% end ) -%>
+<% end -%>
+<% if !@excluded_interface_re.empty? -%>
+    excluded_interface_re:
+<%- (@excluded_interfaces_re.each do |i| -%>
+      - <%= i %>
+<% end ) -%>
+<% end -%>
+    combine_connection_states: <%= @combine_connection_states %>
