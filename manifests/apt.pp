@@ -50,6 +50,6 @@ class serverdensity_agent::apt {
   package {
     'sd-agent':
       ensure  => 'present',
-      require => Apt::Source['serverdensity_agent'],
+      require => [ Apt::Source['serverdensity_agent'],Exec['apt_update'] ],
   }
 }
