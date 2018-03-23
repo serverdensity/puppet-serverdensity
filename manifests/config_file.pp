@@ -13,10 +13,10 @@
 
 class serverdensity_agent::config_file (
   $api_token,
-  $provided_agent_key = $::sd_agent_key,
   $sd_account,
   $server_group,
   $use_fqdn,
+  $provided_agent_key = $::sd_agent_key,
   $proxy_host = undef,
   $proxy_port = undef,
   $proxy_user = undef,

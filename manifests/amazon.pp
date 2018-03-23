@@ -12,7 +12,7 @@
 #
 
 class serverdensity_agent::amazon {
-  $repo_baseurl = "https://archive.serverdensity.com/el/6"
+  $repo_baseurl = 'https://archive.serverdensity.com/el/6'
   $repo_keyurl = 'https://archive.serverdensity.com/sd-packaging-public.key'
 
   yumrepo { 'serverdensity_agent':
