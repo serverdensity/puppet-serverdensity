@@ -60,4 +60,12 @@ class serverdensity_agent::config_file (
     mode   => '0755',
     notify => Class['serverdensity_agent::service'],
   }
+
+  # Write the agent key to a file so no api lookups are required
+  file { '/var/run/sd-agent-key':
+    ensure  => 'present',
+    replace => 'no',
+    content => $agent_key,
+    mode    => '0644',
+  }
 }

@@ -12,6 +12,8 @@ Facter.add(:sd_agent_key, :timeout => 10) do
     # do this first as it's fast
     if File::exist?('/etc/sd-agent-key')
         result = Facter::Util::Resolution.exec("cat /etc/sd-agent-key")
+    elsif File::exist?('/var/run/sd-agent-key')
+        result = Facter::Util::Resolution.exec("cat /var/run/sd-agent-key")
     elsif Facter.value('ec2_instance_id')
         # use the amazon metadata api to
         # get user-data that we've set on
@@ -21,7 +23,7 @@ Facter.add(:sd_agent_key, :timeout => 10) do
         res = Net::HTTP.start(uri.host, uri.port) {|http|
                 http.request(req)
             }
-        
+
         result = res.body.split(':').last if res.code == 200
     end
 
