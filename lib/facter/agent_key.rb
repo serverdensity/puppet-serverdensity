@@ -7,9 +7,9 @@ Facter.add(:sd_agent_key, :timeout => 10) do
     # just in case we don't get any of them
     result = nil
 
-    # We inject this file using the Rackspace api
-    # on instance creation
-    # do this first as it's fast
+    # We inject '/etc/sd-agent-key' using the Rackspace api when an
+    # instance is created via the Server Density Cloud integration.
+    # Do this first as it's fast
     if File::exist?('/etc/sd-agent-key')
         result = Facter::Util::Resolution.exec("cat /etc/sd-agent-key")
     elsif File::exist?('/var/run/sd-agent-key')
