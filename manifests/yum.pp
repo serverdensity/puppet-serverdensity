@@ -12,7 +12,7 @@
 #
 
 class serverdensity_agent::yum {
-  $repo_baseurl = "http://archive.serverdensity.com/el/${::operatingsystemmajrelease}"
+  $repo_baseurl = "https://archive.serverdensity.com/el/${::operatingsystemmajrelease}"
 
   # March 31, 2017 can't arrive soon enough
   if $::operatingsystemmajrelease >= '5' and $::operatingsystemmajrelease < '6' {
