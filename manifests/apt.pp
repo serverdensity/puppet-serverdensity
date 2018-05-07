@@ -30,7 +30,7 @@ class serverdensity_agent::apt {
     'stretch' => 'stretch',
   }
 
-  $repo_baseurl = "http://archive.serverdensity.com/${downcase($::lsbdistid)}"
+  $repo_baseurl = "https://archive.serverdensity.com/${downcase($::lsbdistid)}"
   $repo_keyurl  = 'https://archive.serverdensity.com/sd-packaging-public.key'
 
   apt::source { 'serverdensity_agent':
