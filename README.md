@@ -232,7 +232,7 @@ Check the class documentation for further details. Basic example:
 class { 'serverdensity_agent::plugin::network':
   excluded_interfaces => ['lo','lo0'],
   collect_connection_state  => true,
-  excluded_interface_re => [],
+  excluded_interface_re => 'eth*',
   combine_connection_states => true
 }
 ```

@@ -13,8 +13,8 @@
 #   Default: False
 #
 # [*excluded_interface_re*]
-#   Array, Define network interfaces to be excluded via regex
-#   Default: []
+#   String, Define network interfaces to be excluded via regex
+#   Default: undef
 #
 # [*combine_connection_states*]
 #   Boolean. Enable combineing of connection states
@@ -25,14 +25,14 @@
 # class { 'serverdensity_agent::plugin::network':
 #   excluded_interfaces => ['lo','lo0'],
 #   collect_connection_state  => false,
-#   excluded_interface_re => [],
+#   excluded_interface_re => 'eth*',
 #   combine_connection_states = false
 # }
 #
 class serverdensity_agent::plugin::network (
     $excluded_interfaces = ['lo','lo0'],
     $collect_connection_state  = false,
-    $excluded_interface_re = [],
+    $excluded_interface_re = undef,
     $combine_connection_states = false
   ) {
   serverdensity_agent::plugin { 'network':
