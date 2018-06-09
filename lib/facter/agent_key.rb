@@ -5,7 +5,7 @@ require 'uri'
 Facter.add(:sd_agent_key, :timeout => 10) do
 
     # just in case we don't get any of them
-    result = nil
+    result = ''
 
     # We inject this file using the Rackspace api
     # on instance creation
