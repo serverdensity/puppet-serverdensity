@@ -15,6 +15,7 @@ class serverdensity_agent::apt {
   $repo_location = $::lsbdistcodename ? {
     'artful'  => 'xenial',
     'bionic'  => 'bionic',
+    'cosmic'  => 'bionic',
     'precise' => 'all',
     'quantal' => 'all',
     'raring'  => 'all',
