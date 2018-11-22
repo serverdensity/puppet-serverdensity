@@ -22,3 +22,9 @@
 # same, you can set sdstats's receive buffer size here. The maximum allowed
 # value is the value of `/proc/sys/net/core/rmem_max`.
 # statsd_so_rcvbuf:
+<%- if @statsd_forward_host -%>
+statsd_forward_host: <%= @statsd_forward_host %>
+<%- end -%>
+<%- if @statsd_forward_port-%>
+statsd_forward_port: <%= @statsd_forward_port %>
+<%- end -%>
