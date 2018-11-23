@@ -27,4 +27,17 @@ class serverdensity_agent::service {
     hasstatus  => false,
     subscribe  => Class['serverdensity_agent::config_file'],
   }
+
+  # sdstatsd
+  if $serverdensity_agent::use_sdstatsd {
+    $ensure_sdstatsd = 'present'
+  }
+  else {
+    $ensure_sdstatsd = 'absent'
+  }
+  package {
+    'sd-agent-sdstatsd':
+      ensure  => $ensure_sdstatsd,
+      require => Apt::Source['serverdensity_agent'],
+  }
 }
