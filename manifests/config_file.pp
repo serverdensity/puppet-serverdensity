@@ -30,6 +30,8 @@ class serverdensity_agent::config_file (
   $log_to_syslog = undef,
   $syslog_host = undef,
   $syslog_port = undef,
+  $statsd_fw_host = undef,
+  $statsd_fw_port = undef,
   ) {
   $agent_key = agent_key(
     $api_token,
