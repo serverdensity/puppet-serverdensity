@@ -50,6 +50,11 @@ syslog_port: <%= @syslog_port %>
 <%- end -%>
 
 # sdstatsd
+<%- if @use_sdstatsd -%>
+use_sdstatsd: yes
+<%- else -%>
+use_sdstatsd: no
+<%- end -%>
 <%- if @statsd_forward_host -%>
 statsd_forward_host: <%= @statsd_fw_host %>
 <%- end -%>

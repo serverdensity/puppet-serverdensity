@@ -167,6 +167,7 @@ class serverdensity_agent(
     syslog_host        => $syslog_host,
     syslog_port        => $syslog_port,
     plugin_directory   => $v1_plugin_directory,
+    use_sdstatsd       => $use_sdstatsd,
     statsd_fw_host     => $statsd_forward_host,
     statsd_fw_port     => $statsd_forward_port,
   }
