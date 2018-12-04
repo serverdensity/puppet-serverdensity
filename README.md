@@ -71,6 +71,9 @@ There are some optional parameters that can be used to configure other parts of 
 * `v1_plugin_directory` - The directory to install 3rd party legacy agent plugins to
 * `log_level` - String. Logging level to use for agent. Defaults to INFO if not set.
 * `service_enabled` - Boolean. Ensures the sd-agent service is enabled and running through the system service facility, default: true. Useful when using an alternative process manager, e.g supervisor
+* `use_sdstatsd` - Boolean. Ensures the sdstatsd service is enabled and running, default: false. [https://support.serverdensity.com/hc/en-us/articles/360001082706-Monitoring-with-SdStatsd
+* `statsd_forward_host` - String. Allows sdstatsd to forward statsd packets to another host and port, default: undef and therefore off.
+* `statsd_forward_port` - String. Allows sdstatsd to forward statsd packets to another host and port, default: undef and therefore off.
 
 ## Upgrade to Server Density Agent Puppet Module 2.x
 
