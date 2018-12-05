@@ -49,6 +49,20 @@
 #   Default: true
 #   Valid values: true, false
 #
+# [*use_sdstatsd*]
+#   Boolean. Ensures the sd-agent statsd service is enabled and running through the
+#            system service facility.
+#   Default: true
+#   Valid values: true, false
+#
+# [*statsd_forward_host*]
+#   String. Hostname of the external statsd server.
+#   Default: undef
+#
+# [*statsd_forward_port*]
+#   String. Port of the external statsd server.
+#   Default: undef
+#
 # === Examples
 #
 #  class { 'serverdensity_agent':
@@ -91,6 +105,9 @@ class serverdensity_agent(
   $syslog_host = undef,
   $syslog_port = undef,
   $service_enabled = true,
+  $use_sdstatsd = false,
+  $statsd_forward_host = undef,
+  $statsd_forward_port = undef,
   ) {
 
   case $::osfamily {
@@ -150,5 +167,8 @@ class serverdensity_agent(
     syslog_host        => $syslog_host,
     syslog_port        => $syslog_port,
     plugin_directory   => $v1_plugin_directory,
+    use_sdstatsd       => $use_sdstatsd,
+    statsd_fw_host     => $statsd_forward_host,
+    statsd_fw_port     => $statsd_forward_port,
   }
 }
