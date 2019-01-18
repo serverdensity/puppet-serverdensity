@@ -143,9 +143,9 @@ class serverdensity_agent(
   }
 
   # Include everything and let each module determine its own state
-  anchor { 'serverdensity_agent::begin': } ->
-  class { 'serverdensity_agent::service': } ->
-  anchor {'serverdensity_agent::end': }
+  anchor { 'serverdensity_agent::begin': }
+  -> class { 'serverdensity_agent::service': }
+  -> anchor {'serverdensity_agent::end': }
 
   class { 'serverdensity_agent::config_file':
     api_token          => $api_token,

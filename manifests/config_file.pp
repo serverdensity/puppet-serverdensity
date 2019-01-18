@@ -13,10 +13,10 @@
 
 class serverdensity_agent::config_file (
   $api_token,
-  $provided_agent_key = $::sd_agent_key,
   $sd_account,
   $server_group,
   $use_fqdn,
+  $provided_agent_key = $::sd_agent_key,
   $proxy_host = undef,
   $proxy_port = undef,
   $proxy_user = undef,
@@ -59,5 +59,13 @@ class serverdensity_agent::config_file (
     ensure => 'directory',
     mode   => '0755',
     notify => Class['serverdensity_agent::service'],
+  }
+
+  # Write the agent key to a file so no api lookups are required
+  file { '/var/run/sd-agent-key':
+    ensure  => 'present',
+    replace => 'no',
+    content => $agent_key,
+    mode    => '0644',
   }
 }
