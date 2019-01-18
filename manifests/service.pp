@@ -38,6 +38,5 @@ class serverdensity_agent::service {
   package {
     'sd-agent-sdstatsd':
       ensure  => $ensure_sdstatsd,
-      require => Apt::Source['serverdensity_agent'],
   }
 }
