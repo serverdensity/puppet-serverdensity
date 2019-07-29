@@ -9,4 +9,4 @@ end
 gem 'rake'
 gem 'puppet-lint'
 gem 'rspec-puppet'
-gem 'json', '<= 1.8.3'
+gem 'json'

@@ -30,6 +30,7 @@ class serverdensity_agent::apt {
     'wheezy'  => 'wheezy',
     'jessie'  => 'jessie',
     'stretch' => 'stretch',
+    'buster'  => 'buster',
   }
 
   $repo_baseurl = "https://archive.serverdensity.com/${downcase($::lsbdistid)}"
