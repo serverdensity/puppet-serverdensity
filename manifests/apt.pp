@@ -16,6 +16,7 @@ class serverdensity_agent::apt {
     'artful'  => 'xenial',
     'bionic'  => 'bionic',
     'cosmic'  => 'bionic',
+    'focal' => 'focal',
     'precise' => 'all',
     'quantal' => 'all',
     'raring'  => 'all',
