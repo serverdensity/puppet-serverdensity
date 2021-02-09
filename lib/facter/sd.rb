@@ -26,7 +26,7 @@ else
         providerid = Facter.value('ec2_instance_id')
     else
         begin
-            body = open("http://metadata/computeMetadata/v1beta1/?recursive=true&alt=json").read
+            body = open("http://metadata.google.internal/computeMetadata/v1/?recursive=true&alt=json", "Metadata-Flavor" => "Google").read
         rescue
             body = nil
         end
