@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.3.6 (09-02-2021)
+* Updated GCP metadata endpoint.
+
 ## v2.3.5 (26-05-2020)
 * Added support for Ubuntu Eoan and Focal.
 
